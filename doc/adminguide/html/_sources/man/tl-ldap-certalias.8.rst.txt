@@ -1,0 +1,164 @@
+.. meta::
+   :description: The tl-ldap-certalias command updates local databases
+                 for smart card authentication using LDAP and SSH. It
+                 automates key management, certificate validation, and
+                 supports cron scheduling for regular updates.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-ldap-certalias
+=================
+
+Synopsis
+--------
+
+**tl-ldap-certalias** [*options*]
+
+Description
+-----------
+
+The :program:`tl-ldap-certalias` command can automatically update the
+local databases needed for smart card public key authentication,
+provided the system uses the OpenSSH server (or any SSH server that uses
+a compatible format and location for authorized public keys) and
+standards compliant LDAP servers where users and certificates are
+stored.
+
+The :program:`tl-ldap-certalias` command can also perform validation of
+certificates it finds in LDAP databases. Read more about this in
+:ref:`certalias_validation`.
+
+-  On invocation, a list of all users and matching certificates is
+   gathered. How is determined by the |certificate_user_match|
+   configuration variable. If |allow_invalid_certificates| is no, only
+   matching valid certificates will be gathered.
+
+   .. |certificate_user_match| replace::
+      :servconf:`certificate_user_match
+      </utils/tl-ldap-certalias/certificate_user_match>`
+   .. |allow_invalid_certificates| replace::
+      :servconf:`allow_invalid_certificates
+      </utils/tl-ldap-certalias/allow_invalid_certificates>`
+
+-  The user's home directory, as well as the :file:`~/.ssh` directory,
+   are created if they are required and do not already exist.
+   :program:`tl-ldap-certalias` reuses the
+   :servconf:`/vsmagent/make_homedir_mode` configuration variable from
+   vsmagent for determining the default permissions of newly created
+   home directories.
+
+-  Any old public keys added by :program:`tl-ldap-certalias` are removed
+   from the :file:`~/.ssh/authorized_keys` file and the keys from the
+   current set of certificates are added.
+
+-  The file :file:`/etc/passwdaliases` is updated with a list of subject
+   names and user id:s, to allow for login without usernames. See
+   :ref:`smartcard_auto` for more information.
+
+.. note::
+
+   It should be noted that any custom entries in
+   :file:`~/.ssh/authorized_keys` will be retained, but custom changes
+   to :file:`/etc/passwdaliases` will be overwritten each time
+   :program:`tl-ldap-certalias` is run.
+
+After deployment, :program:`tl-ldap-certalias` is meant to be run from
+cron at regular intervals, for example every 15 minutes. This makes sure
+that the ThinLinc system automatically keeps all user certificates
+updated. However, please note that if you're using certificate
+validation, downloading and parsing certificate revocation lists may
+take a long time (up to 5 minutes each). This is mitigated by caching
+the data from the CRLs, but the first run, and whenever the CRL needs
+to be updated, may take a long time. Thus, if you have certificates from
+a lot of different certificate authorities, don't run
+:program:`tl-ldap-certalias` too often.
+
+Since the default use of this tool is to be run from cron, the default
+behavior is to produce no output other than error messages. If you want
+more output from :program:`tl-ldap-certalias`, see the options section.
+
+.. note::
+
+   The root user must be able to write to the users' home directories
+   for :program:`tl-ldap-certalias` to be able to update the
+   :file:`~/.ssh/authorized_keys` files.
+
+.. _certalias_config:
+
+Configuration
+^^^^^^^^^^^^^
+
+:program:`tl-ldap-certalias` uses the
+:servconf:`/utils/tl-ldap-certalias` Hiveconf folder for configuration
+purposes. On a standard ThinLinc installation, it's located in
+:file:`/opt/thinlinc/etc/conf.d/tl-ldap-certalias.hconf`. See
+:ref:`configuration_tl_ldap_certalias` for details about the available
+parameters.
+
+.. _certalias_validation:
+
+Certificate validation
+^^^^^^^^^^^^^^^^^^^^^^
+
+:program:`tl-ldap-certalias` can perform validation of certificates
+found in LDAP databases by the following methods if
+|allow_invalid_certificates| is set to ``no``:
+
+Certificate validity and expiry dates
+   :program:`tl-ldap-certalias` now checks the certificate validity and
+   expiry dates and rejects certificates that are not valid yet or have
+   expired.
+
+Matching certificate to certificate issuers
+   Place the CA certificates you wish to trust certificates from in
+   :file:`/opt/thinlinc/etc/ca/`. The CA certificates must be in DER
+   form. If :program:`tl-ldap-certalias` finds a certificate with an
+   issuer that does not match any of the certificates in
+   :file:`/opt/thinlinc/etc/ca/`, the certificate will be considered
+   invalid and ignored.
+
+Certificate revocation lists
+   :program:`tl-ldap-certalias` searches the certificates it encounters
+   for certificate revocation lists (CRL) to make sure that the
+   certificate has not been revoked by its issuer. Once downloaded, the
+   CRL will be cached until the time for the next scheduled update found
+   in the CRL list has passed.
+
+   .. note::
+
+      :program:`tl-ldap-certalias` can only handle CRL lists distributed
+      with HTTP.
+
+Validation of certificate signatures.
+   :program:`tl-ldap-certalias` can verify that the certificate
+   signature is valid and thus assures that the certificate has not been
+   tampered with.
+
+Options
+-------
+
+.. option:: -d, --debug
+
+   Turn on extra debugging output to standard output. This is off by
+   default.
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+.. option:: -s, --simulate
+
+   Dry run mode. Specifying this option tells
+   :program:`tl-ldap-certalias` to avoid writing any changes to disk.
+   This is off by default.
+
+.. option:: -v, --verbose
+
+   Turn on program status output to standard output. This is off by
+   default.
+
+.. option:: --version
+
+   Prints the ThinLinc version and exits.

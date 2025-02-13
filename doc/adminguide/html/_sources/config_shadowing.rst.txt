@@ -1,0 +1,50 @@
+.. meta::
+   :description: Configuration options for controlling session shadowing
+                 in ThinLinc, including permissions and notification
+                 settings.
+
+.. _configuration_shadowing:
+
+.. server-config-folder:: /shadowing
+
+Parameters in /shadowing/
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this section, we will describe all the parameters currently used by
+the shadowing feature. These configuration parameters reside in
+:file:`/opt/thinlinc/etc/conf.d/shadowing.hconf`.
+
+.. server-config:: /shadowing/allowed_shadowers
+
+   A space-separated list of users and/or groups that are allowed to
+   shadow other users. Group names are prefixed with ``+`` sign. Please
+   note that these users will gain full access to other users' sessions.
+   See :ref:`shadowing` for more information.
+
+.. server-config:: /shadowing/shadowing_mode
+
+   A constant string value of ``reject``, ``silent``, ``notify``, or
+   ``ask``. This value configures in which way a shadowing request is
+   handled.
+
+   ``reject``
+      All shadowing requests are rejected. You should set this if you
+      want to disable the shadowing feature.
+
+   ``silent``
+      All shadowing requests are accepted and the user will not be
+      notified about being shadowed.
+
+   ``notify``
+      All shadowing requests are accepted and a message box will be
+      shown to notify the user when the shadowing starts and when the
+      shadowing ends.
+
+   ``ask``
+      Shows a dialog to the user and gives him the full control of
+      deciding to accept or reject the shadowing request. If the request
+      timeout is reached without the user making a decision then the
+      shadowing request will be rejected. Like for notify the user is
+      also informed when the shadowing ends.
+
+   See :ref:`shadowing` for more information.

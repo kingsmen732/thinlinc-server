@@ -1,0 +1,138 @@
+=============================
+ThinLinc 4.18.0 release notes
+=============================
+
+Introduction
+============
+
+Cendio are proud to present ThinLinc 4.18.0, with more than 40
+enhancements and fixes. The most prominent changes are:
+
+* It is now possible to limit the maximum number of users per agent.
+  This can be used in scenarios where resources on the agents are
+  limited and denying access to the ThinLinc cluster is preferred over
+  exceeding those limits.
+
+* It is now possible to configure HTTP Strict Transport Security for
+  ThinLinc Web Administration and Web Access. By enforcing encrypted
+  connections for a domain, an admin can feel safer and meet external
+  safety requirements.
+
+ThinLinc works on most modern Linux distributions and is supported on
+any platform that fulfills our documented requirements.
+
+Changes in this release
+=======================
+
+In the list below, the bug number is given in parentheses. For more
+information, visit https://bugzilla.cendio.com.
+
+Server
+------
+
+* It is now possible to limit the maximum number of users per agent.
+  This can be used in scenarios where resources on the agents are
+  limited and denying access to the ThinLinc cluster is preferred over
+  exceeding those limits. (284)
+
+* It is now possible to configure HTTP Strict Transport Security for
+  ThinLinc Web Administration and Web Access. By enforcing encrypted
+  connections for a domain, an admin can feel safer and meet external
+  safety requirements. (7948)
+
+* The security policy for ThinLinc Web Administration and Web Access has
+  been adjusted to conform with current best practices. As a result, it
+  is no longer possible to embed these in other web pages using iframes.
+  (8400)
+
+* It is now possible to hide the version information in HTTP responses
+  from ThinLinc Web Administration and Web Access. This provides no
+  added security, but may be required to silence overzealous security
+  scanners. (8319)
+
+* Periodic updates of the license statistics graphs in ThinLinc Web
+  Administration are now handled by a systemd timer instead of a cron
+  job. This means that cron is no longer an implicit dependency for the
+  ThinLinc server. (8104)
+
+* Clicking links in the graphical ThinLinc installer or ThinLinc setup
+  now places the URL in the clipboard. This allows it to more easily be
+  pasted into a web browser. (8468)
+
+*  Fixed multiple vulnerabilities where a malicious application could
+   cause the X server to crash or execute arbitrary code.
+   [CVE-2023-6816, CVE-2024-0229, CVE-2024-21885, CVE-2024-21886,
+   CVE-2024-0408, CVE-2024-0409, CVE-2024-31080, CVE-2024-31081,
+   CVE-2024-31082, CVE-2024-31083, CVE-2024-9632] (8379, 8439)
+
+Native client
+-------------
+
+* Fixed an issue where the client would fail to reconnect to a session
+  that used a client specified start command. (8323)
+
+* Fixed an issue on macOS where the client would, in some cases,
+  not respect the system language settings. (7167)
+
+* Fixed a bug where the key in the top-left corner, next to 1, didn't
+  work in certain layouts on macOS. (8414)
+
+Administration
+--------------
+
+* It is now possible to set agent_hostname from ThinLinc setup. This is
+  useful when ThinLinc needs to be accessed from outside the local
+  network. (6144)
+
+Documentation
+-------------
+
+* Restructured and rewrote chapters in the ThinLinc Administrator's
+  Guide covering the initial installation and setup of ThinLinc, making
+  them more coherent and easier to understand. (8321, 1655, 4448, 8405,
+  5389, 7884)
+
+* Rewrote the two introductory chapters "Introduction" and "ThinLinc
+  architecture" in the ThinLinc Administrator's Guide to better
+  summarize ThinLinc and its architecture. (8320)
+
+Configuration changes
+=====================
+
+New
+---
+
+* New parameter: `/vsmserver/subclusters/<name>/max_users_per_agent`.
+  Controls the maximum concurrent users allowed per agent within a
+  subcluster.
+
+* New parameter: `/webaccess/server_tokens`. Controls whether Python
+  and ThinLinc version should be sent in response headers.
+
+* New parameter: `/tlwebadm/server_tokens`. Controls whether Python and
+  ThinLinc version should be sent in response headers.
+
+* New configuration folder: `/webaccess/hsts/`. Holds settings relating
+  to HTTP Strict Transport Security for Web Access.
+
+* New configuration folder: `/tlwebadm/hsts/`. Holds settings relating
+  to HTTP Strict Transport Security for Web Administration.
+
+A complete configuration reference can be found in the ThinLinc
+Administrators Guide.
+
+Corrected issues
+================
+
+ThinLinc has also been enhanced in many other ways. The complete list
+of corrected issues is::
+
+     284, 1655, 4448, 5114, 5389, 5467, 5943, 6124, 6144, 7167, 7382,
+    7884, 7945, 7948, 8041, 8081, 8104, 8128, 8156, 8178, 8192, 8277,
+    8318, 8319, 8320, 8321, 8323, 8359, 8379, 8385, 8387, 8389, 8390,
+    8391, 8400, 8402, 8403, 8405, 8414, 8416, 8417, 8420, 8421, 8424,
+    8432, 8435, 8436, 8439, 8468
+
+| Linux is a registered trademark of Linus Torvalds.
+| macOS and OS X are registered trademarks of Apple Computer, Inc.
+| ThinLinc is a registered trademark of Cendio AB.

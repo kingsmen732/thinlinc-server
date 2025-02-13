@@ -1,0 +1,62 @@
+.. meta::
+   :description: Explore tips and tricks for using the ThinLinc desktop
+                 customizer (TLDC) with KDE, including solving unwanted
+                 icons, file associations, and fixing the home icon.
+
+Tips & tricks with TLDC
+-----------------------
+
+.. _tldc_unwanted_icons:
+
+Unwanted icons on the desktop with KDE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+At first login for each user, KDE copies files from
+:file:`/usr/share/apps/kdesktop/DesktopLinks` to the :file:`Desktop`
+directory of the user. This means that if there is a :file:`Home Icon`
+in :file:`DesktopLinks` and you add a :file:`Home Icon` via TLDC, there
+will be two :file:`Home Icon`.
+
+Remove the contents of :file:`/usr/share/apps/kdesktop/DesktopLinks` to
+solve the problem, and let TLDC be the sole provider of icons on the
+desktop.
+
+.. note::
+
+   If your KDE is based somewhere else than under :file:`/usr`, the
+   :file:`DesktopLinks` directory will be situated elsewhere. For
+   example, on SUSE, KDE is based at :file:`/opt/kde3`.
+
+.. _tldc_file_associations:
+
+File associations in KDE for applications not in the menu
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When KDE tries to determine what application to use for opening a
+specific file, it is only looking for applications that are available in
+the menu. There are cases where not all applications that may be used
+for opening files are meant to be available in the menu.
+
+In this case, create a hidden menu by setting :guilabel:`Hide this menu`
+to :guilabel:`Yes` in the menu structure editor, and then create an
+application group that adds the applications that should be available
+for file associations in to this menu.
+
+.. _tldc_kde_home_icon:
+
+Home icon not working in KDE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is a case of the problem above where file associations are not
+working. Create an application group that includes the Konqueror
+("kde-kfmclient_dir") application in a hidden menu, and make sure this
+application group is added for all relevant users, and the home icon
+will work again.
+
+.. note::
+
+   A menu named **Hidden Menu** is created by the application group
+   **Hidden** which is by default activated for the Profile **kde**.
+   This menu contains **kde-kcmclient_dir** to make sure the home icon
+   is working. Make sure this application group is activated for all
+   users with a desktop based on KDE.

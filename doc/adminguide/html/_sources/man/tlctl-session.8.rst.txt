@@ -1,0 +1,99 @@
+.. meta::
+   :description: The tlctl session command inspects and manages ThinLinc
+                 cluster sessions, allowing session listing, filtering
+                 by agent, user, or subcluster, and termination of
+                 sessions with multiple options for control.
+
+.. raw:: pdf
+
+   PageBreak
+
+tlctl session
+=============
+
+Synopsis
+--------
+
+**tlctl session** [*options*] <*command*> [*args*]
+
+Description
+-----------
+
+:program:`tlctl session` can be used to inspect and control sessions in
+the ThinLinc cluster.
+
+Options
+-------
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+Commands
+--------
+
+**list** [*options*]
+   List the currently running sessions in the ThinLinc cluster. If no
+   options are specified then all sessions will be listed. Multiple
+   options can be combined to further restrict which sessions will be
+   listed.
+
+   Note that the listed information only is updated periodically, and
+   hence it is possible for e.g. the session's status to be slightly
+   outdated at times.
+
+   .. option:: --agent=AGENT
+
+      Only show the sessions running on *AGENT*.
+
+   .. option:: --display=DISPLAY
+
+      Only show the sessions with display id *DISPLAY*.
+
+   .. option:: --subcluster=SUBCLUSTER
+
+      Only show the sessions running in *SUBCLUSTER*.
+
+   .. option:: --user=USERNAME
+
+      Only show the sessions belonging to *USERNAME*.
+
+**terminate** [*options*]
+   Terminate one or more sessions in the ThinLinc cluster. At least one
+   option must be given specifying with sessions to terminate. Multiple
+   options can be combined to further restrict which sessions will be
+   terminated.
+
+   If the :option:`--allow-abandon` option is specified, in addition to
+   terminating reachable sessions, unreachable sessions will be
+   abandoned. When a session is abandoned, the master will stop tracking
+   it which may leave stray processes on the associated agent machine.
+
+   .. option:: --agent=AGENT
+
+      Terminate all sessions running on *AGENT*.
+
+   .. option:: --all
+
+      Terminate all sessions in the ThinLinc cluster.
+
+   .. option:: --allow-abandon
+
+      Also abandon sessions that are unreachable and thus cannot be
+      terminated.
+
+   .. option:: --display=DISPLAY
+
+      Terminate all sessions with display id *DISPLAY*.
+
+   .. option:: --subcluster=SUBCLUSTER
+
+      Terminate all sessions running in *SUBCLUSTER*.
+
+   .. option:: --user=USERNAME
+
+      Terminate all sessions belonging to *USERNAME*.
+
+   .. option:: -y, --assume-yes
+
+      Automatically answer yes for all questions.

@@ -1,0 +1,20 @@
+.. meta::
+   :description: Overview on how to access client resources, including
+                 local drives, serial ports, sound, and smart cards,
+                 from a ThinLinc session.
+
+.. _client-resources:
+
+Accessing client resources from the ThinLinc session
+====================================================
+
+In this chapter we will describe how to access client resources, such as
+local drives and serial ports, from the ThinLinc session.
+
+.. toctree::
+   :hidden:
+
+   redir_drives
+   redir_serial
+   redir_sound
+   redir_scard

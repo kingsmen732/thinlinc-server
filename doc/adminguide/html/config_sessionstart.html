@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Configuration parameters for ThinLinc session startup, including background settings and keyboard layout." name="description" />
+
+    <title>Parameters in /sessionstart/ &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parameters in /shadowing/" href="config_shadowing.html" />
+    <link rel="prev" title="Parameters in /tlwebadm/" href="config_tlwebadm.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_tlwebadm.html" title="Previous document">Parameters in /tlwebadm/</a>
+        </li>
+        <li>
+          <a href="config_shadowing.html" title="Next document">Parameters in /shadowing/</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="parameters-in-sessionstart">
+<span id="std-server-config-folder-sessionstart"></span><span id="std:server-config-folder-/sessionstart"></span><span id="configuration-sessionstart"></span><h1>Parameters in /sessionstart/<a class="headerlink" href="#parameters-in-sessionstart" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we will describe all the parameters currently used by
+the session startup scripts. These configuration parameters reside in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/sessionstart.hconf</span></code>.</p>
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-sessionstart-background_color">
+<span id="server-config-/sessionstart/background_color"></span><span class="sig-name descname"><span class="pre">/sessionstart/background_color</span></span><a class="headerlink" href="#server-config-sessionstart-background_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The initial color of the background that is set early during session
+startup. The default color is white.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-sessionstart-background_image">
+<span id="server-config-/sessionstart/background_image"></span><span class="sig-name descname"><span class="pre">/sessionstart/background_image</span></span><a class="headerlink" href="#server-config-sessionstart-background_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>A PNG used as the initial background. The image will always be zoomed
+to fit each individual monitor. The default is a ThinLinc- branded
+image.</p>
+<p>An empty value will disable the background image. If no image is
+set, or if the image contains transparency then the color set by
+<a class="reference internal" href="#server-config-sessionstart-background_color"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/sessionstart/background_color</span></code></a> will shine through.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-sessionstart-keyboard_layout">
+<span id="server-config-/sessionstart/keyboard_layout"></span><span class="sig-name descname"><span class="pre">/sessionstart/keyboard_layout</span></span><a class="headerlink" href="#server-config-sessionstart-keyboard_layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default virtual keyboard layout used by Xvnc. The protocol is not
+dependent on this being configured, but some applications can
+misbehave if a different virtual layout is configured compared to the
+real keyboard layout on the client device.</p>
+<p>A list of possible keyboard layouts is given by this command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>man /opt/thinlinc/share/man/man7/xkeyboard-config.7
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_tlwebadm.html" title="Previous document">Parameters in /tlwebadm/</a>
+        </li>
+        <li>
+          <a href="config_shadowing.html" title="Next document">Parameters in /shadowing/</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="config_params.html">Server configuration parameters</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config_profiles.html">Parameters in /profiles/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_tlwebadm.html">Parameters in /tlwebadm/</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parameters in /sessionstart/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_shadowing.html">Parameters in /shadowing/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_utils.html">Parameters in /utils/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsm.html">Parameters in /vsm/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsmagent.html">Parameters in /vsmagent/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsmserver.html">Parameters in /vsmserver/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_subclusters.html">Parameters in /vsmserver/subclusters/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_webaccess.html">Parameters in /webaccess/</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="config_params.html">Server configuration parameters</a><ul>
+      <li>Previous: <a href="config_tlwebadm.html" title="previous chapter">Parameters in /tlwebadm/</a></li>
+      <li>Next: <a href="config_shadowing.html" title="next chapter">Parameters in /shadowing/</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/config_sessionstart.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

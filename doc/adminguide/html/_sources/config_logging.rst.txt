@@ -1,0 +1,155 @@
+.. meta::
+   :description: Learn how to configure logging for ThinLinc servers,
+                 including settings for log destinations, sub-loggers,
+                 and log levels for various ThinLinc server components
+                 such as master, agent, and Web Access.
+
+Configuring logging on ThinLinc servers
+---------------------------------------
+
+In this section we will describe how ThinLinc logs activities on the
+server, and how the logging can be configured.
+
+Logs are written by each individual session and by the following
+ThinLinc server components.
+
+-  VSM server
+
+-  VSM agent
+
+-  Web Integration
+
+-  Web Administration Interface
+
+-  Web Access (HTML5 client)
+
+ThinLinc server components
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Logging is configured by editing parameters in Hiveconf. Each component
+that uses the logging system has a Hiveconf folder named ``logging``.
+In this folder and its subfolder, the logging system is configured.
+
+Log destinations
+^^^^^^^^^^^^^^^^
+
+Logs can be written to a file on disk, to syslog, or both.
+
+Writing logs to file
+''''''''''''''''''''
+
+The file name for the log file written to local disk is configured by
+editing the parameter ``logfile`` under the ``logging`` folder. To turn
+off logging to file, set the parameter ``log_to_file`` to ``0``. Note
+that the log file will still be created. If abnormal situations occur
+because of programming errors, data may appear in the file.
+
+Writing logs to syslog
+''''''''''''''''''''''
+
+For large installations, using a central log host might be very
+convenient. ThinLinc supports writing logs to syslog, which makes it
+possible to collect all logs in one place.
+
+By setting the parameter ``log_to_syslog`` under the ``logging`` folder
+to ``1``, logs will be written to syslog. Specify the syslog facility in
+the parameter ``syslog_facility``. The default behavior is not to log to
+syslog.
+
+If the parameter ``syslog_host`` is set, logs will be sent via UDP to
+the syslog daemon on the host specified. If not, logs will be sent to
+syslog by writing to the socket specified in ``syslog_socket``. The
+latter is the default.
+
+Sub-loggers
+^^^^^^^^^^^
+
+Each program doing logging uses a number of sub-loggers. Sub-loggers are
+a way to distinguish different types of information written by the
+program. For example, the VSM server uses the sub-loggers ``license``,
+``session`` and ``shadow`` for logging license-related messages,
+information about sessions and information about shadowing respectively.
+Every sub-logger can be configured to use a different log level. This
+allows the system administrator to, for example, increase the
+information about new sessions without increasing the overall log level,
+easing debugging of specific problems.
+
+Log levels
+^^^^^^^^^^
+
+The amount of logging can be configured using log levels. The log levels
+available are:
+
+.. table:: Log levels
+
+   +-------------+-------------------------------------------------------+
+   | Log Level   | Explanation                                           |
+   +=============+=======================================================+
+   | ``ERROR``   | Unrecoverable Errors                                  |
+   +-------------+-------------------------------------------------------+
+   | ``WARNING`` | Warnings --- something went wrong, but ThinLinc can   |
+   |             | recover.                                              |
+   +-------------+-------------------------------------------------------+
+   | ``INFO``    | Messages that are useful in daily maintenance.        |
+   +-------------+-------------------------------------------------------+
+   | ``DEBUG``   | Messages that can be of use for system administrators |
+   |             | when debugging problems.                              |
+   +-------------+-------------------------------------------------------+
+   | ``DEBUG2``  | Messages useful to trained ThinLinc personnel when    |
+   |             | doing advanced debugging.                             |
+   +-------------+-------------------------------------------------------+
+
+The log level configured can be seen as a barrier. If the log level is
+set to for example ``INFO``, log messages with a level of ``INFO`` or
+higher are let through. If the log level instead is set to ``DEBUG2``,
+all log messages are let through, since all log levels are higher than
+``DEBUG2``.
+
+There is one default log level, and one log level per sub-logger defined.
+If the log level for a sub-logger is set to a lower value than the
+default log level, more information will be written by that specific
+sub-logger.
+
+The default log level is configured in the ``logging/defaultlevel``
+parameter. Each sub-logger's level can then be configured by setting the
+parameters under the ``logging/levels`` folder.
+
+Summary
+^^^^^^^
+
+The default logging configuration is summarized in
+:ref:`configuration-logsummary`.
+
+.. _configuration-logsummary:
+
+.. table:: Default log behavior
+
+   +----------------+--------------------------+------------------------+
+   | Component      | Default Behavior         | Log Configuration      |
+   |                |                          | Hive Folder            |
+   +================+==========================+========================+
+   | VSM server     | Log to                   | ``/vsmserver/logging`` |
+   |                | /var/log/vsmserver.log   |                        |
+   +----------------+--------------------------+------------------------+
+   | VSM agent      | Log to                   | ``/vsmagent/logging``  |
+   |                | /var/log/vsmagent.log    |                        |
+   +----------------+--------------------------+------------------------+
+   | Web            | Log to                   | ``/tlwebadm/logging``  |
+   | Administration | /var/log/tlwebadm.log    |                        |
+   | Interface      |                          |                        |
+   +----------------+--------------------------+------------------------+
+   | Web Access     | Log to                   | ``/webaccess/logging`` |
+   | (HTML5 client) | /var/log/tlwebaccess.log |                        |
+   |                |                          |                        |
+   +----------------+--------------------------+------------------------+
+
+Per-session logging
+~~~~~~~~~~~~~~~~~~~
+
+Each session writes what is written to standard output and standard
+error output to a file named :file:`xinit.log` which is located in the
+session directory for a specific session. For example, the log for the
+last session of the user *johndoe* is located in
+:file:`/var/opt/thinlinc/sessions/{johndoe}/last/`. This log contains
+for example output written by software run in the session, but it also
+has some output from ThinLinc software that is run by the user.

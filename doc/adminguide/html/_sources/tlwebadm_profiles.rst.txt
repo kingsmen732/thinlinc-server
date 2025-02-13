@@ -1,0 +1,149 @@
+.. meta::
+   :description: Manage profiles and introduction texts in the ThinLinc
+                 web administration interface, including creating,
+                 editing, and organizing user profiles and translations
+                 for the profile chooser.
+
+.. _tlwebadm_profiles:
+
+The profiles module
+~~~~~~~~~~~~~~~~~~~
+
+On this page you can modify text shown in the profile chooser, and
+manage profiles. You can create or delete a profile and configure the
+profile order.
+
+- :guilabel:`Introduction texts` allows you to modify and manage
+  translation of texts used in the profile chooser.
+
+- :guilabel:`Profile list` allows you to configure the available
+  profiles and their order.
+
+.. _tlwebadm_profiles_introductions_texts:
+
+Introduction texts
+^^^^^^^^^^^^^^^^^^
+
+:guilabel:`Introduction texts` contain translation tables for greetings
+and introduction texts. There is also a configuration option to enable
+or disable the use of introduction texts.
+
+- :guilabel:`Greeting text` is the text to show at the top of the
+  profile chooser.
+
+- :guilabel:`Introduction text` is the text to show before presenting
+  the list of profiles.
+
+To add a new translation, fill in the language code and the translated
+string. Click the :guilabel:`Save` button to save the new translation
+and add it to the translation table.
+
+To delete a translation select the row using the checkbox in
+:guilabel:`Delete` column of the translation table. Click the
+:guilabel:`Save` button to carry out the actual deletion of selected
+rows.
+
+.. _tlwebadm_profiles_profiles_list:
+
+Profile list
+^^^^^^^^^^^^
+
+The :guilabel:`Profile list` module contains functionality to manage
+your profiles. You can change the default profile, create new or edit
+existing profiles, or change the order of profiles.
+
+- :guilabel:`Default profile` allows you to specify the default profile
+  to be selected in the profile chooser.
+
+- :guilabel:`Active profiles` allows you to modify active profiles and
+  their order, or create new profiles. These are presented to the user
+  in the same order as in the list. Note that other criteria must also
+  be satisfied for a profile to be available to a user.
+
+- :guilabel:`Inactive profiles` allows you to modify inactive
+  profiles. These are not presented to the user.
+
+Create a new profile by clicking the :guilabel:`Add new profile` button.
+If you want to edit an existing profile, click the profile name in the
+table of available profiles.
+
+When creating a new or editing an existing profile a pop-up is displayed.
+This pop-up is shared between both modes and each field details are
+described below.
+
+-  :guilabel:`Identification`
+
+   A unique string identifier for the profile which is used when
+   referencing this profile.
+
+-  :guilabel:`Make profile available`
+
+   This will make the profile available to be selected and used. If
+   disabled it will not be shown to the user in the profile chooser.
+
+-  :guilabel:`XDG session desktop`
+
+   The system desktop session configuration that this profile should be
+   connected to.
+
+-  :guilabel:`Default name`
+
+   A name for the profile which is displayed in the profile chooser.
+
+-  :guilabel:`Take description from`
+
+   The description is shown in the profile chooser when a profile is
+   selected. This field can be a static text which is defined in the
+   input field :guilabel:`Default description`.
+
+   -  :guilabel:`Test command`: This will take and use the output of the
+      defined :guilabel:`Test command` as the description for the
+      profile.
+
+   - :guilabel:`Manually defined text below`: This will use the text
+     defined in the :guilabel:`Default description` field below.
+
+-  :guilabel:`Default description`
+
+   A text used as the description for the profile. This is text is used
+   if :guilabel:`Take description from` above is selected to use the
+   manually defined text.
+
+-  :guilabel:`Icon path`
+
+   A filename of the icon to use in the profile chooser.
+
+-  :guilabel:`Screenshot path`
+
+   A filename of the screenshot to use in the profile chooser.
+
+-  :guilabel:`Command line`
+
+   This command is used to start up a session. In most cases this is
+   something simple like ``xfce4-session``, but in some cases there
+   might also be arguments like
+   ``gnome-session --session gnome-classic``.
+
+-  :guilabel:`Test command`
+
+   This command is evaluated and if it returns true, the profile is
+   shown to the user. If the command evaluates as false, the profile
+   will not be shown in the list of available profiles for the user.
+
+   ThinLinc includes the tool :program:`tl-memberof-group` which may be
+   used to test membership of groups. You can use this tool as a test
+   command, such as ``/opt/thinlinc/bin/tl-memberof-group
+   my_profile_access_group``. This example will give members of group
+   ``my_profile_access_group`` access to the profile.
+
+   If you only want to give a specific user access to the profile you
+   may specify ``test ${USER} = user``.
+
+When you have finished editing the fields, click :guilabel:`Save` button
+at the bottom of the pop-up to save your changes into the configuration
+file.
+
+To delete a profile, click the profile name in the table of available
+profiles. Then click the checkbox at the bottom of the pop-up to verify
+your intention about deletion of the profile. Complete the deletion by
+clicking the :guilabel:`Delete` button.

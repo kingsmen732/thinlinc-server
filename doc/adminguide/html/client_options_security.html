@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Guide to configuring security and authentication settings in the ThinLinc client, including options for SSH ports, password, public key, smart card, and Kerberos authentication." name="description" />
+
+    <title>Security tab &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Advanced tab" href="client_options_advanced.html" />
+    <link rel="prev" title="Optimization tab" href="client_options_optimization.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_options_optimization.html" title="Previous document">Optimization tab</a>
+        </li>
+        <li>
+          <a href="client_options_advanced.html" title="Next document">Advanced tab</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="security-tab">
+<span id="client-security-tab"></span><h1>Security tab<a class="headerlink" href="#security-tab" title="Permalink to this headline">¶</a></h1>
+<p>The <span class="guilabel">Security</span> tab controls how the client authenticates
+against the ThinLinc server. The main interface of the client will be
+different depending on the choices made here.</p>
+<figure class="align-default" id="id1">
+<img alt="_images/client-options-security.png" src="_images/client-options-security.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 15 </span><span class="caption-text">Client settings security tab</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="description-of-security-tab-settings">
+<h2>Description of security tab settings<a class="headerlink" href="#description-of-security-tab-settings" title="Permalink to this headline">¶</a></h2>
+<p>Here follows a detailed description of the settings available in the
+security tab.</p>
+<p><span class="guilabel">SSH port</span></p>
+<blockquote>
+<div><p>This option selects the TCP/IP port to use when the client tries to
+establish an SSH connection with the ThinLinc server. The normal SSH
+port is 22, which also is the default selection for this option.
+There can be reasons to use another port on some occasions. If you
+for example need to use ThinLinc over the Internet, from a location
+where port 22 is blocked by a firewall. Then you can select a port
+that is open. To be able to use a port other than 22 you need to make
+sure that the SSH daemon (sshd), which runs on the ThinLinc server,
+listens to the port you want to use. The SSH daemon can be told to
+listen to any wanted ports. In the client interface you can select
+between the default port 22, port 80 and an arbitrary port number
+which you can enter by yourself.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the SSH host key on the server changes, e.g. due to an upgrade
+of the OS or SSH server software, the client will note this fact.
+It will then, at the next login, open a dialog and let the user
+confirm that the new host key is valid. If the user clicks OK,
+then the host key on the client for this particular server is
+updated on disk.</p>
+<p>The administrator can disallow this by manually setting the
+parameter <a class="reference internal" href="client_config_params.html#client-config-ALLOW_HOSTKEY_UPDATE"><code class="xref std std-clientconf docutils literal notranslate"><span class="pre">ALLOW_HOSTKEY_UPDATE</span></code></a> to <code class="docutils literal notranslate"><span class="pre">0</span></code>. See
+<a class="reference internal" href="client_config_params.html#clientconf-params"><span class="std std-ref">Client configuration parameters</span></a> for more information.</p>
+</div>
+</div></blockquote>
+<dl>
+<dt><span class="guilabel">Password</span></dt><dd><p>This option makes the client try to authenticate using a regular
+password.</p>
+</dd>
+<dt><span class="guilabel">Public key</span></dt><dd><p>This option makes the client try to authenticate using public key
+encryption. The user will be asked to provide a private encryption
+key instead of a text password.</p>
+</dd>
+<dt><span class="guilabel">Smart card</span></dt><dd><p>This option makes the client try to authenticate using public key
+encryption, but with the private key securely stored on a smart card.
+The user will be asked to select a certificate on the smart card and
+to provide the passphrase for it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Smart card authentication requires that the smart card is readable
+by your PKCS#11 library. The library included by default supports
+PKCS#15 compliant smart cards and relies on the PC/SC interface.
+This is always present on Windows systems and is usually installed
+by default on Linux systems.</p>
+</div>
+<p>The <span class="guilabel">Details…</span> button lets you change the options for
+smart card usage and managing the certificate filters which are used
+to match accepted certificates for authentication.</p>
+<figure class="align-default" id="id2">
+<span id="smart-card-options-dialog"></span><img alt="_images/client-options-security-smart-card-options.png" src="_images/client-options-security-smart-card-options.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 16 </span><span class="caption-text">Smart card authentication settings</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<dl>
+<dt><span class="guilabel">Use certificate subject as login name</span></dt><dd><p>Enable this options if you want to enable automatic login. This
+will also hide the <span class="guilabel">Username</span> field.</p>
+</dd>
+<dt><span class="guilabel">Connect when smart card is inserted</span></dt><dd><p>This option will try to automatically connect on card
+insertion. It is dependent on certificate filters, automatic
+connect will only occur if only one certificate is available after
+the filtration.</p>
+<p>Read more about automatic connection below where certificate
+filters are discussed.</p>
+<p>See <a class="reference internal" href="authentication_scpublickey.html#smartcard-auto"><span class="std std-ref">Automatic connection</span></a> for information on how to
+configure the server for automatic smart card connection.</p>
+</dd>
+<dt><span class="guilabel">Disconnect when smart card is removed</span></dt><dd><p>Enabling this options makes the client automatically disconnect
+when the smart card used to authenticate is removed.</p>
+</dd>
+<dt><span class="guilabel">Send smart card passphrase (PIN) to server</span></dt><dd><p>This option makes the client transmit the smart card passphrase,
+as entered by the user, over to the ThinLinc server. It is
+required to enable smart card single sign-on.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Enabling this option reduces the security of the smart card as
+the passphrase would otherwise never leave the client system.
+The option should be left disabled if smart card single sign-on
+is not used.</p>
+</div>
+</dd>
+<dt><span class="guilabel">Smart card — certificate filter</span></dt><dd><p>A certificate filter is used to present only allowed certificates
+for authentication. Certificates that do not match any filter will
+be hidden from the user.</p>
+<p>When no certificate filters are configured, all available
+certificates on the smart card will be available for
+authentication and therefore the auto-connect feature will not
+work.</p>
+<p>If the resulting filtered list of certificates contains only one
+certificate for authentication and the auto-connect feature is
+enabled, that certificate will be used for authentication.</p>
+<p>When the login dialog is displayed and the key shortcut
+<kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Control</kbd>+<kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">F8</kbd></kbd> is pressed, the certificate filtering
+functionality is bypassed and gives you access to all certificates
+available on the smart card for authentication.</p>
+<p>To add a new filter, press the <span class="guilabel">Add</span> button as shown in
+dialog <a class="reference internal" href="#smart-card-options-dialog"><span class="std std-numref">Fig. 16</span></a>. You can also select an
+available filter item in the list and press <span class="guilabel">Edit</span> to
+change the settings for that specific filter. Either way, the
+certificate filter settings dialog
+<a class="reference internal" href="#smart-card-certificate-filter-settings-dialog"><span class="std std-numref">Fig. 17</span></a> will be
+shown where you can modify the settings of the filter.</p>
+<figure class="align-default" id="id3">
+<span id="smart-card-certificate-filter-settings-dialog"></span><img alt="_images/client-options-security-smart-card-options-certificate-filter.png" src="_images/client-options-security-smart-card-options-certificate-filter.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 17 </span><span class="caption-text">Certificate filter settings</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<dl class="simple">
+<dt><span class="guilabel">Filter name</span></dt><dd><p>Name that will be displayed in the filter list.</p>
+</dd>
+<dt><span class="guilabel">Issuer</span></dt><dd><p>The certificate issuer field consists of a comma separated list
+of attribute-value pairs that all must be present in the
+certificate issuer field. Commonly the “common name” of the
+issuer is used, e.g. <code class="docutils literal notranslate"><span class="pre">cn=My</span> <span class="pre">CA</span></code>. It is also possible to allow
+any issuer who is part of the same organization, e.g. <code class="docutils literal notranslate"><span class="pre">o=My</span>
+<span class="pre">Company</span> <span class="pre">Ltd.</span></code>. Any registered object identifier descriptor can
+be used as an attribute name (see <a class="reference external" href="https://www.iana.org/assignments/ldap-parameters/ldap-parameters.xhtml">IANA</a> for a full list).</p>
+</dd>
+<dt><span class="guilabel">Key usage</span></dt><dd><p>The certificate must have all the key usage bits selected in
+this window. Having more bits than those selected does not
+exclude a certificate.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl>
+<dt><span class="guilabel">Kerberos ticket</span></dt><dd><p>This option makes the client try to authenticate using an existing
+Kerberos ticket.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This requires that a valid Kerberos ticket is available on the
+client, and that the SSH daemon on the ThinLinc server is
+configured to accept this ticket during authentication. For
+information about how to configure Kerberos authentication on your
+particular platform(s), please see the relevant vendor
+documentation.</p>
+</div>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_options_optimization.html" title="Previous document">Optimization tab</a>
+        </li>
+        <li>
+          <a href="client_options_advanced.html" title="Next document">Advanced tab</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="client.html">The native client</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="clientplatforms.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_usage.html">Client usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_cmdline.html">Client command line usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_export_local_device.html">Local device export</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="client_options.html">Client configuration</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="client_options_display.html">Display tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_local_devices.html">Local devices tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_optimization.html">Optimization tab</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Security tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_advanced.html">Advanced tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_config.html">Configuration storage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="client_gestures.html">Client touch gestures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_logfile_placement.html">Log file placement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_customizer.html">Client customizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_web_integration.html">Launching the client from a web page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_advanced_topics.html">Advanced topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="client.html">The native client</a><ul>
+  <li><a href="client_options.html">Client configuration</a><ul>
+      <li>Previous: <a href="client_options_optimization.html" title="previous chapter">Optimization tab</a></li>
+      <li>Next: <a href="client_options_advanced.html" title="next chapter">Advanced tab</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/client_options_security.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

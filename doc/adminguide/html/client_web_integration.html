@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Instructions for setting up and using ThinLinc Web Integration, allowing web servers to initiate ThinLinc client connections with customized configurations through CGI scripts." name="description" />
+
+    <title>Launching the client from a web page &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Advanced topics" href="client_advanced_topics.html" />
+    <link rel="prev" title="Client customizer" href="client_customizer.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_customizer.html" title="Previous document">Client customizer</a>
+        </li>
+        <li>
+          <a href="client_advanced_topics.html" title="Next document">Advanced topics</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="launching-the-client-from-a-web-page">
+<span id="clientplatforms-web-integration"></span><h1>Launching the client from a web page<a class="headerlink" href="#launching-the-client-from-a-web-page" title="Permalink to this headline">¶</a></h1>
+<p>This feature allows a web server, such as an intranet or a web portal,
+to initiate a ThinLinc client connection with a given configuration on
+behalf of a user.</p>
+<section id="requirements">
+<span id="clientplatforms-web-integration-requirements"></span><h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Web Integration requires an Apache HTTP Server, configured for TLS, with
+the ability to run CGI scripts.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some Linux distributions distributes their Apache HTTP Server with
+the mod_cgi module disabled. This module is required for Web
+Integration to work. On Ubuntu systems, it can be enabled by running
+the <strong class="command">a2enmod cgi</strong> command and restarting the httpd service.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If Web Integration is used over HTTP, an attacker with access to the
+network may be able to intercept user passwords. To protect from this
+happening, Web Integration automatically redirects to a HTTPS
+connection when HTTP is used.</p>
+</div>
+</section>
+<section id="installation">
+<span id="clientplatforms-web-integration-installation"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The Web Integration feature is not enabled by default in a ThinLinc
+installation. An installation script,
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/share/web_integration/install-web-integration</span></code>, is
+provided for ease of installation.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo /opt/thinlinc/share/web_integration/install-web-integration
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>After installing the Apache HTTP configuration file, make sure to
+restart the httpd service to load the new configuration.</p>
+</div>
+<p>While the installation script works as-is on most supported platforms,
+two environment variables grants you more control over where the
+configuration file is installed. This can be useful if you have httpd
+installed at a custom location.</p>
+<dl class="environ">
+<dt class="sig sig-object">
+<span class="sig-name descname"><span class="pre">APACHE_CONF_DIR</span></span></dt>
+<dd><p>If your Apache HTTP Server has been installed to a non-standard
+location, set this environment variable to tell the installation
+script where the configuration directory is located.</p>
+<p>If this parameter is unset, the installation script will attempt to
+find the configuration directory from a list of known locations.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo env <span class="nv">APACHE_CONF_DIR</span><span class="o">=</span>/usr/local/etc/httpd/conf.d <span class="se">\</span>
+    /opt/thinlinc/share/web_integration/install-web-integration
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="environ">
+<dt class="sig sig-object">
+<span class="sig-name descname"><span class="pre">APACHE_CONF_NAME</span></span></dt>
+<dd><p>The default behavior of the installation script is to install the
+configuration file in the configuration directory with the name
+<code class="file docutils literal notranslate"><span class="pre">thinlinc.conf</span></code>. If you already have a file with that name in
+the configuration directory that you wish to keep, set this
+environment variable to a different name.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo env <span class="nv">APACHE_CONF_NAME</span><span class="o">=</span>web-integration.conf <span class="se">\</span>
+    /opt/thinlinc/share/web_integration/install-web-integration
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="usage">
+<span id="clientplatforms-web-integration-usage"></span><h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The process works like this:</p>
+<ol class="arabic simple">
+<li><p>The CGI script is called with the desired parameters.</p></li>
+<li><p>The CGI script generates a “launch file”, which is a normal client
+configuration file. When the browser receives this file, it launches
+the locally installed ThinLinc client.</p></li>
+</ol>
+<p>The launch file delivered to the client is generated from the template
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/tlclient.conf.webtemplate</span></code>. The CGI script
+performs some substitutions on this file, before sending it to the
+client. Currently, the following variables are substituted:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">$server_name$</span></code></dt><dd><p>The server name where the CGI script resides.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">$login_name$</span></code></dt><dd><p>The username, specified by the <code class="docutils literal notranslate"><span class="pre">username</span></code> CGI parameter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">$password$</span></code></dt><dd><p>The password in hexadecimal ASCII notation, specified by the
+<code class="docutils literal notranslate"><span class="pre">password</span></code> or <code class="docutils literal notranslate"><span class="pre">hexpassword</span></code> CGI parameters.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">$autologin$</span></code></dt><dd><p>The value of the <code class="docutils literal notranslate"><span class="pre">autologin</span></code> CGI parameter.</p>
+</dd>
+</dl>
+</section>
+<section id="the-cgi-script-tlclient-cgi">
+<span id="clientplatforms-tlclient-cgi"></span><h2>The CGI script tlclient.cgi<a class="headerlink" href="#the-cgi-script-tlclient-cgi" title="Permalink to this headline">¶</a></h2>
+<p>The CGI script <code class="file docutils literal notranslate"><span class="pre">tlclient.cgi</span></code> is used to start the native client,
+when launched from a web page. It accepts many parameters which affects
+its operation. These are described below:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">server_name</span></code></dt><dd><p>The desired server name.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">username</span></code></dt><dd><p>The desired username. No default.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">password</span></code></dt><dd><p>The desired password, in plain text. No default.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">hexpassword</span></code></dt><dd><p>The desired password, in hexadecimal ASCII notation. This parameter
+overrides the <code class="docutils literal notranslate"><span class="pre">password</span></code> parameter. No default.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">redirto</span></code></dt><dd><p>After launching the native client, the browser will redirect to the
+web page specified by this parameter. Default value: the empty
+string.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">loginsubmit</span></code></dt><dd><p>This boolean parameter specifies if a login should be directly
+executed, instead of showing a login form. Default value: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">autologin</span></code></dt><dd><p>This boolean parameter specifies if the native client should
+automatically connect to the specified server at startup. Default
+value: <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">start_program_enabled</span></code></dt><dd><p>This boolean parameter specifies if the native client should request
+that the server starts the session with the command supplied by the
+client, as indicated by the <code class="docutils literal notranslate"><span class="pre">start_program_command</span></code> parameter.
+Default value: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">start_program_command</span></code></dt><dd><p>This parameter specifies the command to use when starting the
+session. Default value: <code class="docutils literal notranslate"><span class="pre">&quot;tl-single-app</span> <span class="pre">firefox&quot;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">displayurl</span></code></dt><dd><p>This boolean parameter can be used for debugging and development
+purposes. It will display a URL with all submitted parameters, and
+do nothing else. Default value: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">shadowing_enabled</span></code></dt><dd><p>This boolean parameter specifies if the native client should activate
+shadowing. Default value: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">shadow_name</span></code></dt><dd><p>This parameter specifies the user to shadow. Default value is the
+empty string.</p>
+</dd>
+</dl>
+<p>To make it easier to test various parameters, the HTML file
+<code class="file docutils literal notranslate"><span class="pre">cgitest.html</span></code> is included, in the same location as
+<code class="file docutils literal notranslate"><span class="pre">tlclient.cgi</span></code>. It also demonstrates how to create icons on web
+pages, which launches ThinLinc sessions.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_customizer.html" title="Previous document">Client customizer</a>
+        </li>
+        <li>
+          <a href="client_advanced_topics.html" title="Next document">Advanced topics</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="client.html">The native client</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="clientplatforms.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_usage.html">Client usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_cmdline.html">Client command line usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_export_local_device.html">Local device export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_options.html">Client configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_gestures.html">Client touch gestures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_logfile_placement.html">Log file placement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_customizer.html">Client customizer</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Launching the client from a web page</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-cgi-script-tlclient-cgi">The CGI script tlclient.cgi</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="client_advanced_topics.html">Advanced topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="client.html">The native client</a><ul>
+      <li>Previous: <a href="client_customizer.html" title="previous chapter">Client customizer</a></li>
+      <li>Next: <a href="client_advanced_topics.html" title="next chapter">Advanced topics</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/client_web_integration.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="31cm" height="33cm" viewBox="52 1 609 651" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="61" y="79" width="258" height="60"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="61" y="79" width="258" height="60"/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="190" y="113.985">
+    <tspan x="190" y="113.985">Run scripts in xstartup.d</tspan>
+  </text>
+  <g>
+    <rect style="fill: #ffffff" x="61" y="235" width="258" height="60"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="61" y="235" width="258" height="60"/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="190" y="269.986">
+    <tspan x="190" y="269.986">Run profile command</tspan>
+  </text>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="190" y1="139" x2="190" y2="218"/>
+    <polygon style="fill: #000000" points="182,218 190,234 198,218 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="182,218 190,234 198,218 "/>
+  </g>
+  <text font-size="32" style="fill: #000000;text-anchor:middle;font-family:serif;font-style:normal;font-weight:normal" x="356.06" y="46.7648">
+    <tspan x="356.06" y="46.7648">ThinLinc startup</tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="400" y="95.9852">
+    <tspan x="400" y="95.9852">Scripts in </tspan>
+    <tspan x="400" y="113.985">/opt/thinlinc/etc/xstartup.d </tspan>
+    <tspan x="400" y="131.985">are executed.</tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="400" y="269.986">
+    <tspan x="400" y="269.986">Session is started </tspan>
+  </text>
+  <g>
+    <rect style="fill: #ffffff" x="61" y="399" width="258" height="60"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="61" y="399" width="258" height="60"/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="190" y="433.986">
+    <tspan x="190" y="433.986">Run scripts in xlogout.d</tspan>
+  </text>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="190" y1="295" x2="190" y2="382"/>
+    <polygon style="fill: #000000" points="182,382 190,398 198,382 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="182,382 190,398 198,382 "/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="274" y="353">
+    <tspan x="274" y="353">At user logout</tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="400" y="415.986">
+    <tspan x="400" y="415.986">Scripts in </tspan>
+    <tspan x="400" y="433.986">/opt/thinlinc/etc/xlogout.d </tspan>
+    <tspan x="400" y="451.986">are executed.</tspan>
+  </text>
+  <g>
+    <rect style="fill: #ffffff" x="61" y="562" width="258" height="60"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="61" y="562" width="258" height="60"/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="190" y="596.986">
+    <tspan x="190" y="596.986">Session terminated</tspan>
+  </text>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="190" y1="459" x2="190" y2="545"/>
+    <polygon style="fill: #000000" points="182,545 190,561 198,545 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="182,545 190,561 198,545 "/>
+  </g>
+  <g>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2.35099e-37; stroke: #ffffff" x="52" y="1" width="608" height="650"/>
+    <text font-size="12.8" style="fill: #ffffff;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="356" y="331.45">
+      <tspan x="356" y="331.45"></tspan>
+    </text>
+  </g>
+</svg>

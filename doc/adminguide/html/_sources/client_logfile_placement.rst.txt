@@ -1,0 +1,82 @@
+.. meta::
+   :description: Overview of ThinLinc client log file management,
+                 including log file naming conventions and storage
+                 locations on Linux, Windows, and macOS systems.
+
+.. _client_logfile_placement:
+
+Log file placement
+------------------
+
+The ThinLinc client logs its activities in human-readable log files. For
+the common use case of running one client at a time, the log file is
+always called :file:`tlclient.log`. Once the first client has been
+closed and a second client is started, the log file of the first client
+is renamed :file:`tlclient.old.log` and the second client creates its
+log file, again called :file:`tlclient.log`. At most two log files are
+kept at a time for this use case --- one for the current client and one
+for the most recently closed client. If the file
+:file:`tlclient.old.log` exists before starting a client, that file will
+be permanently deleted once the client is started.
+
+Another, more rare use case is running two or more clients
+simultaneously. The first log file is again called :file:`tlclient.log`
+and the log files of any additional clients are called
+:file:`tlclient2.log`, :file:`tlclient3.log`, and so on, up to a maximum
+of nine active log files. Once the maximum number of active log files is
+reached, any additional clients started will not have any log files
+associated with them.
+
+If a client with an associated log file is closed, that log file is
+considered inactive. If a new client is started when less than nine log
+files are active, the client will once again have a log file associated
+with it. Note, however, that a client can *reuse* an inactive log name.
+In this context, *reuse* means that if e.g. the client associated with
+log file :file:`tlclient3.log` is closed and a new client is opened, it
+is possible for the log file of the new client to again be named
+:file:`tlclient3.log`.
+
+Every time a new client is opened, all :file:`.old.log` files will be
+permanently deleted and all inactive log files will be renamed from
+:file:`.log` to :file:`.old.log`. That means that when running multiple
+clients simultaneously, there can be several :file:`.log` files as well
+as several :file:`.old.log` files.
+
+The locations of the log files differ between Linux and Windows systems
+and are explained below.
+
+Linux log file
+~~~~~~~~~~~~~~
+
+On Linux systems, the log file is located in the user home directory:
+:file:`~/.thinlinc/tlclient.log`.
+
+Windows log file
+~~~~~~~~~~~~~~~~
+
+On Windows systems the log file is located in the directory referenced
+from the :environ:`%TMP%` variable. The value of this variable can be
+achieved by running any of the following commands in a Windows command
+window.
+
+.. code:: doscon
+
+   C:\> echo %TMP%
+
+or
+
+.. code:: doscon
+
+   C:\> set
+
+Observe that some directories in the Windows :environ:`%TMP%` path may
+be flagged as hidden by the Windows system. This means that you need to
+change directory options to display hidden files and directories to
+navigate to the log file.
+
+macOS log file
+~~~~~~~~~~~~~~
+
+On macOS systems the log file is located in the home directory for the
+user that runs the ThinLinc client. The path is
+:file:`~/.thinlinc/tlclient.log`.

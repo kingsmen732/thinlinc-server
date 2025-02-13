@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Overview of the local device export capabilities in ThinLinc, including sound devices, serial ports, drives, printers, and smart card readers, enabling secure access to client resources from a ThinLinc session." name="description" />
+
+    <title>Local device export &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Client configuration" href="client_options.html" />
+    <link rel="prev" title="Client command line usage" href="client_cmdline.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_cmdline.html" title="Previous document">Client command line usage</a>
+        </li>
+        <li>
+          <a href="client_options.html" title="Next document">Client configuration</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="local-device-export">
+<span id="client-export-local-device"></span><h1>Local device export<a class="headerlink" href="#local-device-export" title="Permalink to this headline">¶</a></h1>
+<p>ThinLinc supports export of different local devices. This means that a
+device that exists on your client computer or terminal can be reached
+from the ThinLinc session that runs on the server. The types of devices
+that can be exported varies depending on which operating system the
+ThinLinc client runs on. The export is, very generalized, done by
+establishing secure tunnels for the data transmission and services that
+connect both ends. Here follows more information about each type of
+possible export; for detailed information about how to enable each type
+of export in the client, see <a class="reference internal" href="client_options_local_devices.html#client-local-devices-tab"><span class="std std-ref">Local devices tab</span></a> below.</p>
+<section id="sound-device">
+<span id="client-export-sound"></span><h2>Sound device<a class="headerlink" href="#sound-device" title="Permalink to this headline">¶</a></h2>
+<p>This feature makes it possible to hear sound from applications that runs
+on the ThinLinc server. Sound will be sent from the ThinLinc server to
+your local client through a secure connection. A small local sound
+daemon will be automatically started by the ThinLinc client. A secure
+tunnel for sound will be established during the ThinLinc session setup.</p>
+<p>All programs that support PulseAudio should automatically be aware of
+this tunnel and send their sound to the client. See also
+<a class="reference internal" href="redir_sound.html#sound-redirection"><span class="std std-ref">Using sound device redirection</span></a> for information about supporting other
+applications.</p>
+<p>The sound data that is sent from the server session to the local client
+is uncompressed audio data. This means that it can be relatively large
+and may use relatively much network bandwidth. This feature should not
+be used if you plan to use ThinLinc over low bandwidth connections such
+as modems or ISDN connections.</p>
+</section>
+<section id="serial-ports-windows-and-linux-only">
+<span id="client-export-serial"></span><h2>Serial ports (Windows and Linux only)<a class="headerlink" href="#serial-ports-windows-and-linux-only" title="Permalink to this headline">¶</a></h2>
+<p>This feature makes it possible to export two local serial ports to the
+ThinLinc session. When serial port redirection is enabled, a small
+redirection daemon will be automatically started by the ThinLinc client
+during session startup. A secure tunnel for serial port data will be
+established.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When activating serial port redirection, all users on the terminal
+server can access the serial port of the client machine.</p>
+</div>
+</section>
+<section id="drives">
+<span id="client-export-drives"></span><h2>Drives<a class="headerlink" href="#drives" title="Permalink to this headline">¶</a></h2>
+<p>This feature makes it possible to, in a secure way, export one or many
+local drives from the client machine to the server session. This can be
+local hard disk volumes, local CD-ROM drives, and so on. The local drive
+will be made available on the ThinLinc server session.</p>
+<p>Each exported device can have individual permission settings. All export
+settings are made in the ThinLinc client options interface.</p>
+</section>
+<section id="printer">
+<span id="client-export-printer"></span><h2>Printer<a class="headerlink" href="#printer" title="Permalink to this headline">¶</a></h2>
+<p>This feature makes it possible to export a local printer to make it
+available from the ThinLinc session. When enabled, the client will set
+up a secure tunnel for printer jobs. The client will also activate a
+small built-in print server that listens for printer jobs on this
+tunnel.</p>
+<p>When you print to the special printer queue <strong>thinlocal</strong> in your
+ThinLinc session, then the job will be sent through this tunnel and then
+printed on the client machine. On Linux platforms, the print job will
+always be sent to the default printer. On Windows and macOS, it is
+possible to select whether the print job should be sent to the default
+printer or if the printer selection dialog should be used every print.
+Note that device dependent print jobs will always go to the default
+printer.</p>
+<p>For more information about printer redirection in ThinLinc, see
+<a class="reference internal" href="thinlocal.html#thinlocal"><span class="std std-ref">Local printer support</span></a>.</p>
+</section>
+<section id="smart-card-readers">
+<span id="client-export-smartcard"></span><h2>Smart card readers<a class="headerlink" href="#smart-card-readers" title="Permalink to this headline">¶</a></h2>
+<p>This feature makes it possible to export all local smart cards and smart
+card readers to make them available from the ThinLinc session. All smart
+card readers available to the system will be exported to the session so
+there is nothing to configure except an activation switch.</p>
+<p>The ThinLinc client relies on the PC/SC interface present on the system
+to communicate with the smart card readers. If you have a reader that
+uses another system, then that reader will not be exported.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_cmdline.html" title="Previous document">Client command line usage</a>
+        </li>
+        <li>
+          <a href="client_options.html" title="Next document">Client configuration</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="client.html">The native client</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="clientplatforms.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_usage.html">Client usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_cmdline.html">Client command line usage</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Local device export</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sound-device">Sound device</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#serial-ports-windows-and-linux-only">Serial ports (Windows and Linux only)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#drives">Drives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#printer">Printer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smart-card-readers">Smart card readers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="client_options.html">Client configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_gestures.html">Client touch gestures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_logfile_placement.html">Log file placement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_customizer.html">Client customizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_web_integration.html">Launching the client from a web page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_advanced_topics.html">Advanced topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="client.html">The native client</a><ul>
+      <li>Previous: <a href="client_cmdline.html" title="previous chapter">Client command line usage</a></li>
+      <li>Next: <a href="client_options.html" title="next chapter">Client configuration</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/client_export_local_device.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

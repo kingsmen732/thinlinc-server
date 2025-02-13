@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Overview of the configuration parameters for the ThinLinc agent service, including settings for session management, network configuration, and environment customization." name="description" />
+
+    <title>Parameters in /vsmagent/ &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parameters in /vsmserver/" href="config_vsmserver.html" />
+    <link rel="prev" title="Parameters in /vsm/" href="config_vsm.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_vsm.html" title="Previous document">Parameters in /vsm/</a>
+        </li>
+        <li>
+          <a href="config_vsmserver.html" title="Next document">Parameters in /vsmserver/</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="parameters-in-vsmagent">
+<span id="std-server-config-folder-vsmagent"></span><span id="std:server-config-folder-/vsmagent"></span><span id="configuration-vsmagent"></span><h1>Parameters in /vsmagent/<a class="headerlink" href="#parameters-in-vsmagent" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we will describe all the parameters currently used by
+the VSM agent. These configuration parameters reside in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/vsmagent.hconf</span></code>.</p>
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-agent_hostname">
+<span id="server-config-/vsmagent/agent_hostname"></span><span class="sig-name descname"><span class="pre">/vsmagent/agent_hostname</span></span><a class="headerlink" href="#server-config-vsmagent-agent_hostname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Public hostname; the hostname that clients are redirected to. If not
+defined, the agent will use the computer’s IP address. This is the
+default configuration, and means that ThinLinc does not require DNS
+to work properly. However, if you are using Network Address
+Translation (NAT), you must set this parameter to an IP address or
+DNS name that all clients can connect to. For example:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">agent_hostname</span> <span class="o">=</span> <span class="s">thinlinc.example.com</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-allowed_clients">
+<span id="server-config-/vsmagent/allowed_clients"></span><span class="sig-name descname"><span class="pre">/vsmagent/allowed_clients</span></span><a class="headerlink" href="#server-config-vsmagent-allowed_clients" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the space-separated list of VSM servers that should be
+allowed to connect to this VSM agent and create new sessions.
+<code class="docutils literal notranslate"><span class="pre">localhost</span></code> is always allowed, as well as the IP of the hostname
+the VSM agent runs on and the host specified in the
+<a class="reference internal" href="#server-config-vsmagent-master_hostname"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent/master_hostname</span></code></a> parameter.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-default_environment">
+<span id="server-config-/vsmagent/default_environment"></span><span class="sig-name descname"><span class="pre">/vsmagent/default_environment</span></span><a class="headerlink" href="#server-config-vsmagent-default_environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>This subfolder of <a class="reference internal" href="#std-server-config-folder-vsmagent"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent</span></code></a> contains environment
+variables that should be set in each user’s session. Example:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[/vsmagent/default_environment]</span>
+<span class="na">TOWN</span><span class="o">=</span><span class="s">Springfield</span>
+<span class="na">LC_CTYPE</span><span class="o">=</span><span class="s">sv_SE.UTF-8</span>
+<span class="na">FOOBAR</span><span class="o">=</span><span class="s">foobar</span>
+</pre></div>
+</div>
+<p>This will set the <span class="sig sig-inline environ">TOWN</span> environment variable to
+<code class="docutils literal notranslate"><span class="pre">Springfield</span></code> , the <span class="sig sig-inline environ">LC_CTYPE</span> variable to <code class="docutils literal notranslate"><span class="pre">sv_SE.UTF-8</span></code>
+and the <span class="sig sig-inline environ">FOOBAR</span> variable to <code class="docutils literal notranslate"><span class="pre">foobar</span></code> in each user’s
+session.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong class="program">xsession</strong> is executed via a login shell, which may
+modify the environment and override values in
+<a class="reference internal" href="#server-config-vsmagent-default_environment"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent/default_environment</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-default_geometry">
+<span id="server-config-/vsmagent/default_geometry"></span><span class="sig-name descname"><span class="pre">/vsmagent/default_geometry</span></span><a class="headerlink" href="#server-config-vsmagent-default_geometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default session size, to be used when clients are not requesting
+any specific session size.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-display_max">
+<span id="server-config-/vsmagent/display_max"></span><span class="sig-name descname"><span class="pre">/vsmagent/display_max</span></span><a class="headerlink" href="#server-config-vsmagent-display_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum display number to be used for ThinLinc sessions on each
+specific VSM agent host. Default value is <code class="docutils literal notranslate"><span class="pre">2000</span></code>.</p>
+<p>The maximum ThinLinc sessions allowed on a specific VSM Agent host is
+<a class="reference internal" href="#server-config-vsmagent-display_max"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent/display_max</span></code></a> -
+<a class="reference internal" href="#server-config-vsmagent-display_min"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent/display_min</span></code></a>.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-display_min">
+<span id="server-config-/vsmagent/display_min"></span><span class="sig-name descname"><span class="pre">/vsmagent/display_min</span></span><a class="headerlink" href="#server-config-vsmagent-display_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>The lowest display numbers to use for clients. The default is <code class="docutils literal notranslate"><span class="pre">10</span></code>,
+and unless there are other processes needing display numbers, the
+recommendation is not to change this number. See <a class="reference internal" href="tcp-ports.html#tcp-ports"><span class="std std-ref">TCP ports used by ThinLinc</span></a> for
+an in-depth explanation of port allocation.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-listen_port">
+<span id="server-config-/vsmagent/listen_port"></span><span class="sig-name descname"><span class="pre">/vsmagent/listen_port</span></span><a class="headerlink" href="#server-config-vsmagent-listen_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>The TCP port VSM Agent listen to for incoming requests. This should
+normally be set to the same value as <a class="reference internal" href="config_vsm.html#server-config-vsm-vsm_agent_port"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsm/vsm_agent_port</span></code></a>.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-lowest_user_port">
+<span id="server-config-/vsmagent/lowest_user_port"></span><span class="sig-name descname"><span class="pre">/vsmagent/lowest_user_port</span></span><a class="headerlink" href="#server-config-vsmagent-lowest_user_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>The lowest port to be used by normal user processes. This may <em>never</em>
+be lower than <a class="reference internal" href="#server-config-vsmagent-max_session_port"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent/max_session_port</span></code></a>. See
+<a class="reference internal" href="tcp-ports.html#tcp-ports"><span class="std std-ref">TCP ports used by ThinLinc</span></a> for an in-depth explanation of port allocation.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-make_homedir">
+<span id="server-config-/vsmagent/make_homedir"></span><span class="sig-name descname"><span class="pre">/vsmagent/make_homedir</span></span><a class="headerlink" href="#server-config-vsmagent-make_homedir" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this parameter is true, the user’s home directory will be
+automatically created if it doesn’t exist.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-make_homedir_mode">
+<span id="server-config-/vsmagent/make_homedir_mode"></span><span class="sig-name descname"><span class="pre">/vsmagent/make_homedir_mode</span></span><a class="headerlink" href="#server-config-vsmagent-make_homedir_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>When a home directory is created (see parameter
+<a class="reference internal" href="#server-config-vsmagent-make_homedir"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent/make_homedir</span></code></a> above), the mode for the newly
+created directory will be determined by this parameter.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-master_hostname">
+<span id="server-config-/vsmagent/master_hostname"></span><span class="sig-name descname"><span class="pre">/vsmagent/master_hostname</span></span><a class="headerlink" href="#server-config-vsmagent-master_hostname" title="Permalink to this definition">¶</a></dt>
+<dd><p>This parameter specifies the hostname of the master machine, i.e. the
+machine that runs the VSM server. In a HA setup, this should be the
+hostname of the IP address that is on the machine that is currently
+the active node, to ensure that services on the agents that need to
+access the VSM Server always connects to the machine that is up and
+running.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-max_session_port">
+<span id="server-config-/vsmagent/max_session_port"></span><span class="sig-name descname"><span class="pre">/vsmagent/max_session_port</span></span><a class="headerlink" href="#server-config-vsmagent-max_session_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>The highest port to use for VNC and tunnel ports on the VSM Agent.
+See <a class="reference internal" href="tcp-ports.html#tcp-ports"><span class="std std-ref">TCP ports used by ThinLinc</span></a> for an in-depth explanation of port allocation.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-single_signon">
+<span id="server-config-/vsmagent/single_signon"></span><span class="sig-name descname"><span class="pre">/vsmagent/single_signon</span></span><a class="headerlink" href="#server-config-vsmagent-single_signon" title="Permalink to this definition">¶</a></dt>
+<dd><p>This parameter decides whether the passwords of the users should be
+saved in order to support Single Sign-On when connecting to servers
+from the ThinLinc session, for example when running a Windows
+session.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-xserver_args">
+<span id="server-config-/vsmagent/xserver_args"></span><span class="sig-name descname"><span class="pre">/vsmagent/xserver_args</span></span><a class="headerlink" href="#server-config-vsmagent-xserver_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extra arguments to pass on to the X server Xvnc. One common case is
+to use <code class="docutils literal notranslate"><span class="pre">-localhost</span></code> , which makes Xvnc require connections to
+originate from localhost, thus forcing applications to either be
+local or use a tunnel (which often also means that the traffic is
+encrypted). Other examples include <code class="docutils literal notranslate"><span class="pre">-IdleTimeout</span></code> and
+<code class="docutils literal notranslate"><span class="pre">-MaxIdleTime</span></code>. For more information, see
+<a class="reference internal" href="config_lifetime.html#configuration-limiting-lifetime"><span class="std std-ref">Limiting lifetime of ThinLinc sessions</span></a>.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmagent-xauthority_location">
+<span id="server-config-/vsmagent/xauthority_location"></span><span class="sig-name descname"><span class="pre">/vsmagent/xauthority_location</span></span><a class="headerlink" href="#server-config-vsmagent-xauthority_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>This parameter controls the location of the <code class="file docutils literal notranslate"><span class="pre">Xauthority</span></code> file.
+Currently, two values are supported: With <code class="docutils literal notranslate"><span class="pre">homedir</span></code>, the file will
+be placed in the user’s home directory. With <code class="docutils literal notranslate"><span class="pre">sessiondir</span></code>, the file
+will be placed in the session directory below
+<code class="file docutils literal notranslate"><span class="pre">/var/opt/thinlinc/sessions</span></code>. The <span class="sig sig-inline environ">XAUTHORITY</span>
+environment variable is set accordingly by the VSM agent.</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_vsm.html" title="Previous document">Parameters in /vsm/</a>
+        </li>
+        <li>
+          <a href="config_vsmserver.html" title="Next document">Parameters in /vsmserver/</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="config_params.html">Server configuration parameters</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config_profiles.html">Parameters in /profiles/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_tlwebadm.html">Parameters in /tlwebadm/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_sessionstart.html">Parameters in /sessionstart/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_shadowing.html">Parameters in /shadowing/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_utils.html">Parameters in /utils/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsm.html">Parameters in /vsm/</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parameters in /vsmagent/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsmserver.html">Parameters in /vsmserver/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_subclusters.html">Parameters in /vsmserver/subclusters/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_webaccess.html">Parameters in /webaccess/</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="config_params.html">Server configuration parameters</a><ul>
+      <li>Previous: <a href="config_vsm.html" title="previous chapter">Parameters in /vsm/</a></li>
+      <li>Next: <a href="config_vsmserver.html" title="next chapter">Parameters in /vsmserver/</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/config_vsmagent.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

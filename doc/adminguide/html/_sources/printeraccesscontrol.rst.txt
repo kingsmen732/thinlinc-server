@@ -1,0 +1,143 @@
+.. meta::
+   :description: Explanation of the printer access control feature in
+                 ThinLinc, which manages and restricts user access to
+                 printers based on terminal location within a ThinLinc
+                 cluster. This section covers configuration
+                 requirements, activation steps, and considerations for
+                 handling unknown terminals.
+
+.. _printeraccesscontrol:
+
+Printer access control
+----------------------
+
+In a ThinLinc cluster, all printers that any user of the cluster needs
+to be able to print to must be defined centrally, or the user will not
+be able to print from applications that run in a ThinLinc session. For
+large installations, this leads to a very long list of available
+printers.
+
+A long list of printers leads to usability problems --- having to a
+select printer from a long list can be troublesome. Also, it opens for
+problems with printer jobs being printed at remote locations by mistake
+(or on purpose, by users finding it amusing to send "messages" to other
+locations).
+
+The solution to this problem is the printer access control feature of
+ThinLinc. By integrating with CUPS (the Common Unix Printing System),
+the list of printers a user is presented with and allowed to print to is
+limited to the printers that should be available to a specific terminal,
+based on information in a database of printers, terminals and locations.
+
+.. note::
+
+   The printer access control feature will affect all users on the
+   ThinLinc cluster. The only user excepted from limitations of the
+   printer list is the superuser (root) --- all other users will only
+   see and be able to use printers based on the location of their
+   terminals, when the printer access control feature is enabled.
+
+Theory of operation
+~~~~~~~~~~~~~~~~~~~
+
+Each time a user requests a new session or reconnects to an existing
+session, the hardware (MAC) address of the terminal is sent along with
+the request from the ThinLinc client. Using the same database as the
+*nearest printer* feature used to find which printer is closest to the
+user, the printer access control feature calculates which printers the
+user is allowed to use, and then configures the access control of the
+printing system (CUPS).
+
+This way, the user is presented with a list of printers that only
+contains the printers relevant for the location where the terminal the
+user is currently using is located. In a situation where a user has
+multiple sessions running from multiple clients, all printers associated
+with the different terminals will be made available.
+
+Requirements
+~~~~~~~~~~~~
+
+-  CUPS v1.2 or higher.
+
+Activating the printer access control feature
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+First, make sure you have configured the printers in your ThinLinc
+cluster as documented in :ref:`printing_config_overview`. For the
+printer access control feature, a central CUPS daemon on the VSM Server
+host is required, and all agent hosts must have a correctly configured
+:file:`/etc/cups/client.conf`.
+
+To activate the printer access feature, create two symlinks on the host
+running VSM Server, as follows:
+
+.. code:: console
+
+   $ sudo ln -s /opt/thinlinc/sbin/tl-limit-printers \
+      /opt/thinlinc/etc/sessionstartup.d
+   $ sudo ln -s /opt/thinlinc/sbin/tl-limit-printers \
+      /opt/thinlinc/etc/sessionreconnect.d
+
+The first symlink makes sure :program:`tl-limit-printers` is run when
+sessions are started. The second makes sure it is run at reconnects to
+existing sessions. More details about the session startup can be found
+in :ref:`configuration_customizing_user_session`.
+
+.. note::
+
+   With the above configuration (symlinking :program:`tl-limit-printers`
+   into :file:`sessionstartup.d` and :file:`sessionreconnect.d`), the
+   client will not get an answer back from the server until
+   :program:`tl-limit-printers` has finished its execution. This is the
+   desired behavior if it is strictly necessary that printer access
+   rights are correct when the user connects to the session. In
+   environments where it is acceptable that the final list of printers
+   shown to the user may not be finished when the user connects to the
+   session, place the execution of :program:`tl-limit-printers` in the
+   background, as detailed in
+   :ref:`configuration_scripts_startup_reconnect`, as that will decrease
+   the time the user has to wait for the session to appear on his client.
+
+After creating the symlinks, try connecting to your ThinLinc cluster
+with a ThinLinc client and bring up an application that lists the
+available printers. The list of printers should now be limited according
+to configuration.
+
+.. note::
+
+   The printer list limitation doesn't work for applications that use
+   the deprecated "cupsGetPrinters" library call. This means that older
+   applications might show the whole list of printers. The access
+   control is still enforced, which means that even if a disallowed
+   printer is shown in the list of printers, users can't submit jobs to
+   it.
+
+   Most applications in a modern Linux distribution doesn't have this
+   problem.
+
+Configuration
+~~~~~~~~~~~~~
+
+Configuration of the printer access control feature is mostly a matter
+of using tlwebadm (see :ref:`tlwebadm_locations` for details) to add the
+hardware address of all terminals as well as information about where
+they are located and which printers are to be available for each
+location.
+
+Unknown terminals / terminals without hardware address
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When a client reports a hardware address that is not present in the
+database of terminals, or when no hardware address is reported, the
+default behavior is to disallow access to all printers, rendering an
+empty printer list for the user.
+
+There is however a way to give even unknown terminals access to one or
+more printers --- define a special location and enable the
+:guilabel:`Use for unknown terminals` switch. Then add the printers that
+should be available for the unknown terminals.
+
+One common configuration is to add such a location and then add the
+**thinlocal** printer to this location. This way, unknown terminals, for
+example people working from their home computers, will be able to user
+their locally connected printer, but no other printer will be available.

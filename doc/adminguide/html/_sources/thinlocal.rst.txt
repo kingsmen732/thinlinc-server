@@ -1,0 +1,114 @@
+.. meta::
+   :description: Learn how to set up and use ThinLinc's local printer
+                 support, enabling printing to client-attached printers
+                 with device-independent and device-dependent modes.
+
+.. _thinlocal:
+
+Local printer support
+---------------------
+
+Theory of operation
+~~~~~~~~~~~~~~~~~~~
+
+With ThinLinc, it is possible to print to a printer attached to the
+client computer. Two primary modes of operation available: device
+independent and device dependent. Both modes can be used at the same
+time. See below for details about the two modes.
+
+The thinlocal printer is cluster-aware. If a user submits a print job on
+a node in a ThinLinc cluster which does not host the user's session, the
+print job will automatically be respooled to the correct node. This is
+used in the recommended setup (see :ref:`printing_config_overview`).
+
+If a user has more than one session, print jobs submitted to the local
+printer will be redirected to the client that made the last connection.
+
+The local printer features are implemented as a backend to CUPS (*Common
+Unix Printing System*).
+
+.. note::
+
+   When using local printers, we recommend that you activate the
+   parameter :servconf:`/vsmserver/unbind_ports_at_login`.
+
+Device-independent mode
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The device-independent mode is designed to provide universal access to
+any local printer without having to install drivers on the ThinLinc
+server. This is achieved by converting the print job to the Adobe
+Portable Document Format (PDF) on the remote desktop server, and then
+sending it through an encrypted tunnel to the client. The client
+subsequently prints the job on the local printer using a built-in PDF
+renderer.
+
+Because the driver on the ThinLinc server is device independent, it has
+no way to know what capabilities (duplex ability, trays, paper size,
+etc.) the printer connected to the client has. At the same time,
+applications that want to print needs to know about these capabilities
+to print correctly.
+
+As a compromise, the universal printer is configured with a PPD
+(*Postscript Printer Definition*) that covers a broad range of printer
+capabilities --- it's a *Generic Postscript Printer* driver. This makes
+it possible for CUPS to convert input formats to the correct format
+before sending them to the local printer. It also means that default
+values can be set for some of the configuration parameters, for example
+paper size, using the CUPS configuration interface.
+
+Device dependent mode
+~~~~~~~~~~~~~~~~~~~~~
+
+The device dependent mode is to be used when it is necessary to access
+all options on the printer, or when the communication with the printer
+cannot be expressed in terms of normal pages (e.g. a label printer). In
+this mode the printer driver is installed on the ThinLinc server and the
+data is sent unmodified to the local printer.
+
+.. note::
+
+   ThinLinc has no way of verifying that the connected printer is the
+   correct one, so it is up to the user to make sure that a device
+   dependent queue is not used with a different printer.
+
+Installation and configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use ThinLinc setup to install the PDF conversion filter, the backend and
+queue in CUPS on all machines running VSM Agent. This adds a new queue
+named **thinlocal** to CUPS and makes it available to your users. This
+queue is the one to use for device independent mode described above.
+
+After installation, the local printer is ready for use. Make sure your
+ThinLinc client is configured to allow redirection of printers, then
+print to the **thinlocal** queue, and the job will be rerouted to the
+default printer of the client you're currently using.
+
+Device dependent queues are installed as if installing the printer
+locally on the ThinLinc server. The only difference is that the URI
+shall be specified as ``thinlocal:/``. Example:
+
+.. code:: console
+
+   $ sudo lpadmin -p thinlocal-label -v 'thinlocal:/' \
+      -P /media/cd/label-printer.ppd
+
+Parallel port emulation
+~~~~~~~~~~~~~~~~~~~~~~~
+
+ThinLinc also includes a very basic form of parallel port emulation that
+gives legacy application access to the local printer. It is built on top
+of the **thinlocal** queue, which means it only works if certain
+requirements are satisfied:
+
+-  The application must only write to the port. Reading is not
+   supported, neither is monitoring nor altering the port status pins.
+
+-  After a print job is completed, the application must close the port.
+   As the emulation is unaware of the printer protocol, closing the port
+   is the only way it can determine where one job ends and another
+   begins.
+
+To access the emulated parallel port, configure the application to use
+the port :file:`$TLSESSIONDATA/dev/lp0`.

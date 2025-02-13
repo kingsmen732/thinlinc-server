@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Overview of the ThinLinc nearest printer feature, which automatically directs print jobs to the nearest available printer based on the user's terminal location. Includes details on configuration, administration, and the printer selection algorithm." name="description" />
+
+    <title>Nearest printer support &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Printer access control" href="printeraccesscontrol.html" />
+    <link rel="prev" title="Local printer support" href="thinlocal.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="thinlocal.html" title="Previous document">Local printer support</a>
+        </li>
+        <li>
+          <a href="printeraccesscontrol.html" title="Next document">Printer access control</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="nearest-printer-support">
+<span id="nearestprinter"></span><h1>Nearest printer support<a class="headerlink" href="#nearest-printer-support" title="Permalink to this headline">¶</a></h1>
+<p>With the ThinLinc <em>nearest printer</em> feature, printer jobs are sent to
+a printer selected based on the physical address of the users terminal.
+This is typically used to implement printer queues based on physical
+proximity.</p>
+<p>The nearest printer is implemented as an extra printer queue, on top of
+the real printers. Printer jobs sent to the <strong>nearest</strong> queue will be
+sent to the <em>nearest printer backend</em>. The backend is a program which is
+called by CUPS together with all needed information. The backend will
+look at the username requesting the printout and ask the ThinLinc VSM
+server for more information about this user. The information includes
+which terminal the user is currently using. The backend then queries the
+information stored in Hiveconf for a list of printers that are
+considered near the terminal used by the printing user. When a printer
+is known the backend will place the job in that printer queue.</p>
+<p>The <strong>nearest</strong> queue is added to the VSM master server by ThinLinc
+setup. The recommended setup is to configure one <strong>nearest</strong> printer
+queue in the CUPS daemon on the VSM Server host, and then let all agents
+use this CUPS daemon. See <a class="reference internal" href="printing_config_overview.html#printing-config-overview"><span class="std std-ref">Printer configuration overview</span></a> for an
+overview of printer setup in a ThinLinc cluster.</p>
+<section id="administration-of-the-nearest-printer-feature-in-thinlinc">
+<h2>Administration of the nearest printer feature in ThinLinc<a class="headerlink" href="#administration-of-the-nearest-printer-feature-in-thinlinc" title="Permalink to this headline">¶</a></h2>
+<p>The nearest printer system needs information about groups of terminals,
+known as <em>locations</em>, which typically represents some physical layout.
+The information connects terminals to locations and also links printers
+to the locations. Available printers are automatically fetched from the
+underlying printing system and are available for assignment to locations
+and/or terminals.</p>
+<p>Information about terminals, locations and their associated printers can
+be administrated using the ThinLinc Web Administration, see
+<a class="reference internal" href="tlwebadm_locations.html#tlwebadm-locations"><span class="std std-ref">The locations module</span></a>.</p>
+<p>Each location should be entered with a name, and may have an optional
+description. A location can for example represent a classroom, a
+department, a house, and so on. Each location can be associated with one
+or more printers, including the special <strong>nearest</strong> and <strong>thinlocal</strong>
+printers. Typically it will include all printers available near that
+physical location the location represents. If the location is so big
+that different printers are close to different parts of the location,
+then you should probably divide the location into smaller parts, each
+represented by a separate location.</p>
+<p>A location can be set to handle clients which are not defined using a
+terminal definition (“unknown terminals”).</p>
+<p>Each terminal in the ThinLinc Web Administration represents one physical
+terminal in the installation and is defined by its terminal network
+interface hardware (MAC) address. The hardware address can be entered in
+many formats, but will be converted to all uppercase hexadecimal form
+separated by a colon, i.e. <code class="docutils literal notranslate"><span class="pre">01:23:45:67:89:AB</span></code>.</p>
+<p>A terminal must be associated with a location.</p>
+</section>
+<section id="nearest-printer-selection-algorithm">
+<h2>Nearest printer selection algorithm<a class="headerlink" href="#nearest-printer-selection-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>If a terminal has a printer directly assigned to it in the terminals
+module in tlwebadm, that printer will be the nearest printer for that
+terminal. For terminals without a printer directly assigned (the normal
+situation), the first printer in the list of printers for the terminal’s
+location is selected when the user submits a printer job to the
+<strong>nearest</strong> queue.</p>
+<p>If the client is not a known terminal, i.e. its hardware address was not
+found, it will use the printer for the location marked as handling
+unknown terminals. If not, there will be no printer available.</p>
+<p>If a user is using multiple sessions, print jobs submitted via
+<strong>nearest</strong> printer will be redirected to the printer that is found
+starting from the client that made the last connection.</p>
+</section>
+<section id="printer-drivers">
+<h2>Printer drivers<a class="headerlink" href="#printer-drivers" title="Permalink to this headline">¶</a></h2>
+<p>When printing via the <strong>nearest</strong> printer, the CUPS client can’t get
+hold of all information about the real printer where the job will
+actually be printed because it doesn’t know that the printer job will be
+rerouted by the <strong>nearest</strong> driver. Therefore, the printing application
+has no way to know about the number of trays, the paper sizes available
+etc. This is a problem for some applications, and it also adds to the
+number of applications that will be misconfigured, for example selecting
+the wrong paper size.</p>
+<p>As a compromise, the <strong>nearest</strong> printer is configured with a PPD
+(<em>Postscript Printer Definition</em>) that covers a broad range of printer
+capabilities — it’s a <em>Generic Postscript Printer</em> driver. This makes
+it possible to configure default values for some of the settings, for
+example paper size, using the CUPS configuration interface.</p>
+<p>If all the printers in your organization are of the same type, it may be
+a good idea to replace the Generic Postscript PPD installed for the
+<strong>nearest</strong> queue with a PPD for the specific printer in use. That will
+let CUPS-aware applications select between the specific set of features
+available for the specific printer model.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="thinlocal.html" title="Previous document">Local printer support</a>
+        </li>
+        <li>
+          <a href="printeraccesscontrol.html" title="Next document">Printer access control</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="printing.html">Printer features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="printing_config_overview.html">Printer configuration overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thinlocal.html">Local printer support</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Nearest printer support</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#administration-of-the-nearest-printer-feature-in-thinlinc">Administration of the nearest printer feature in ThinLinc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nearest-printer-selection-algorithm">Nearest printer selection algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#printer-drivers">Printer drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="printeraccesscontrol.html">Printer access control</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="printing.html">Printer features</a><ul>
+      <li>Previous: <a href="thinlocal.html" title="previous chapter">Local printer support</a></li>
+      <li>Next: <a href="printeraccesscontrol.html" title="next chapter">Printer access control</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nearestprinter.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

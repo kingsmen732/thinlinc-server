@@ -1,0 +1,100 @@
+.. meta::
+   :description: The tlctl load command displays the current load
+                 status of a ThinLinc cluster, providing key metrics
+                 like CPU, memory usage, and agent capacity to help
+                 monitor system health and load balancing.
+
+.. raw:: pdf
+
+   PageBreak
+
+tlctl load
+==========
+
+Synopsis
+--------
+
+**tlctl load** [*options*] <*command*> [*args*]
+
+Description
+-----------
+
+:program:`tlctl load` displays the current load status of the ThinLinc
+cluster, as currently measured by ThinLinc. It can be used to get a
+quick overview of the health of the system, or to help debug unexpected
+load balancing decisions.
+
+Options
+-------
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+Commands
+--------
+
+**list** [*options*]
+   List the basic load numbers for all agents in the cluster, with
+   subcluster association displayed if multiple subclusters exist.
+
+   .. option:: --sort=HEADER
+
+      Sort the list of agents specified by *HEADER*. The default is
+      "AGENT". Available headers are found in the list below.
+
+   Definition of command output:
+
+   AGENT
+       Agent names.
+   USERS
+       Total numbers of unique users on the agent (not only users
+       running ThinLinc sessions).
+   MEM
+       Aggregated RAM and swap memory used.
+   CPU
+       Aggregated CPU used over all available CPUs.
+   RATING
+       Quantification of agent capacity for additional sessions, where
+       for instance 10.0 rating corresponds to approximately 10
+       additional sessions.
+
+**show** <*AGENT*>
+   Show all load information for the agent specified by *AGENT*.
+
+   Definition of command output:
+
+   Subclusters
+       All the subclusters the agent is associated with. This line is
+       printed if there exists multiple subclusters, regardless if the
+       agent in question is associated with one or more subclusters.
+   ThinLinc users
+       Number of users on the agent running one or more ThinLinc
+       sessions.
+   Total number of users
+       Total numbers of unique users on the agent (not only users
+       running ThinLinc sessions).
+   Memory (used RAM\+swap)
+       Aggregated RAM and swap memory used.
+   RAM (used/total)
+       Used RAM / total RAM.
+   Swap (used/total)
+       Used swap memory / total swap memory.
+   Load (1 min)
+       CPU load 1-minute average.
+   Number of CPUs
+       Number of available CPUs.
+   CPU
+       Aggregated CPU used over all available CPUs.
+   Bogomips
+       Computational capacity.
+   Rating
+       Quantification of agent capacity for additional sessions, where
+       for instance 10.0 rating corresponds to approximately 10
+       additional sessions.
+   Penalty points
+       Received e.g. when the agent is slow to respond or when
+       additional users connect, which directly affects the rating
+       of the agent.
+   Last updated
+       Timestamp of content update.

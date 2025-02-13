@@ -1,0 +1,42 @@
+.. meta::
+   :description: The tl-notify command sends user-visible messages to
+                 ThinLinc sessions, with options to target specific
+                 users or all sessions.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-notify
+=========
+
+Synopsis
+--------
+
+**tl-notify** [*options*] <*message*>
+
+Description
+-----------
+
+This command sends a user-visible message to ThinLinc sessions on the
+server. The default is to send the message to all sessions, but the
+:option:`-u` option can be used to send the message to a single
+recipient instead.
+
+To send messages to all users in a ThinLinc cluster, you can use this
+command in combination with the :program:`tl-ssh-all`\ (8) command.
+
+Options
+-------
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+.. option:: -u, --user=USER
+
+   User to send message to. The default is "all".
+
+.. option:: --version
+
+   Prints the ThinLinc version and exits.

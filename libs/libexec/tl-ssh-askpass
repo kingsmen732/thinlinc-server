@@ -1,0 +1,11 @@
+#!/bin/bash
+# -*- mode: shell-script; coding: utf-8 -*-
+#
+# Copyright 2002-2014 Cendio AB.
+# For more information, see http://www.cendio.com
+
+[ -h "$0" ] && ORIGIN=`ls -l "$0" | sed "s/.*-> //g"` || ORIGIN="$0"
+ORIGIN=`(cd "\`dirname \"$ORIGIN\"\`"; pwd -P 2>/dev/null || pwd)`
+
+# Can't put a relative path in the hashbang
+exec "${ORIGIN}/../libexec/python3" "${ORIGIN}/tl-ssh-askpass.py" "$@"

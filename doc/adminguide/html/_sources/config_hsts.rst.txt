@@ -1,0 +1,83 @@
+.. meta::
+   :description: Learn how to configure HTTP Strict Transport Security
+                 (HSTS) in ThinLinc to enforce HTTPS connections.
+                 Includes options for subdomains and browser preload
+                 settings.
+
+.. _configuring_hsts_header:
+
+Configuring HSTS headers
+=====================================
+
+HTTP Strict Transport Security (HSTS) is a security mechanism that
+forces users to connect to a website over a secure HTTPS connection
+instead of insecure HTTP. This is done by the server sending an HTTP
+header, Strict-Transport-Security (RFC 6797). This header informs the
+browser that a site should only be accessed using HTTPS, and that any
+future attempts to access the site using HTTP will automatically be
+converted to HTTPS. By preventing data from being transmitted
+unprotected, this header can help protect websites and users from
+certain types of attacks, such as man-in-the-middle attacks.
+
+Warnings and limitations
+------------------------
+Important: Do not modify the HSTS settings unless you fully understand
+the potential risks, as these settings should be regarded as permanent.
+Incorrect configuration can lead to unintended consequences, including
+blocking access to other services on your domain. Below are some key
+warnings and limitations to consider before enabling HSTS:
+
+- If HSTS is enabled, the browser enforces HTTPS strictly for the entire
+  domain, converting all HTTP requests to HTTPS. This setting does not
+  only affect ThinLinc. This causes issues if some resources are not
+  accessible over HTTPS.
+- A service may not have a valid, trusted SSL/TLS certificate and might
+  instead use a self-signed certificate. If HSTS is enabled, browsers
+  will block access to such services.
+- If HSTS is configured to also include subdomains, all subdomains must
+  also use HTTPS and have valid certificates. It is safer to enable HSTS
+  on subdomains separately, since it reduces the risk of blocking access
+  to any subdomains not fully supporting HTTPS.
+
+Overview
+--------
+The HSTS configuration has three options which control details on how it
+works. These options, which can be added to the
+:servconf:`/tlwebadm/hsts` or :servconf:`/webaccess/hsts` parameters,
+are explained more in detail in subsequent sections and in
+:ref:`configuration_tlwebadm` and :ref:`configuration_tlwebaccess`.
+
+Enable HSTS headers
+---------------------
+After being turned on, the HSTS policy is enabled for the domain after
+the first visit to ThinLinc Web Access or Web Administration. This means
+the browser starts using the policy from the second visit for a set
+duration time. As long as the domain is revisited continuously, it will
+keep enforcing the usage of HTTPS. When first enabling, it is
+recommended to choose “testing”, please see
+:ref:`configuration_tlwebadm` or :ref:`configuration_tlwebaccess`.
+Remember to restart the service after changing the configuration.
+
+Include subdomains in the HSTS policy
+--------------------------------------
+When including subdomains in the HSTS policy, the browser will also
+enforce HTTPS usage for the subdomains of the ThinLinc host. Note the
+warnings above. The parameters are explained more in detail in
+:servconf:`/tlwebadm/hsts/subdomains_included` and
+:servconf:`/webaccess/hsts/subdomains_included`.
+
+Allow browser HSTS preloading
+-----------------------------------------
+Major browsers have a preload list of domains with the HSTS policy
+enabled, which for many is based on Chromium's list. A request can be
+made to be added to Chromium's preload list, when all requirements are
+met. The reason for preloading is to enable the HSTS policy at the first
+visit to the domain or subdomain. The results should be considered
+permanent once enabled and are difficult to reverse.
+
+ThinLinc has options for this, which indicates, when enabled, that the
+intention is to add the domain, and subdomains, to the browsers’ lists.
+The parameters are explained more in detail in
+:servconf:`/tlwebadm/hsts/allow_browser_preload` and
+:servconf:`/webaccess/hsts/allow_browser_preload`.
+

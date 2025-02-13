@@ -1,0 +1,44 @@
+.. meta::
+   :description: Guide to installing and running the ThinLinc client on
+                 Windows, including system requirements and steps for
+                 installation and configuration.
+
+.. _windowsclients:
+
+Windows
+-------
+
+.. _windowsclientsreq:
+
+Requirements
+~~~~~~~~~~~~
+
+The supported Windows versions are Windows 10 or later, and Windows
+Server 2016 or later.
+
+.. _windowsclientsinstall:
+
+Installing the Windows client
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To install the client on a Windows machine, unpack the client bundle and
+enter the :file:`client-windows` directory. Then click on the file
+:file:`tl-x.y.z-client-windows.exe` and follow the instructions.
+
+You will also find unpacked versions of the ThinLinc Windows client,
+both 32-bit and 64-bit, under the :file:`tl-x.y.z-client-windows-x86`
+and :file:`tl-x.y.z-client-windows-x64` directories. It makes it
+possible to run the client directly from the bundle or other media, like
+a portable application, without the requirement of installing the
+client.
+
+For more information about how to configure the client, read
+:ref:`clientconf`.
+
+.. _windowsclientsrun:
+
+Running the Windows client
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+During installation the ThinLinc client will be added to the Start menu.
+To start the client you select it from the Start menu.

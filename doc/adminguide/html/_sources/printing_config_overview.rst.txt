@@ -1,0 +1,64 @@
+.. meta::
+   :description: Overview of printer configuration in a ThinLinc
+                 cluster, detailing the setup of CUPS on the master and
+                 agent machines, including the importance of disabling
+                 CUPS Browsing and configuring the nearest and thinlocal
+                 printer queues.
+
+.. _printing_config_overview:
+
+Printer configuration overview
+------------------------------
+
+This section provides an overview of how printing is configured in a
+ThinLinc cluster.
+
+.. figure:: images/printer_config_overview.svg
+
+   Printer configuration overview
+
+CUPS browsing
+~~~~~~~~~~~~~
+
+It is important that the CUPS Browsing feature is **turned off** on all
+machines in the cluster, or problems with duplicate **thinlocal**
+printers will occur.
+
+CUPS configuration on the master machine
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Configure all printers that need to be available in the CUPS
+configuration on the machine running VSM Server. Either use
+distribution-specific tools, or the built-in administration interface in
+CUPS which can usually be reached by using a web browser, connecting to
+port 631 on the machine, i.e. http://tl.example.com:631/.
+
+The **nearest** and **thinlocal** queues, used by the nearest printer
+and the local printer features respectively, are added by ThinLinc
+setup.
+
+Printers, with one exception (see below) only need to be configured on
+the machine running VSM Server. Agent nodes will use the CUPS daemon
+(cupsd) on the VSM Server machine for printing.
+
+CUPS configuration on the agent machines(s)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The machines in the cluster that run VSM Agent, i.e., the machines that
+host user sessions, need a running CUPS daemon (cupsd), but this cupsd
+only needs one printer defined --- the **thinlocal** queue.
+
+The **thinlocal** queue is added by ThinLinc setup when installing the
+agent.
+
+.. note::
+
+   The CUPS daemon on each agent must listen to requests on the network
+   interface, and allow printer jobs from the machine running VSM Server
+   to be submitted to the **thinlocal** queue.
+
+When a user submits a job to the local printer, i.e. to the
+**thinlocal** queue, the printer job will be submitted to the CUPS
+daemon running on the VSM Server host. It will then be respooled to the
+cupsd on the agent server hosting the session. This is to make central
+configuration of all other printers possible.

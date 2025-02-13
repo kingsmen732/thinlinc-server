@@ -1,0 +1,110 @@
+.. meta::
+   :description: Learn how to use the shadowing feature in ThinLinc to
+                 view and interact with other users' sessions for remote
+                 assistance and support.
+
+.. _shadowing:
+
+Shadowing
+=========
+
+Introduction
+------------
+
+Shadowing is a feature that lets a user connect to, view, and interact
+with ThinLinc sessions of other users. This can be useful in remote
+assistance and support scenarios, where trusted support personnel can
+connect to a user session and aid with for example application problems.
+
+Because shadowing gives the shadowing user full control over the
+shadowed session, this feature should be used with caution.
+
+The shadowing feature is enabled by default and is configured to ask the
+user to accept or reject a shadowing request.
+
+.. _shadowing-disable-feature:
+
+Disable shadowing feature
+-------------------------
+
+The shadowing feature is enabled by default when installing ThinLinc.
+You can disable this feature, if required, using the following command:
+
+.. code:: console
+
+   $ sudo tl-config /shadowing/shadowing_mode=reject
+
+When the shadowing feature is disabled, all requests to shadow a user
+session are actively rejected. Details about the
+:servconf:`/shadowing/shadowing_mode` configuration parameter is
+described in :ref:`configuration_shadowing`.
+
+.. note::
+
+   The above command should be run on all of the ThinLinc servers in
+   your cluster.
+
+.. _shadowing-granting-access:
+
+Granting shadowing access to users
+----------------------------------
+
+Because of the security implications of this feature, the system
+administrator needs to grant this permission to named users and/or
+groups before it can be used.
+
+The **vsmserver** service controls whether a user requesting to shadow
+another user is authorized to do so. The configuration parameter
+:servconf:`/shadowing/allowed_shadowers` from the
+:file:`/opt/thinlinc/etc/conf.d/shadowing.hconf` file is read by the
+**vsmserver** service on startup. This parameter is described in detail
+in :ref:`configuration_shadowing`.
+
+.. note::
+
+   After the configuration variable has been set, the ``vsmserver``
+   service needs to be restarted before the change is made active.
+
+.. _shadowing-indicating:
+
+Shadowing notification
+----------------------
+
+Notification behavior of the shadowing feature is configured by the
+system administrator. The notification mechanism can be configured in
+four different modes as described here.
+
+-  Shadow requests are silently rejected
+
+-  Shadow requests are silently accepted
+
+-  Shadow requests are accepted and the user is notified
+
+-  Shadow requests are interactively accepted or rejected by the user
+
+To configure the shadowing mode, use the following command and select a
+value of ``reject``, ``silent``, ``notify``, or ``ask``. Details about
+the :servconf:`/shadowing/shadowing_mode` configuration parameter are
+described in :ref:`configuration_shadowing`.
+
+.. code:: console
+
+   $ sudo tl-config /shadowing/shadowing_mode=ask
+
+.. note::
+
+   The above command should be run on all ThinLinc servers in your
+   cluster.
+
+.. note::
+
+   Only newly started session are affected by the above change.
+
+Shadowing a user session
+------------------------
+
+The ThinLinc client must be configured for shadowing. See
+:ref:`client_advanced_tab` for more information.
+
+Once the client has been configured for shadowing, enter the username of
+the user you wish to shadow in the User to shadow field and connect.

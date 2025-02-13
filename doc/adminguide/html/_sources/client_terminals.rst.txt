@@ -1,0 +1,150 @@
+.. meta::
+   :description: Instructions for installing and configuring the
+                 ThinLinc client on various thin terminals, including HP
+                 ThinPro, IGEL Universal Desktop, and other Linux-based
+                 or Windows-based appliances.
+
+.. _thinterminals:
+
+Thin terminals
+--------------
+
+ThinLinc has support for several thin terminals, i.e. hardware built
+with the task of providing a thin client as a primary design goal.
+
+.. _clientplatforms_hp_terminals:
+
+HP ThinPro terminals
+~~~~~~~~~~~~~~~~~~~~
+
+HP ThinPro terminals are based on Ubuntu, and therefore one can use the
+DEB package provided in our ThinLinc client bundle for this terminal.
+
+Manual installation/upgrade of ThinLinc client
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Below we will describe the process of manually installing the ThinLinc
+client on Ubuntu-based HP ThinPro Linux terminals.
+
+1. Use the tool :guilabel:`Administrator/User mode switch` to
+   authenticate as administrator.
+
+2. Start an X terminal from the advanced tab in the control panel.
+
+3. Unlock the file system:
+
+   .. code:: console
+
+      # fsunlock
+
+4. Copy the ThinLinc client .deb package from ThinLinc client bundle
+   onto a USB memory stick, and connect it to the terminal. Go into the
+   directory which represents your connected USB device with command:
+
+   .. code:: console
+
+      # cd /tmp/tmpfs/media/my_usb_storage
+
+   As an alternative, it is also possible to download the client package
+   from a web server using the :command:`wget` command.
+
+5. Install the ThinLinc client package using Debian package manager
+   command:
+
+   .. code:: console
+
+      # dpkg -i thinlinc-client*.deb
+
+6. Lock down the file system before closing the X terminal window:
+
+   .. code:: console
+
+      # fslock
+
+7. Reboot.
+
+8. Add a ThinLinc connection in the connection manager.
+
+The HP :guilabel:`Connection Wizard` does not include an entry for
+ThinLinc. Press :guilabel:`Skip`, then add a ThinLinc connection in the
+:guilabel:`Connection Manager`.
+
+The default user and administrator share the same home directory, and it
+is therefore important to NOT start the ThinLinc client as administrator
+the first time. This will make the ThinLinc client configuration only
+accessible by administrator and not the default user.
+
+On "zero" clients, the default server name is set when the ThinLinc
+connection type is selected. To change server name, temporarily switch
+to another connection type, then switch back to ThinLinc. Also, to
+configure the ThinLinc client, enter an invalid username/password
+combination in the HP login dialog. Acknowledge the error. It is then
+possible to access the full ThinLinc client interface.
+
+.. _igel:
+
+IGEL Universal Desktop
+~~~~~~~~~~~~~~~~~~~~~~
+
+A client package for IGEL Universal Desktop terminals is provided. It is
+included in the directory :file:`client-igel` in the client bundle. IGEL
+Universal Desktop is a modern embedded operating system which works
+well. Some editions include a bundled ThinLinc client. We do not
+recommend this client. Instead, install the client as described below.
+
+.. note::
+
+   Installation of our client package is only possible on IGEL terminals
+   with the :guilabel:`Custom Partition` feature. Please ask your IGEL
+   representative for more information.
+
+Installing/Upgrading the ThinLinc client on IGEL terminals
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Below we will describe how to install and configure the ThinLinc client
+on IGEL terminals, using the :guilabel:`Custom partition`. You can use
+either the Universal Management Suite software running on a separate
+workstation, or the setup software installed on the terminal. You will
+need access to a web server which allows you to publish the client
+files.
+
+1. Edit the configuration of the terminal. Select
+   :menuselection:`System --> Firmware --> Customization --> Custom
+   Partition`.
+
+2. Under the :guilabel:`Partition` option, make sure that
+   :guilabel:`Enable Partition` is checked. Enter a size, such as
+   ``100M``. The partition must be at least 25 MiB. The upper limit
+   depends on the hardware used. Make sure that the mount point is
+   ``/custom``.
+
+3. Under the :guilabel:`Download` option, press the star to create a new
+   data source. Enter the URL to the web server where the ThinLinc
+   client package definition is located. Example:
+   :samp:`http://{www.example.com}/client-igel/thinlinc-amd64.inf`
+
+4. Under :guilabel:`Custom Application`, press the star to create a new
+   application entry. Use a :guilabel:`Session name` such as
+   ``ThinLinc``.
+
+5. Click on :guilabel:`Settings`. Enter the :guilabel:`Icon name`::
+
+      /custom/thinlinc/icon.png
+
+   To set up the client to use the terminal's normal language, enter this
+   :guilabel:`Command`::
+
+      /custom/thinlinc/bin/tlclient
+
+   To setup the client to use Swedish, use this :guilabel:`Command`::
+
+      env LC_ALL=sv_SE.UTF-8 /custom/thinlinc/bin/tlclient
+
+6. Press :guilabel:`OK` to save the configuration.
+
+Other thin terminals
+~~~~~~~~~~~~~~~~~~~~
+
+The ThinLinc client can be made to run on almost any Linux-based thin
+terminal as well as on some Windows-based appliances. Contact Cendio if
+you need help on a consultancy basis.

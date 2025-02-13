@@ -1,0 +1,95 @@
+.. meta::
+   :description: Detailed guide to the advanced settings in the ThinLinc
+                 client, including options for program execution,
+                 session shadowing, system key handling, mouse button
+                 emulation, and reconnection policies.
+
+.. _client_advanced_tab:
+
+Advanced tab
+~~~~~~~~~~~~
+
+The :guilabel:`Advanced` tab contains advanced options for the ThinLinc
+session. This includes settings for which program to execute in the
+session, shadowing another user's session, reassignment of session pop-up
+key and how reconnections are handled.
+
+.. figure:: images/client-options-advanced.png
+
+   Client settings advanced tab
+
+Description of advanced tab settings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Here follows a detailed description of the settings available in the
+advanced tab.
+
+:guilabel:`Start a program`
+   If enabled, the client requests that the server should start the
+   session with the command supplied by the client. Otherwise, the
+   session command is determined by the server configuration.
+
+:guilabel:`Enable shadowing`
+   When enabled, an extra text field will be present in the client main
+   window. This field is used to enter the username of the user whose
+   session you want to shadow. For more information, see
+   :ref:`shadowing`.
+
+:guilabel:`Send system keys`
+   When this setting is enabled and the client is in full-screen mode,
+   key combinations such :kbd:`Alt+Tab` will be sent to the remote
+   system instead of being handled locally. To regain access to the
+   local system without ending the session, the menu key must be used.
+
+:guilabel:`Emulate middle mouse button`
+   When enabled, the middle mouse button can be emulated by pressing
+   the left and right mouse button simultaneously.
+
+:guilabel:`Popup menu key`
+   During a ThinLinc session you can press a specific key to bring up
+   the session control pop-up window. This window can for example be
+   used to toggle to and from full-screen mode and to disconnect the
+   session. The default key for this is :kbd:`F8`, but other keys can be
+   configured here. The feature can also be disabled by selecting
+   :guilabel:`None`.
+
+:guilabel:`Reconnect policy`
+   When the client connects to a ThinLinc server, there might already be
+   multiple sessions running on it. Some of these sessions might be
+   connected to another client, and some might be disconnected. The
+   client can be configured to automatically handle some of these cases,
+   or always ask the user what to do. This option only affects
+   connections to servers where multiple sessions per user are allowed.
+
+   .. note::
+
+      Sessions that have been started with a command different from
+      the one currently used will be ignored.
+
+   :guilabel:`Automatically reconnect to a disconnected session`
+      1. If there is no disconnected session and additional sessions are
+         allowed, create a new session. The master will attempt to keep
+         this new session on the same agent as the other sessions for
+         this user.
+
+      2. If there is a single disconnected session, or if the server
+         allows only one session, reconnect to the existing session.
+
+      3. Otherwise, ask how to proceed.
+
+   :guilabel:`Always ask how multiple sessions should be handled`
+      1. If there is no running session, create a new session.
+
+      2. If the server allows only one session, reconnect to the
+         existing session.
+
+      3. Otherwise, ask how to proceed. If there are any running
+         sessions for this user and the server allows an additional
+         session, the master will place the new session on the same
+         agent as the previous sessions of that user.
+
+:guilabel:`Software updates`
+   If enabled, the client will periodically query the
+   :clientconf:`UPDATE_URL` value specified in :file:`tlclient.conf` for
+   updates. If a newer version is available, the user will be asked if
+   they want to install it.

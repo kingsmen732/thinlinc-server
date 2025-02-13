@@ -1,0 +1,37 @@
+.. meta::
+   :description: Guidance on recovering a ThinLinc High Availability
+                 (HA) setup after hardware failures, including
+                 procedures for minor and catastrophic failures to
+                 ensure continuous service and proper session
+                 synchronization.
+
+.. _HA-recover:
+
+Recovering from hardware failures
+---------------------------------
+
+If situations occur where the secondary node has been forced to take
+over service because the primary node failed for some reason, it's
+important to know how to recover.
+
+Recovering from minor failures
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the primary went down because of a minor failure (overheating
+trouble, faulty processor, faulty memory etc.) and the contents of the
+files in :file:`/var/lib/vsm` are untouched, recovery is very simple and
+fully automatic. Simply start the server and let the two VSM servers
+resynchronize with each other.
+
+Recovering from catastrophic failure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If a catastrophic failure has occurred, and no data on the disks of the
+primary can be recovered, ThinLinc needs to be reinstalled and HA must
+be reinitialized.
+
+Install ThinLinc as described in :ref:`HA-install`, but before starting
+the VSM server after enabling HA in the configuration file, copy the
+file :file:`/var/lib/vsm/sessions` from the secondary to the primary.
+That will preload the database of active sessions with more current
+values on the primary.

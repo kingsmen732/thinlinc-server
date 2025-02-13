@@ -1,0 +1,39 @@
+.. meta::
+   :description: Overview of the desktop customizer module in ThinLinc's
+                 web administration interface, with links to configure
+                 application groups, manual and system applications, and
+                 menu structures.
+
+.. _tlwebadm_tldc:
+
+The desktop customizer module
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ThinLinc desktop customizer is described more fully in its own
+chapter, :ref:`tldc`. Links to sections of this chapter pertaining to
+the respective menus of the desktop customizer module are provided below
+for convenience.
+
+Application groups
+^^^^^^^^^^^^^^^^^^
+
+For information on configuring application groups using TLDC, see
+:ref:`tldc_define_applications`
+
+Applications (manual)
+^^^^^^^^^^^^^^^^^^^^^
+
+For information on configuring manual applications using TLDC, see
+:ref:`tldc-applications`
+
+Applications (system)
+^^^^^^^^^^^^^^^^^^^^^
+
+For information on configuring system applications using TLDC, see
+:ref:`tldc_dskcustomizer_applications`
+
+Menu structure
+^^^^^^^^^^^^^^
+
+For information on configuring menu structures using TLDC, see
+:ref:`tldc_define_menustructure`

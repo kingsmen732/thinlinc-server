@@ -1,0 +1,70 @@
+.. meta::
+   :description: Instructions for installing and running the ThinLinc
+                 client on macOS, including system requirements,
+                 installation steps, and key behavior customization for
+                 Command and Alt keys.
+
+.. _macosclients:
+
+macOS
+-----
+
+.. _macosclientsreq:
+
+Requirements
+~~~~~~~~~~~~
+
+-  macOS (formerly OS X) version newer than 10.6 running on 64-bit Intel
+   hardware
+
+.. note::
+
+   macOS (formerly OS X) versions newer than 10.9 comes with a
+   default setting that breaks the multi monitor functionality of the
+   ThinLinc client. A workaround to this problem is to disable setting
+   :guilabel:`Displays have separate Spaces` in settings for
+   :guilabel:`Mission Control` found in :guilabel:`System Preferences`.
+
+.. _macosclientsinstall:
+
+Installing the macOS client
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The client for macOS can be found in the directory :file:`client-macos`
+in the client bundle. To install the client, follow these steps:
+
+1. Double-click on the file :file:`tl-x.y.z_rel-client-macos.iso`.
+
+2. Double-click on the :guilabel:`ThinLinc client` volume that just
+   appeared on your desktop.
+
+3. Drag the :guilabel:`ThinLinc client` application to an application
+   folder of your choice.
+
+4. Eject the :guilabel:`ThinLinc client` volume.
+
+.. _macosclientsrun:
+
+Running the macOS client
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+To start the ThinLinc client, double-click on the client application.
+The client can also be added to and started from the Dock.
+
+.. _macosalt:
+
+Command and Alt keys on macOS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The :kbd:`Alt` key (also known as the :kbd:`Option` key) behaves very
+differently on macOS compared to its behavior on other platforms. It
+closely resembles the PC :kbd:`AltGr` key, found on international
+keyboards. ThinLinc therefore treats these keys in a special manner on
+macOS in order to provide a good integration between the client and the
+remote ThinLinc system.
+
+Whenever either of the :kbd:`Alt` keys are pressed, ThinLinc will behave
+as if :kbd:`AltGr` was pressed. The left :kbd:`Command` key is used as
+a replacement for :kbd:`Alt` to use shortcuts like :kbd:`Alt+F`. The
+right :kbd:`Command` key retains its behavior of acting like the
+:kbd:`Super`/:kbd:`Windows` key.

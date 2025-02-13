@@ -1,0 +1,136 @@
+.. meta::
+   :description: Guide to installing and configuring the ThinLinc client
+                 on ThinStation terminals, including setup for network
+                 boot, sound and drive redirection, and managing SSH
+                 host keys.
+
+.. _thinstation:
+
+Running ThinLinc on a ThinStation terminal
+------------------------------------------
+
+The `ThinStation project`_ is an open source thin client Linux
+distribution that can be booted in many different ways, including
+entirely over the network on diskless machines and via a LiveCD.
+
+A client package for ThinStation is shipped as part of the ThinLinc
+client distribution. In this section, we will document how to use and
+configure this package with ThinStation.
+
+.. _ThinStation webpages:
+.. _ThinStation project: https://thinstation.org/
+
+Installing and building the package
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Begin by downloading and unpacking the ThinStation main distribution
+available from the `ThinStation webpages`_.
+
+Enter the ThinStation directory created while unpacking, and replace the
+ThinLinc package included with ThinStation with the updated package from
+the :file:`client-thinstation` directory in the client-bundle:
+
+.. code:: console
+
+   $ rm -rf packages/thinlinc/
+   $ tar zxvf tl-x.y.z-rel-client-thinstation.tar.gz
+
+Edit the :file:`build.conf` and uncomment the line ``package thinlinc``
+in the ``Applications`` section.
+
+Run the :file:`build` script and wait for its completion.
+
+If everything went well, there will now be ThinStation images available
+in the :file:`boot-images` directory. Use the appropriate boot image for
+your preferred boot method.
+
+Configuring the ThinLinc client when running on a ThinStation terminal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When running on a network-booted ThinStation terminal, the client is
+configured by adding statements to the configuration file that is
+downloaded at boot by ThinStation. The default name of this file is
+:file:`thinstation.conf.network`, located in your tftproot. There can
+also be other filenames that configure specific terminals based on their
+IP or hardware (MAC) addresses.
+
+Basic configuration
+^^^^^^^^^^^^^^^^^^^
+
+For the ThinLinc client to appear at all, a ThinStation "session" must
+be created. This is done by adding a few lines to the
+:file:`thinstation.conf.network` file. Here's an example::
+
+   SESSION_0_TYPE=thinlinc
+   SESSION_0_THINLINC_SERVER=tl.example.com
+   SESSION_0_THINLINC_OPTIONS="-u johndoe"
+   SESSION_0_THINLINC_CONFIG_NFS_SERVER_ENABLED=0
+
+The above example will make ThinLinc appear on the display of the client
+after boot. It will set the server name to ``tl.example.com``, and it
+will reset the username field. It will also disable export of local
+drives. See below for information on enabling local drives on
+ThinStation.
+
+All standard client options can be added to the
+``SESSION_0_THINLINC_OPTIONS`` variable. For example, to lock down the
+server field, add ``-l server``.
+
+Configuration using the client configuration file
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Some of the features of the ThinLinc client can't be configured via
+command-line options. Instead, the configuration file must be altered.
+To allow features such as local drive and sound redirection to work when
+running on ThinStation, the ThinLinc client package for ThinStation has
+features for altering the configuration file on the client.
+
+To alter the configuration file, add statements on the form
+:samp:`SESSION_0_THINLINC_CONFIG_{<configuration file variable name>}
+= {<value>}` to :file:`thinstation.conf.network`. An example follows::
+
+   SESSION_0_THINLINC_CONFIG_NFS_SERVER_ENABLED=1
+   SESSION_0_THINLINC_CONFIG_SOUND_ENABLED=1
+
+The above example will set the :clientconf:`NFS_SERVER_ENABLED` to ``1``
+and the :clientconf:`SOUND_ENABLED` to ``1``, and so on.
+
+Enabling sound and local drive redirection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If the hardware running ThinStation has support for it and the correct
+sound and disk device modules has been loaded, the ThinLinc client will
+be able to support sound and local drive redirection. The following
+configuration lines in :file:`thinstation.conf.network` will enable
+sound redirection and local drive redirection for USB storage devices::
+
+   SESSION_0_THINLINC_CONFIG_NFS_EXPORTS=/mnt/usbdevice,rw,/mnt/cdrom,ro
+   SESSION_0_THINLINC_CONFIG_NFS_SERVER_ENABLED=1
+   SESSION_0_THINLINC_CONFIG_SOUND_ENABLED=1
+   SESSION_0_THINLINC_CONFIG_NFS_ROOT_WARNING=0
+
+Avoiding question about server host key
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When running on a device with non-volatile storage, such as a hard disk,
+the ThinLinc client stores the public part of the ssh host key of the
+ThinLinc client the first time it connects to the server after asking
+the user to verify the fingerprint of the key. At subsequent connects,
+this copy is used to verify that the client is connecting to the correct
+server.
+
+When running on a diskless ThinStation host, the key can be stored only
+in volatile memory (on a RAM disk), so the client will ask the user to
+verify the fingerprint once each time the client has been rebooted.
+Since it is normal behavior to reboot a ThinStation terminal once a day,
+this will lead to a confusing situation for users, not to mention that
+it will decrease security.
+
+To solve this problem, the ThinLinc client package for ThinStation tries
+to download a file name :file:`ssh_known_hosts` from the tftproot. If it
+exists, it will be used as a database of known host keys on the client.
+
+To create this file, log in with the client to the ThinLinc server,
+using the same server name as the one that will be configured on the
+clients. Then copy the file :file:`~/.thinlinc/known_hosts` to
+:file:`{<tftproot>}/ssh_known_hosts`.

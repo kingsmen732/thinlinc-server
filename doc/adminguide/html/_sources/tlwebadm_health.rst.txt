@@ -1,0 +1,23 @@
+.. meta::
+   :description: Overview of the System Health module in the ThinLinc
+                 web administration interface for monitoring service
+                 status and testing user and group lookup performance.
+
+.. _tlwebadm_system_health:
+
+The system health module
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The System Health module allows you to check the running state of the
+ThinLinc master, agent and Web Access services. There is also a tool to
+perform a user or group lookup which reports the time for the lookup.
+
+-  :guilabel:`Service status` reports the current running state of the
+   master (**vsmserver.service**), agent (**vsmagent.service**), and Web
+   Access (**tlwebaccess.service**) services.
+
+-  :guilabel:`Users and group lookup` allows you to test the performance
+   of user and group lookup on the system.
+
+   Fill in values for username and/or group and click the
+   :guilabel:`Test user and group lookup` button to perform a lookup.

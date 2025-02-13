@@ -1,0 +1,24 @@
+.. meta::
+   :description: Explains how ThinLinc administrators can configure
+                 algorithm availability and order using GnuTLS priority
+                 strings for services that use tlstunnel.
+
+.. _gnutls-priorities:
+
+GnuTLS priority strings
+=======================
+
+ThinLinc uses priority strings to allow the administrator to select
+their own preferred availability and order of algorithms used by GnuTLS
+for services that use tlstunnel. The priority string is a
+colon-delimited list of strings being either keywords (groups of
+algorithms) or algorithms which can be individually enabled or disabled.
+
+For more information, see the GnuTLS documentation about priority
+strings.
+
+.. toctree::
+   :hidden:
+
+   gnutls-priorities-standard
+   gnutls-priorities-all

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="44cm" height="22cm" viewBox="-21 102 874 429" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <ellipse style="fill: #ffffff" cx="420" cy="243.3" rx="190" ry="124.3"/>
+    <ellipse style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" cx="420" cy="243.3" rx="190" ry="124.3"/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="73" y="181">
+    <tspan x="73" y="181">Applications</tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="736.6" y="130.6">
+    <tspan x="736.6" y="130.6">Unix groups</tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="765.6" y="396.6">
+    <tspan x="765.6" y="396.6">Unix users</tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:serif;font-style:normal;font-weight:700" x="418.6" y="154.6">
+    <tspan x="418.6" y="154.6">Application group</tspan>
+  </text>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-19.4" y="153" width="180" height="44.6"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="647.6" y="103.6" width="180" height="48"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="672.6" y="370.6" width="180" height="48"/>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="160.6" y1="175.3" x2="230.522" y2="206.765"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="214.687,208.412 232.561,207.682 221.253,193.821 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="672.6" y1="370.6" x2="582.37" y2="313.006"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="598.276,313.668 580.485,311.803 589.667,327.155 "/>
+  </g>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="477" y1="128" x2="476.968" y2="128"/>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="647.6" y1="151.6" x2="594.411" y2="184.26"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="601.954,170.24 592.506,185.43 610.326,183.875 "/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="340" y="240">
+    <tspan x="340" y="240">Applications in menu?</tspan>
+    <tspan x="340" y="258">Applications on desktop?</tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="346.6" y="291.6">
+    <tspan x="346.6" y="291.6"></tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="272.552" y="510.624">
+    <tspan x="272.552" y="510.624">ThinLinc profiles</tspan>
+  </text>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="178" y="483" width="200" height="47.6"/>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="278" y1="483" x2="344.44" y2="362.516"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="344.799,378.432 345.52,360.558 330.789,370.706 "/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="260" y="520">
+    <tspan x="260" y="520"></tspan>
+  </text>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="20" y="321.4" width="180" height="44.6"/>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="115.6" y="349.6">
+    <tspan x="115.6" y="349.6">Menu structure</tspan>
+  </text>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="200" y1="343.7" x2="245.664" y2="311.241"/>
+    <polygon style="fill: #000000" points="251.777,306.896 246.524,316.765 245.664,311.241 240.73,308.614 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="251.777,306.896 246.524,316.765 245.664,311.241 240.73,308.614 "/>
+  </g>
+</svg>

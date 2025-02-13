@@ -1,0 +1,128 @@
+.. meta::
+   :description: Learn how to set up and configure a ThinLinc cluster
+                 with multiple agent servers for session load balancing,
+                 redundancy, and scalability.
+
+.. _install_cluster:
+
+Cluster installation
+--------------------
+
+In this section, we will describe how to add agent servers to form a
+ThinLinc cluster; allowing session load balancing and redundancy.
+
+.. note::
+
+   This section does *not* address configuration of high
+   availability. For information on configuring your ThinLinc cluster
+   for high availability, see :ref:`HA`.
+
+A ThinLinc cluster consists of one master server (or two master servers
+in a :ref:`high availability configuration <ha>`) with multiple agent
+servers. While ThinLinc in its simplest configuration may be run with
+both the master and agent installed on the same machine, running
+ThinLinc in a cluster configuration conveys numerous advantages:
+
+1. A cluster configuration allows load balancing of sessions across
+   multiple agents
+
+2. Having multiple agents offers redundancy; for example, if one agent
+   goes down or is taken out of service for maintenance, other agents
+   are still available to handle user sessions
+
+3. A cluster configuration is scalable. Since most of the workload is
+   taken up by the agents and not the master, adding more capacity to
+   your ThinLinc installation is generally as easy as installing one or
+   more new agent servers
+
+Prerequisites
+~~~~~~~~~~~~~
+
+This chapter assumes you already have a ThinLinc master server running,
+installed according to :ref:`install_install`. It also assumes you can
+authenticate using the same system credentials on all nodes in the
+ThinLinc cluster.
+
+.. _install_cluster_agent:
+
+New agent configuration
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Firstly, ThinLinc needs to be installed and configured on the new node
+that is to be part of the agent pool:
+
+.. note::
+
+   It is recommended that all agent nodes in the cluster are kept
+   consistent in terms of configuration and software installed. This way
+   the user gets the same experience regardless of agent node.
+
+   Similarly, keeping user home directories on a central file server is
+   recommended for a consistent experience over all agent nodes.
+
+1. Install ThinLinc on the new agent node according to
+   :ref:`install_install`. Select :guilabel:`Agent` when asked for the
+   type of ThinLinc server to configure.
+
+2. Set :servconf:`/vsmagent/master_hostname` to the domain name or IP of
+   the pre-existing machine running the master service (**vsmserver**),
+   for example:
+
+   .. code:: console
+
+      $ sudo tl-config /vsmagent/master_hostname=master.example.com
+
+3. For the browser client :ref:`Web Access<tlwebaccess>` to work as
+   intended, set :servconf:`/webaccess/login_page` to the URL of the Web
+   Access login page on the master server, for example:
+
+   .. code:: console
+
+      $ sudo tl-config /webaccess/login_page=https://master.example.com:300/
+
+4. Restart the agent and Web Access service (**vsmagent** and
+   **tlwebaccess**) on the new agent node:
+
+   .. code:: console
+
+      $ sudo systemctl restart vsmagent tlwebaccess
+
+.. _install_cluster_master:
+
+Master configuration
+~~~~~~~~~~~~~~~~~~~~
+
+The machine running the master service then need to be made aware of the
+agent node configured in the last step:
+
+1. Add the newly created agent to |agents| of the subcluster where the
+   extra capacity is needed. If you are not using the :ref:`subcluster
+   features<configuration_subcluster>` of ThinLinc, add it to the
+   **Default** subcluster:
+
+   .. code:: console
+
+      $ # Get the current list of agents in the Default subcluster
+      $ tl-config /vsmserver/subclusters/Default/agents
+      127.0.0.1
+      $ # Add the new agent (new-agent.example.com) to the agent list
+      $ sudo tl-config /vsmserver/subclusters/Default/agents=\
+      "127.0.0.1 new-agent.example.com"
+
+2. Restart the master service:
+
+   .. code:: console
+
+      $ sudo systemctl restart vsmserver
+
+.. |agents| replace::
+   :servconf:`/vsmserver/subclusters/<name>/agents`
+
+.. _install_cluster_next_steps:
+
+Next steps
+~~~~~~~~~~
+
+Your new agent node is now ready to accept new sessions. For further
+information about further configuring and maintaining your ThinLinc
+cluster, see :ref:`configuration_cluster`.

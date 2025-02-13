@@ -1,0 +1,56 @@
+.. meta::
+   :description: Learn about the system and software requirements for
+                 installing ThinLinc servers, including guidelines for
+                 server sizing and clustering.
+
+.. _requirements_server:
+
+Server requirements
+-------------------
+
+ThinLinc system and software requirements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Minimum requirements:
+
+-  An x86_64 (or compatible) CPU
+
+-  glibc 2.12, or newer
+
+-  Python 3.4.4, or newer
+
+-  Support for .rpm or .deb package formats
+
+-  An SSH (secure shell) server
+
+As long as your platform fulfills the requirements above, ThinLinc
+should work as expected. If any additional packages are required,
+ThinLinc will offer to install these automatically during setup.
+
+.. _requirements_server_sizing:
+
+A note on server sizing
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Since each use-case is different, it is hard to provide estimates in
+advance of the amount of compute resources (CPU, RAM, storage, etc.)
+required by a ThinLinc installation. However, there are several
+guidelines which can help you establish these requirements early on:
+
+- ThinLinc has very modest resource requirements. Check the requirements
+  for your operating system and applications, and use these as a
+  baseline instead.
+
+- Set up a proof-of-concept installation, and monitor resources under
+  typical usage scenarios. If you need extra temporary licenses for
+  testing purposes, let us know.
+
+- If you are likely to have a lot of users all logging in at the same
+  time, make sure to size your master server accordingly.
+
+- In cluster configurations, try to find a balance between a small
+  number of powerful servers, and a large number of weaker ones. 
+
+- Adding and removing agent servers from a cluster is trivial. So if
+  resource requirements change, or you don't quite get it right first
+  time, it is easy to adjust your ThinLinc installation to suit.

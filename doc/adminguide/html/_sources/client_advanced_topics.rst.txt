@@ -1,0 +1,75 @@
+.. meta::
+   :description: Discussion of advanced configuration topics for the
+                 ThinLinc client, including customization and update
+                 management.
+
+.. _client_advanced_topics:
+
+Advanced topics
+---------------
+
+Hardware address reporting
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When the client connects to a server, it reports its hardware
+address. On Linux, the active interface with the smallest MAC address is
+used. On Windows, the address of the first interface (as listed in the
+Control Panel) is used.
+
+Client update notifications
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The client includes a feature which can periodically check for new
+versions. This functionality is affected by the configuration parameters
+:clientconf:`UPDATE_ENABLED`, :clientconf:`UPDATE_INTERVAL`,
+:clientconf:`UPDATE_LASTCHECK`, :clientconf:`UPDATE_MANDATORY`, and,
+:clientconf:`UPDATE_URL`. These are described in
+:ref:`clientconf_params`. During an update check, the client retrieves
+the file specified by :clientconf:`UPDATE_URL`. An example follows::
+
+   WINDOWSINSTALLER = https://www.cendio.com/downloads/clients/tl-latest-client-windows.exe
+   LINUXINSTALLER = https://www.cendio.com/downloads/clients/thinlinc-client-latest.i686.rpm
+   DEFAULTINSTALLER = https://www.cendio.com/thinlinc/download
+   OKVERSIONS = 3.2.0 3.3.0
+
+The ``OKVERSIONS`` parameter specifies a list of valid client versions.
+If the running client version is different, the client will notify the
+user. The ``WINDOWSINSTALLER``, ``LINUXINSTALLER``, and
+``DEFAULTINSTALLER`` parameters specifies the updated client packages
+for Windows, Linux, and other platforms, respectively.
+
+.. _client_branding:
+
+Adding custom branding to the login window
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is possible to add a custom logo to the main ThinLinc client window,
+making it easily distinguishable from a generic client. The custom logo
+will be placed to the right of the input fields.
+
+Adding the logo is easy. The new logo must be a PNG file with maximum
+width and height of 50 pixels. On Windows, just add the file
+:file:`branding.png` in the same directory as the executable with the
+custom logo. On Linux, the file name is
+:file:`/opt/thinlinc/lib/tlclient/branding.png`.
+
+.. _client_xdm_mode:
+
+XDM mode (Linux only)
+~~~~~~~~~~~~~~~~~~~~~
+
+When installing dedicated clients, for example old PCs or thin terminal
+boxes, it's common to install the client to run in XDM mode. XDM is an
+acronym for X Display Manager and is the name of a small graphical
+program used for graphical logins in many Linux systems. By using the
+ThinLinc client in XDM mode you can make sure that the client appears
+automatically when the client hardware is started and that it reappears
+directly after a user logs out.
+
+To run the client in XDM mode you need to start it with the :option:`-x`
+option. When running in XDM mode the following changes will be made to
+the client interface.
+
+-  The :guilabel:`Exit` button is removed.
+
+-  Always use full screen on all monitors.

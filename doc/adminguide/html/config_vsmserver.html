@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Overview of configuration parameters for the master in ThinLinc, covering settings for administrative email, load balancing, session management, and high availability configurations." name="description" />
+
+    <title>Parameters in /vsmserver/ &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parameters in /vsmserver/subclusters/" href="config_subclusters.html" />
+    <link rel="prev" title="Parameters in /vsmagent/" href="config_vsmagent.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_vsmagent.html" title="Previous document">Parameters in /vsmagent/</a>
+        </li>
+        <li>
+          <a href="config_subclusters.html" title="Next document">Parameters in /vsmserver/subclusters/</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="parameters-in-vsmserver">
+<span id="std-server-config-folder-vsmserver"></span><span id="std:server-config-folder-/vsmserver"></span><span id="configuration-vsmserver"></span><h1>Parameters in /vsmserver/<a class="headerlink" href="#parameters-in-vsmserver" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we will describe all the parameters currently used by
+the VSM server. These configuration parameters reside in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/vsmserver.hconf</span></code>.</p>
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-admin_email">
+<span id="server-config-/vsmserver/admin_email"></span><span class="sig-name descname"><span class="pre">/vsmserver/admin_email</span></span><a class="headerlink" href="#server-config-vsmserver-admin_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>The administrator’s email address. This is where warnings about
+overuse of Licenses are sent, among with other administrative
+messages. Make sure this is a valid address.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-allowed_clients">
+<span id="server-config-/vsmserver/allowed_clients"></span><span class="sig-name descname"><span class="pre">/vsmserver/allowed_clients</span></span><a class="headerlink" href="#server-config-vsmserver-allowed_clients" title="Permalink to this definition">¶</a></dt>
+<dd><p>A space-separated list of hosts from which privileged operations are
+allowed. The default (empty) allows localhost to do this. Privileged
+operations are for example to deactivate a session, something that
+should be allowed by the host running the ThinLinc Web Administration
+service.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-allowed_groups">
+<span id="server-config-/vsmserver/allowed_groups"></span><span class="sig-name descname"><span class="pre">/vsmserver/allowed_groups</span></span><a class="headerlink" href="#server-config-vsmserver-allowed_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>ThinLinc access can be limited to certain groups. If the
+<a class="reference internal" href="#server-config-vsmserver-allowed_groups"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">allowed_groups</span></code></a> space-separated list is empty, all users are
+accepted. Otherwise, the user must be a member of the groups listed
+below, to be able to use ThinLinc. Example:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">allowed_groups</span> <span class="o">=</span> <span class="s">students teachers</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-bogomips_per_user">
+<span id="server-config-/vsmserver/bogomips_per_user"></span><span class="sig-name descname"><span class="pre">/vsmserver/bogomips_per_user</span></span><a class="headerlink" href="#server-config-vsmserver-bogomips_per_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimated bogomips required for each user.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-existing_users_weight">
+<span id="server-config-/vsmserver/existing_users_weight"></span><span class="sig-name descname"><span class="pre">/vsmserver/existing_users_weight</span></span><a class="headerlink" href="#server-config-vsmserver-existing_users_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>This parameter decides the importance of the number of logged-in
+users on a VSM agent host when calculating load balance parameters. A
+host with low load, but a lot of users, is generally more likely to
+get a higher load within a short time when the users get active. For
+this reason, the load balance calculating code takes the number of
+users at a certain host into its calculation. The
+<a class="reference internal" href="#server-config-vsmserver-existing_users_weight"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/existing_users_weight</span></code></a> controls how important
+this factor is. A higher value of this parameter means the load
+balancing code will care less about a high number of users on a
+certain machine.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This parameter should normally not be changed, unless when
+fine-tuning the load balancing.</p>
+</div>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-HA-enabled">
+<span id="server-config-/vsmserver/HA/enabled"></span><span class="sig-name descname"><span class="pre">/vsmserver/HA/enabled</span></span><a class="headerlink" href="#server-config-vsmserver-HA-enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this parameter is true, the VSM server will try to replicate
+information about sessions to the other VSM server node. See
+<a class="reference internal" href="HA.html#ha"><span class="std std-ref">High availability</span></a> for more information about ThinLinc in a high availability
+configuration.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-HA-nodes">
+<span id="server-config-/vsmserver/HA/nodes"></span><span class="sig-name descname"><span class="pre">/vsmserver/HA/nodes</span></span><a class="headerlink" href="#server-config-vsmserver-HA-nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>This parameter lists the hostnames of both nodes in a ThinLinc high
+availability setup. The space-separated list should include the hostname of the
+current node. This means that <code class="file docutils literal notranslate"><span class="pre">vsmserver.hconf</span></code> can be
+identical on both nodes.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-listen_port">
+<span id="server-config-/vsmserver/listen_port"></span><span class="sig-name descname"><span class="pre">/vsmserver/listen_port</span></span><a class="headerlink" href="#server-config-vsmserver-listen_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>The TCP port VSM Server listen to for incoming requests. This should
+normally be set to the same value as
+<a class="reference internal" href="config_vsm.html#server-config-vsm-vsm_server_port"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsm/vsm_server_port</span></code></a>.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-load_update_cycle">
+<span id="server-config-/vsmserver/load_update_cycle"></span><span class="sig-name descname"><span class="pre">/vsmserver/load_update_cycle</span></span><a class="headerlink" href="#server-config-vsmserver-load_update_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of seconds allowed for updating the load status in the
+entire cluster.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-max_sessions_per_user">
+<span id="server-config-/vsmserver/max_sessions_per_user"></span><span class="sig-name descname"><span class="pre">/vsmserver/max_sessions_per_user</span></span><a class="headerlink" href="#server-config-vsmserver-max_sessions_per_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of sessions allowed per user. <code class="docutils literal notranslate"><span class="pre">0</span></code> means no
+limit. The master will attempt to keep all sessions for a user on the
+same agent server in order to avoid problems. The problems usually
+come from applications that incorrectly assumes unrivaled access to
+the user’s home directory. When on the same machine the conditions
+allow the applications to handle things better.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-ram_per_user">
+<span id="server-config-/vsmserver/ram_per_user"></span><span class="sig-name descname"><span class="pre">/vsmserver/ram_per_user</span></span><a class="headerlink" href="#server-config-vsmserver-ram_per_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integer, number of estimated MiB memory required for each session.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-vsmserver-unbind_ports_at_login">
+<span id="server-config-/vsmserver/unbind_ports_at_login"></span><span class="sig-name descname"><span class="pre">/vsmserver/unbind_ports_at_login</span></span><a class="headerlink" href="#server-config-vsmserver-unbind_ports_at_login" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this parameter is true, processes occupying the users’ interval of
+forwarded ports will be killed at login. This means that if a user
+logs in twice to the same session, the second login will get working
+tunnel ports, if this parameter is true. The first session’s tunnel
+ports will stop working. If the parameter is false, the first session
+will keep the ports.</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_vsmagent.html" title="Previous document">Parameters in /vsmagent/</a>
+        </li>
+        <li>
+          <a href="config_subclusters.html" title="Next document">Parameters in /vsmserver/subclusters/</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="config_params.html">Server configuration parameters</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config_profiles.html">Parameters in /profiles/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_tlwebadm.html">Parameters in /tlwebadm/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_sessionstart.html">Parameters in /sessionstart/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_shadowing.html">Parameters in /shadowing/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_utils.html">Parameters in /utils/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsm.html">Parameters in /vsm/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsmagent.html">Parameters in /vsmagent/</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parameters in /vsmserver/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_subclusters.html">Parameters in /vsmserver/subclusters/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_webaccess.html">Parameters in /webaccess/</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="config_params.html">Server configuration parameters</a><ul>
+      <li>Previous: <a href="config_vsmagent.html" title="previous chapter">Parameters in /vsmagent/</a></li>
+      <li>Next: <a href="config_subclusters.html" title="next chapter">Parameters in /vsmserver/subclusters/</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/config_vsmserver.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

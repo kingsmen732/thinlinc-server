@@ -1,0 +1,152 @@
+.. meta::
+   :description: Guide to using the Status module in ThinLinc's web
+                 administration interface for monitoring licenses,
+                 server load, and managing sessions.
+
+.. _tlwebadm_status:
+
+The status module
+~~~~~~~~~~~~~~~~~
+
+The status module allows you to view or manipulate the following aspects
+of ThinLinc, by selecting the relevant submenu:
+
+-  :guilabel:`Licenses` allows you to view license usage.
+
+-  :guilabel:`Load` allows you to check the current workload on the
+   ThinLinc agents.
+
+-  :guilabel:`Sessions` allows you to terminate, shadow or view details
+   of sessions.
+
+.. _tlwebadm_licenses:
+
+Licenses
+^^^^^^^^
+
+The licenses menu provides graphs showing current and historical license
+usage, along with the current total number of licenses. It also includes
+functionality to generate a graph displaying license usage over a
+specified number of days in the past.
+
+.. _tlwebadm_load:
+
+Load
+^^^^
+
+The load menu displays information about system utilization across the
+ThinLinc agents, enabling administrators to monitor performance metrics
+and evaluate the capacity for adding more users to the cluster.
+
+The overview shows the current workload for each agent in the ThinLinc
+cluster, including the total number of users (not only users running
+ThinLinc sessions), memory usage, CPU usage, and rating. To view load
+details for a specific agent, click on the agent's name. A popup will
+appear with detailed information about the selected session. Refer to
+the list below for explanation of the rating and other load parameters.
+
+-  :guilabel:`ThinLinc users`: The number of users on the agent running
+   one or more ThinLinc sessions.
+
+-  :guilabel:`Total number of users`: The total numbers of unique users
+   on the agent (not only users running ThinLinc sessions). This
+   includes both human users as well as system users for background
+   processes.
+
+-  :guilabel:`Memory (used RAM+swap)`: The combined total of RAM and
+   swap memory currently in use.
+
+-  :guilabel:`RAM (used/total)`: The amount of RAM currently used
+   compared to the total available RAM.
+
+-  :guilabel:`Swap (used/total)`: The amount of swap memory currently
+   used compared to the total available swap memory.
+
+-  :guilabel:`CPU`: The total CPU resources being utilized across all
+   available CPUs.
+
+-  :guilabel:`Load (1 min)`: The CPU load 1-minute average.
+
+-  :guilabel:`Number of CPUs`: The total number of available CPUs.
+
+-  :guilabel:`Bogomips`: A measurement of the system's computational
+   capacity, providing an estimate of processing performance.
+
+-  :guilabel:`Rating`: A score indicating the agent’s capacity to
+   handle additional sessions; for example, a rating of 10.0 suggests
+   that the agent can accommodate approximately 10 more sessions.
+
+-  :guilabel:`Penalty points`: Points assigned to the agent for
+   performance issues, such as slow response times or additional users
+   connecting. These points negatively impact the agent's rating.
+
+-  :guilabel:`Last updated`: The timestamp indicating when the load
+   information was last refreshed.
+
+.. _tlwebadm_sessions:
+
+Sessions
+^^^^^^^^
+
+When you select the sessions menu, a table with all currently active
+sessions is displayed. To perform additional tasks, click on the
+corresponding username. This will bring up the session details popup,
+which displays all the session parameters for the chosen session. The
+information table in the popup is described below.
+
+-  :guilabel:`Created`: A timestamp for when the session was initially
+   created.
+
+-  :guilabel:`Session status`: The health status of the session as seen
+   by the master machine.
+
+-  :guilabel:`Connection status`: The current connection status between
+   the client and the session.
+
+-  :guilabel:`Last connection`: A timestamp for when the last connection
+   was initiated and the IP address of the last connected client.
+
+-  :guilabel:`Agent`: The DNS host name of the server that is hosting
+   the session, as seen by the master machine.
+
+-  :guilabel:`Agent server address`: The DNS host name of the server
+   that is hosting this session, as seen by the client machine.
+
+-  :guilabel:`Display number`: Each session on a certain server has a
+   unique number, the X Window System display number. Display zero is
+   reserved, and never used for ThinLinc sessions.
+
+-  :guilabel:`Terminal ID`: An identification of the thin terminal. This
+   is the terminal's hardware address (MAC address).
+
+-  :guilabel:`Framebuffer size`: The size (resolution) of the active
+   session.
+
+-  :guilabel:`Local screen size`: The size (resolution) of the
+   terminal's screen.
+
+-  :guilabel:`Session process ID`: The PID (process identification
+   number) of the :program:`tl-session` process, which is the parent for
+   all processes belonging to a certain session.
+
+-  :guilabel:`Command`: The command line that was specified when
+   starting this session. This is usually empty for full desktop
+   sessions.
+
+Below the session information table, there are two buttons:
+
+-  :guilabel:`Terminate session`: By clicking this button, you can
+   terminate a session immediately. Caution: This can lead to data loss,
+   since applications running on the ThinLinc servers may not hold
+   unsaved data.
+
+-  :guilabel:`Shadow session`: This button will generate a ThinLinc
+   "launch file" (see :ref:`clientplatforms_web_integration`) that
+   starts the native ThinLinc client, preconfigured to shadow the
+   current user.
+
+   .. note::
+
+      The user might not be informed that shadowing is in progress if
+      shadowing notification has been disabled. See :ref:`shadowing` for
+      details.

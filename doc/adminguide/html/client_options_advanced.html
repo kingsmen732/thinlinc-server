@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Detailed guide to the advanced settings in the ThinLinc client, including options for program execution, session shadowing, system key handling, mouse button emulation, and reconnection policies." name="description" />
+
+    <title>Advanced tab &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration storage" href="client_config.html" />
+    <link rel="prev" title="Security tab" href="client_options_security.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_options_security.html" title="Previous document">Security tab</a>
+        </li>
+        <li>
+          <a href="client_config.html" title="Next document">Configuration storage</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="advanced-tab">
+<span id="client-advanced-tab"></span><h1>Advanced tab<a class="headerlink" href="#advanced-tab" title="Permalink to this headline">¶</a></h1>
+<p>The <span class="guilabel">Advanced</span> tab contains advanced options for the ThinLinc
+session. This includes settings for which program to execute in the
+session, shadowing another user’s session, reassignment of session pop-up
+key and how reconnections are handled.</p>
+<figure class="align-default" id="id1">
+<img alt="_images/client-options-advanced.png" src="_images/client-options-advanced.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 18 </span><span class="caption-text">Client settings advanced tab</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="description-of-advanced-tab-settings">
+<h2>Description of advanced tab settings<a class="headerlink" href="#description-of-advanced-tab-settings" title="Permalink to this headline">¶</a></h2>
+<p>Here follows a detailed description of the settings available in the
+advanced tab.</p>
+<dl>
+<dt><span class="guilabel">Start a program</span></dt><dd><p>If enabled, the client requests that the server should start the
+session with the command supplied by the client. Otherwise, the
+session command is determined by the server configuration.</p>
+</dd>
+<dt><span class="guilabel">Enable shadowing</span></dt><dd><p>When enabled, an extra text field will be present in the client main
+window. This field is used to enter the username of the user whose
+session you want to shadow. For more information, see
+<a class="reference internal" href="shadowing.html#shadowing"><span class="std std-ref">Shadowing</span></a>.</p>
+</dd>
+<dt><span class="guilabel">Send system keys</span></dt><dd><p>When this setting is enabled and the client is in full-screen mode,
+key combinations such <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Alt</kbd>+<kbd class="kbd docutils literal notranslate">Tab</kbd></kbd> will be sent to the remote
+system instead of being handled locally. To regain access to the
+local system without ending the session, the menu key must be used.</p>
+</dd>
+<dt><span class="guilabel">Emulate middle mouse button</span></dt><dd><p>When enabled, the middle mouse button can be emulated by pressing
+the left and right mouse button simultaneously.</p>
+</dd>
+<dt><span class="guilabel">Popup menu key</span></dt><dd><p>During a ThinLinc session you can press a specific key to bring up
+the session control pop-up window. This window can for example be
+used to toggle to and from full-screen mode and to disconnect the
+session. The default key for this is <kbd class="kbd docutils literal notranslate">F8</kbd>, but other keys can be
+configured here. The feature can also be disabled by selecting
+<span class="guilabel">None</span>.</p>
+</dd>
+<dt><span class="guilabel">Reconnect policy</span></dt><dd><p>When the client connects to a ThinLinc server, there might already be
+multiple sessions running on it. Some of these sessions might be
+connected to another client, and some might be disconnected. The
+client can be configured to automatically handle some of these cases,
+or always ask the user what to do. This option only affects
+connections to servers where multiple sessions per user are allowed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Sessions that have been started with a command different from
+the one currently used will be ignored.</p>
+</div>
+<dl class="simple">
+<dt><span class="guilabel">Automatically reconnect to a disconnected session</span></dt><dd><ol class="arabic simple">
+<li><p>If there is no disconnected session and additional sessions are
+allowed, create a new session. The master will attempt to keep
+this new session on the same agent as the other sessions for
+this user.</p></li>
+<li><p>If there is a single disconnected session, or if the server
+allows only one session, reconnect to the existing session.</p></li>
+<li><p>Otherwise, ask how to proceed.</p></li>
+</ol>
+</dd>
+<dt><span class="guilabel">Always ask how multiple sessions should be handled</span></dt><dd><ol class="arabic simple">
+<li><p>If there is no running session, create a new session.</p></li>
+<li><p>If the server allows only one session, reconnect to the
+existing session.</p></li>
+<li><p>Otherwise, ask how to proceed. If there are any running
+sessions for this user and the server allows an additional
+session, the master will place the new session on the same
+agent as the previous sessions of that user.</p></li>
+</ol>
+</dd>
+</dl>
+</dd>
+<dt><span class="guilabel">Software updates</span></dt><dd><p>If enabled, the client will periodically query the
+<a class="reference internal" href="client_config_params.html#client-config-UPDATE_URL"><code class="xref std std-clientconf docutils literal notranslate"><span class="pre">UPDATE_URL</span></code></a> value specified in <code class="file docutils literal notranslate"><span class="pre">tlclient.conf</span></code> for
+updates. If a newer version is available, the user will be asked if
+they want to install it.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_options_security.html" title="Previous document">Security tab</a>
+        </li>
+        <li>
+          <a href="client_config.html" title="Next document">Configuration storage</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="client.html">The native client</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="clientplatforms.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_usage.html">Client usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_cmdline.html">Client command line usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_export_local_device.html">Local device export</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="client_options.html">Client configuration</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="client_options_display.html">Display tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_local_devices.html">Local devices tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_optimization.html">Optimization tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_security.html">Security tab</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Advanced tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_config.html">Configuration storage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="client_gestures.html">Client touch gestures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_logfile_placement.html">Log file placement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_customizer.html">Client customizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_web_integration.html">Launching the client from a web page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_advanced_topics.html">Advanced topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="client.html">The native client</a><ul>
+  <li><a href="client_options.html">Client configuration</a><ul>
+      <li>Previous: <a href="client_options_security.html" title="previous chapter">Security tab</a></li>
+      <li>Next: <a href="client_config.html" title="next chapter">Configuration storage</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/client_options_advanced.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

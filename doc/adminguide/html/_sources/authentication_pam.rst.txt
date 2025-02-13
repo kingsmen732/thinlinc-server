@@ -1,0 +1,38 @@
+.. meta::
+   :description: Explanation of user authentication in ThinLinc using
+                 Pluggable Authentication Modules (PAM), detailing
+                 integration with various authentication systems.
+
+.. _authentication_pam:
+
+Pluggable Authentication Modules
+--------------------------------
+
+Authentication of users in ThinLinc is performed using the *Pluggable
+Authentication Modules* (PAM). This means ThinLinc can authenticate
+users using any system for which there is a PAM module. Examples of PAM
+modules are **pam_ldap** for accessing LDAP directories (including
+Novell NDS/eDirectory) and **pam_winbind** for authenticating against a
+Windows Domain. Of course, authentication using the standard plaintext
+password files of Linux is also possible using the PAM module
+**pam_unix**.
+
+.. _authentication_pam-files:
+
+Configuration files for PAM
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+PAM is configured by editing the files located in the directory
+:file:`/etc/pam.d/`.
+
+Different Linux distributions have slightly different ways of
+configuring PAM. The ThinLinc installation program will set up ThinLinc
+to authenticate using the same PAM setup as the Secure Shell Daemon, by
+creating a symbolic link from :file:`/etc/pam.d/thinlinc` to either
+:file:`/etc/pam.d/sshd` or :file:`/etc/pam.d/ssh`, depending on which of
+the latter files that exists at installation. This seems to work on most
+distributions. Be aware that the PAM settings for the Secure Shell
+Daemon might really be somewhere else. For example, on Red Hat
+distributions, the file :file:`/etc/pam.d/system-auth` is included by
+all other PAM files, so in most cases, that is the file that should be
+modified instead of the file used by sshd.

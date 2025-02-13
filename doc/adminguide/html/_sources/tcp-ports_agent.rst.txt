@@ -1,0 +1,117 @@
+.. meta::
+   :description: Overview of essential TCP ports used by ThinLinc
+                 agents, including SSH, Web Access, and VNC services.
+
+On a machine running VSM Agent
+------------------------------
+
+22: SSH daemon
+   Just as for the VSM server, there must be an SSH daemon running on
+   all VSM agent machines. This daemon is normally listening to port 22,
+   although it can listen to other ports as well. See the entry about
+   port 22 at :ref:`tcp-ports_vsmserver`.
+
+300: ThinLinc Web Access
+   By default, ThinLinc's Web Access service tlwebaccess is available on
+   TCP port 300. Traffic to this port is encrypted (TLS).
+
+   .. note::
+
+      The port on which tlwebaccess runs is configurable via the
+      parameter :servconf:`/webaccess/listen_port`. See
+      :ref:`configuration_tlwebaccess` for details.
+
+904: VSM Agent
+   The VSM agent listens on port 904 for incoming requests from the VSM
+   server host. The traffic is not encrypted, but the VSM agent only
+   allows connections originating from a port lower than 1024, from a
+   list of known IP addresses. The protocol in use is XMLRPC through
+   HTTP.
+
+1010: ThinLinc web administration interface (tlwebadm)
+   By default, ThinLinc's web-based administration interface is
+   available on TCP port 1010. See the entry about port 1010 at
+   :ref:`tcp-ports_vsmserver`.
+
+5901--5999: VNC servers for first 99 sessions
+   Ports 5901--5999 are used by Xvnc processes serving display numbers
+   strictly below 100.
+
+4900--5899: Tunnels to clients
+   The ports in this interval are used as server-side endpoints for the
+   SSH tunnels used to access local resources of the client, for example
+   local drives, serial ports and sound.
+
+   This interval is used for sessions with display number strictly below
+   100.
+
+   The algorithm used for calculating which ports to use for a specific
+   display number in this interval is:
+
+      4900 + *display-id* × 10 + *SERVICE_SLOT*
+
+   where *SERVICE_SLOT* is a number defined under
+   :servconf:`/vsm/tunnelservices`.
+
+6001--8000: X display ports
+   If Xvnc is configured to listen for incoming TCP requests from X
+   Window System clients on other hosts, ports 6001--8000 are used by
+   display numbers 1--2000. The default is not to listen for incoming TCP
+   requests, so in the default configuration, the ports in this interval
+   are not open.
+
+Port 32767 downwards to 11857
+   The algorithm described below is used to allocate ports for the Xvnc
+   process and for the server-side endpoints for SSH tunnels to access
+   local resources of the client. This algorithm is used for sessions
+   with display numbers strictly higher than 99.
+
+   Each session is allocated :servconf:`/vsm/tunnelslots_per_session`
+   (default value 10) + 1 ports, leading to an allocation of 11 ports
+   per session with the default configuration. The ports are allocated
+   starting with the port given as
+   :servconf:`/vsmagent/max_session_port` (default 32767), and then
+   downwards. This means that the ports are aligned upwards as closely
+   as possible to the upper limit defined. This is a good practice to
+   avoid collisions with other services running on the machine.
+
+   Some examples follow
+
+   Display number 50
+      The VNC port will be 5950 which is:
+
+         5900 + *display*.
+
+      The tunnel ports allocated for this display are 5400--5409, which
+      is:
+
+         4900 + (10 × *display*) + *SERVICE_SLOT*
+
+      where *SERVICE_SLOT* is 0--9.
+
+   Display number 100, :servconf:`/vsmagent/display_min` = 10 (the default), :servconf:`/vsmagent/max_session_port` = 32767.
+      The VNC port will be 32757, which is:
+
+      32767 - ((*display* - 100) ×
+      (:servconf:`/vsm/tunnelslots_per_session` + 1) +
+      :servconf:`/vsm/tunnelslots_per_session`))
+
+      Ports 32758--32767 (inclusive) will be used for tunnel ports.
+
+   Display number 300, :servconf:`/vsmagent/display_min` = 100, :servconf:`/vsmagent/max_session_port` = 32767 (the default).
+      The VNC port will be 30557 which is:
+
+      32767 - ((*display* - 100) ×
+      (:servconf:`/vsm/tunnelslots_per_session` + 1) +
+      :servconf:`/vsm/tunnelslots_per_session`))
+
+      Ports 30558--30567 (inclusive) will be used for tunnel ports.
+
+   Display number 600, :servconf:`/vsmagent/display_min` = 300, :servconf:`/vsmagent/max_session_port` = 32767 (the default).
+      The VNC port will be 29457, which is:
+
+      32767 - ((*display* - 300) ×
+      (:servconf:`/vsm/tunnelslots_per_session` + 1) +
+      :servconf:`/vsm/tunnelslots_per_session`))
+
+      Ports 29458--29467 (inclusive) will be used for tunnel ports.

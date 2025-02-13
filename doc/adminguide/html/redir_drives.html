@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="This section explains how to access and manage client drives in ThinLinc sessions, covering commands for mounting and unmounting drives, as well as relevant limitations and configurations." name="description" />
+
+    <title>Accessing the client’s local drives &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using serial port redirection" href="redir_serial.html" />
+    <link rel="prev" title="Accessing client resources from the ThinLinc session" href="redirection.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="redirection.html" title="Previous document">Accessing client resources from the ThinLinc session</a>
+        </li>
+        <li>
+          <a href="redir_serial.html" title="Next document">Using serial port redirection</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="accessing-the-client-s-local-drives">
+<span id="local-drives"></span><h1>Accessing the client’s local drives<a class="headerlink" href="#accessing-the-client-s-local-drives" title="Permalink to this headline">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Using ThinLinc, it is possible to access the clients’ drives and file
+systems from the ThinLinc session. With thin terminals, one might want
+to access a local USB drive. When running the client on a workstation,
+applications on the remote desktop server can access all filesystems
+mounted at the workstation, just like local applications can.</p>
+</section>
+<section id="mounting-and-unmounting-local-drives">
+<h2>Mounting and unmounting local drives<a class="headerlink" href="#mounting-and-unmounting-local-drives" title="Permalink to this headline">¶</a></h2>
+<p>The exported local drives can be mounted with the command
+<strong class="program">tl-mount-localdrives</strong>. The drives will be mounted below
+<code class="file docutils literal notranslate"><span class="pre">$TLSESSIONDATA/drives</span></code>. A symbolic link called <code class="file docutils literal notranslate"><span class="pre">thindrives</span></code>
+will be created in the user’s home directory, pointing to this
+directory. The syntax for <strong class="program">tl-mount-localdrives</strong> is:</p>
+<p>tl-mount-localdrives [<strong>-h</strong>] [<strong>-v</strong>] [<strong>--version</strong>]</p>
+<p>The option <code class="docutils literal notranslate"><span class="pre">-v</span></code> causes the tool to be executed in verbose mode,
+<code class="docutils literal notranslate"><span class="pre">-h</span></code> shows the syntax, and <code class="docutils literal notranslate"><span class="pre">--version</span></code> shows the
+program’s version number.</p>
+<p>The Hiveconf parameter
+<a class="reference internal" href="config_utils.html#server-config-utils-tl-mount-localdrives-mount_args"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/utils/tl-mount-localdrives/mount_args</span></code></a> specifies the mount
+arguments. This Hiveconf parameter is normally found in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/tl-mount-localdrives.hconf</span></code>. The options
+<code class="docutils literal notranslate"><span class="pre">mountport</span></code>, <code class="docutils literal notranslate"><span class="pre">port</span></code>, <code class="docutils literal notranslate"><span class="pre">mountvers</span></code>, <code class="docutils literal notranslate"><span class="pre">nfsvers</span></code>, <code class="docutils literal notranslate"><span class="pre">nolock</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">tcp</span></code> will always be used.</p>
+<p>Mounted local drives can be unmounted with the command
+<strong class="program">tl-umount-localdrives</strong>. If some applications are using a mount
+at this time, they can continue to access the mount, even though the
+mount has been removed from the file system hierarchy (so called “lazy”
+unmount). The syntax for <strong class="program">tl-umount-localdrives</strong> is:</p>
+<p>tl-umount-localdrives [<strong>-a</strong>] [<strong>-s</strong>] [<strong>-l</strong>] [<strong>-h</strong>] [<strong>-v</strong>] [<strong>--version</strong>]</p>
+<p>If option <code class="docutils literal notranslate"><span class="pre">-a</span></code> is specified, all mounted local drives for all
+users on this machine will be unmounted (root required). Option
+<code class="docutils literal notranslate"><span class="pre">-s</span></code> leads to unmounting of all mounted local drives, for all
+sessions belonging to the current user. With option <code class="docutils literal notranslate"><span class="pre">-l</span></code>
+requested, the <code class="file docutils literal notranslate"><span class="pre">thindrives</span></code> link will not be updated. Given option
+<code class="docutils literal notranslate"><span class="pre">-v</span></code>, the tool will execute in verbose mode, <code class="docutils literal notranslate"><span class="pre">-h</span></code> will
+show the syntax, and finally <code class="docutils literal notranslate"><span class="pre">--version</span></code> shows the program’s
+version number.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using multiple sessions per user, the <code class="file docutils literal notranslate"><span class="pre">thindrives</span></code> link
+will point to the newest session that executed
+<strong class="program">tl-mount-localdrives</strong>. <strong class="program">tl-umount-localdrives</strong>
+will restore the link to the newest session which is not newer than
+the current session and which has mounted local drives.</p>
+</div>
+</section>
+<section id="mounting-drives-at-login">
+<h2>Mounting drives at login<a class="headerlink" href="#mounting-drives-at-login" title="Permalink to this headline">¶</a></h2>
+<p>Often, it’s convenient to automatically mount all local drives for a
+user when the session starts. This is done by default via a symbolic
+link in <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xstartup.d</span></code>, pointing at
+<strong class="program">/opt/thinlinc/bin/tl-mount-localdrives</strong>. This link is created
+for you during installation, as well as its counterpart in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xlogout.d</span></code> which points to
+<strong class="program">/opt/thinlinc/bin/tl-umount-localdrives</strong>.</p>
+</section>
+<section id="limitations-and-additional-information">
+<h2>Limitations and additional information<a class="headerlink" href="#limitations-and-additional-information" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Linux kernel 2.6.23 or later is required.</p></li>
+<li><p>A mounted local drive, for example
+<code class="file docutils literal notranslate"><span class="pre">/var/opt/thinlinc/sessions/johndoe/47/drives/cdrom</span></code>, is only
+usable during the lifetime of the ThinLinc session. If the user ends
+the session without unmounting and then starts a new session, the
+mount will not be usable even if the session number happens to be
+same. In this case, any attempts to access the mount will give the
+error message “Stale NFS file handle”. To be able to use the local
+drive, the user needs to run <strong class="program">tl-mount-localdrives</strong>.</p></li>
+<li><p>The mounted local drive does not fully support POSIX semantics. The
+usual limitations of NFSv3 applies. Additionally, if the file is
+moved to another directory while a process has the file open, the
+process will get a “Stale NFS file handle” error on any subsequent
+file operation for that file.</p></li>
+<li><p>Local files are uniquely identified by their inode number. Some file
+system implementations, such as the Linux kernel FAT implementation,
+do not provide persistent inode numbers. Inode numbers will change on
+each remount, which usually results in “Stale NFS file handle”
+errors.</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="redirection.html" title="Previous document">Accessing client resources from the ThinLinc session</a>
+        </li>
+        <li>
+          <a href="redir_serial.html" title="Next document">Using serial port redirection</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Accessing the client’s local drives</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mounting-and-unmounting-local-drives">Mounting and unmounting local drives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mounting-drives-at-login">Mounting drives at login</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#limitations-and-additional-information">Limitations and additional information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="redir_serial.html">Using serial port redirection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="redir_sound.html">Using sound device redirection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="redir_scard.html">Using smart card redirection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="redirection.html">Accessing client resources from the ThinLinc session</a><ul>
+      <li>Previous: <a href="redirection.html" title="previous chapter">Accessing client resources from the ThinLinc session</a></li>
+      <li>Next: <a href="redir_serial.html" title="next chapter">Using serial port redirection</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/redir_drives.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

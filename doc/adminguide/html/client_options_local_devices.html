@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Guide to configuring local device export in the ThinLinc client, including settings for sound, serial ports, drives, printers, and smart card readers." name="description" />
+
+    <title>Local devices tab &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Optimization tab" href="client_options_optimization.html" />
+    <link rel="prev" title="Display tab" href="client_options_display.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_options_display.html" title="Previous document">Display tab</a>
+        </li>
+        <li>
+          <a href="client_options_optimization.html" title="Next document">Optimization tab</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="local-devices-tab">
+<span id="client-local-devices-tab"></span><h1>Local devices tab<a class="headerlink" href="#local-devices-tab" title="Permalink to this headline">¶</a></h1>
+<p>The local devices tab contains options for which local devices should be
+exported to the server and in what manner.</p>
+<figure class="align-default" id="id1">
+<img alt="_images/client-options-local-devices.png" src="_images/client-options-local-devices.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Client settings local devices tab</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="description-of-local-devices-tab-settings">
+<h2>Description of local devices tab settings<a class="headerlink" href="#description-of-local-devices-tab-settings" title="Permalink to this headline">¶</a></h2>
+<p>Here follows a detailed description of the settings available in the
+local devices tab.</p>
+<dl>
+<dt><span class="guilabel">Export — Sound</span></dt><dd><p>When enabled, sound will be sent from the ThinLinc server to your
+local client. A small local sound daemon will be started by the
+client, which connects to a secure tunnel to the server. See
+<a class="reference internal" href="redir_sound.html#sound-redirection"><span class="std std-ref">Using sound device redirection</span></a> for more information about this
+topic.</p>
+<figure class="align-default" id="id2">
+<img alt="_images/client-options-graphic-options-sound.png" src="_images/client-options-graphic-options-sound.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 10 </span><span class="caption-text">Sound system selection interface</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>On Linux there is a <span class="guilabel">Details…</span> button next to the
+<span class="guilabel">Sound</span> check box that will allow you to choose between
+PulseAudio, ALSA and OSS for the local sound system. You can also let
+the ThinLinc client select the correct system automatically.</p>
+</dd>
+<dt><span class="guilabel">Export — Serial ports</span></dt><dd><p>It is possible to forward two serial ports from the client to make it
+available to programs you run on the server. To select which of your
+local serial devices to export you can press the
+<span class="guilabel">Details…</span> button next to the <span class="guilabel">Serial port</span>
+check box. This will bring up a dialog where you can select which two
+serial ports should be exported.</p>
+<figure class="align-default" id="id3">
+<img alt="_images/client-options-graphic-options-serial.png" src="_images/client-options-graphic-options-serial.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">Serial port selection interface</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <span class="guilabel">Device</span> should be a path to a Linux serial device
+(such as <code class="file docutils literal notranslate"><span class="pre">/dev/ttyS0</span></code>) or a Windows COM port name (such as
+<code class="docutils literal notranslate"><span class="pre">COM1</span></code>). Enter the device to export in the text field or press the
+<span class="guilabel">…</span> button to browse to the wanted device.</p>
+</dd>
+<dt><span class="guilabel">Export — Drives</span></dt><dd><p>This check box turns on export of local devices from your terminal
+top the ThinLinc server. This makes your local drives available from
+your ThinLinc session. To select which drives to export you press the
+<span class="guilabel">Details…</span> button next to <span class="guilabel">Drives</span> check box.
+That presents a dialog where you can build a list of drives to export
+and set export permissions.</p>
+<figure class="align-default" id="id4">
+<img alt="_images/client-options-graphic-options-drives.png" src="_images/client-options-graphic-options-drives.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 12 </span><span class="caption-text">Local drive export selection interface</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <span class="guilabel">Export local drives</span> window consists of two parts. At
+the top there is a list containing exported paths, with two control
+buttons below. The lower half contains settings fields for the
+currently selected path. When you select a path listed in the upper
+list you will see its corresponding settings in the drive options
+field below. You can then change the selected path by changing the
+values on the options field.</p>
+<p>To add a new path to the list you press the <span class="guilabel">Add</span> button.
+That creates a new empty land in the path list. The new path will be
+automatically selected. You can then modify the settings in the lower
+half. Set the path and export permission for the new export. To set
+the export path you can either write it manually in the path text
+field or press the <span class="guilabel">…</span> button to bring up a file
+navigation window.</p>
+<p>To remove a path you simply select a path and press the
+<span class="guilabel">Remove</span> button.</p>
+<p>The Windows client features a mechanism that makes it easy to export
+the <code class="file docutils literal notranslate"><span class="pre">My</span> <span class="pre">Documents</span></code> folder. This feature is activated by
+pressing the <span class="guilabel">My Documents</span> button. Regardless of the local
+folder name, this folder will be mounted as <code class="file docutils literal notranslate"><span class="pre">MyDocuments</span></code> on
+the server.</p>
+<p>The export permissions can be one of the following three options,
+<span class="guilabel">Not exported</span>, <span class="guilabel">Read only</span> and <span class="guilabel">Read
+and write</span>. The <span class="guilabel">Not exported</span> option can be used to
+temporarily turn off an export without having to delete it. The
+<span class="guilabel">Read only</span> option means that you from the ThinLinc session
+will be able to read from the export, but not write. The
+<span class="guilabel">Read and write</span> option means that you from the ThinLinc
+session will be able to both read and write.</p>
+</dd>
+<dt><span class="guilabel">Export — Printer</span></dt><dd><p>By checking this check box the client will export your local printer
+to make it available from the ThinLinc session. For more information
+about this feature, see <a class="reference internal" href="client_export_local_device.html#client-export-printer"><span class="std std-ref">Printer</span></a> and
+<a class="reference internal" href="thinlocal.html#thinlocal"><span class="std std-ref">Local printer support</span></a>.</p>
+<figure class="align-default" id="id5">
+<img alt="_images/client-options-printer-options.png" src="_images/client-options-printer-options.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Printer options dialogue</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>On Windows and macOS there is a <span class="guilabel">Details…</span> button next to
+the <span class="guilabel">Printer</span> check box that will allow you to select if
+the print job should be sent to the default printer or if the printer
+selection dialog should be used on every print.</p>
+</dd>
+<dt><span class="guilabel">Export — Smart card readers</span></dt><dd><p>This check box makes all local smart card readers and smart cards
+available to applications on the ThinLinc server. It is not necessary
+to check this box to authenticate using smart cards, but it is needed
+if you also wish to authenticate using smart cards to a Windows
+Remote Desktop Server.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_options_display.html" title="Previous document">Display tab</a>
+        </li>
+        <li>
+          <a href="client_options_optimization.html" title="Next document">Optimization tab</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="client.html">The native client</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="clientplatforms.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_usage.html">Client usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_cmdline.html">Client command line usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_export_local_device.html">Local device export</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="client_options.html">Client configuration</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="client_options_display.html">Display tab</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Local devices tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_optimization.html">Optimization tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_security.html">Security tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_advanced.html">Advanced tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_config.html">Configuration storage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="client_gestures.html">Client touch gestures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_logfile_placement.html">Log file placement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_customizer.html">Client customizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_web_integration.html">Launching the client from a web page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_advanced_topics.html">Advanced topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="client.html">The native client</a><ul>
+  <li><a href="client_options.html">Client configuration</a><ul>
+      <li>Previous: <a href="client_options_display.html" title="previous chapter">Display tab</a></li>
+      <li>Next: <a href="client_options_optimization.html" title="next chapter">Optimization tab</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/client_options_local_devices.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

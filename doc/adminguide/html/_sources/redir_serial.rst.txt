@@ -1,0 +1,80 @@
+.. meta::
+   :description: Details the use of serial port redirection in ThinLinc,
+                 covering requirements, enabling, accessing, and
+                 limitations.
+
+.. _serial-redirection:
+
+Using serial port redirection
+-----------------------------
+
+Introduction
+~~~~~~~~~~~~
+
+Using ThinLinc, it is possible to access the serial ports of the client
+from the ThinLinc session. This means that you can utilize peripheral
+devices which connect through a serial port, such as digital cameras,
+PDAs and modems. Up to two serial ports are supported at a time.
+
+Requirements
+~~~~~~~~~~~~
+
+-  The application which communicates with the serial port must be
+   dynamically linked. Statically linked applications are not supported.
+
+Enabling serial port redirection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Serial port redirection is activated (for the current user session) by
+sourcing the file :program:`tl-serial-redir.sh`. It can be done manually
+with this command:
+
+.. code:: console
+
+   $ source /opt/thinlinc/libexec/tl-serial-redir.sh
+
+It is necessary to source this file because it sets the environment
+variables :environ:`CYCLADE_DEVICES` and :environ:`LD_PRELOAD`. Thus,
+all applications needing serial port access should be started as a
+subprocess to this shell. The easiest way to accomplish this is to
+source :program:`tl-serial-redir.sh` from the session startup scripts.
+To automatically activate serial port redirection at login for all
+users, execute this command:
+
+.. code:: console
+
+   $ sudo ln -s /opt/thinlinc/libexec/tl-serial-redir.sh \
+      /opt/thinlinc/etc/xstartup.d/42-tl-serial-redir.sh
+
+Accessing the redirected port from applications
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When using redirected serial ports, applications should be configured to
+use a special, personal device-file, instead of a port such as
+:file:`/dev/ttyS0`. The two device files are called
+:file:`$TLSESSIONDATA/dev/ttyS0` and :file:`$TLSESSIONDATA/dev/ttyS1`.
+
+.. tip::
+
+   Since the session number varies, it's often convenient to use the
+   symbolic link :file:`/var/opt/thinlinc/sessions/$USER/last`, which
+   points to the last started session directory. For example, the first
+   serial port can be accessed as
+   :file:`/var/opt/thinlinc/sessions/$USER/last/dev/ttyS0`.
+
+Limitations and additional information
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  When reconnecting to an existing session, it might take up to 10
+   seconds before the serial ports are available.
+
+-  A maximum of two serial ports per session can be redirected.
+
+-  The redirection is handled by processes called
+   :program:`cyclades-ser-cli`. It writes debugging information to
+   :file:`$TLSESSIONDATA/ttyS0.log` and
+   :file:`$TLSESSIONDATA/ttyS1.log`. These processes will automatically
+   terminate when the session terminates.
+
+-  Applications that uses the ``ioctl`` ``TIOCMGET`` are not supported
+   yet.

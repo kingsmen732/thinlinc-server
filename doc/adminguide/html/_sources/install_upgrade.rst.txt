@@ -1,0 +1,184 @@
+.. meta::
+   :description: Detailed guide on upgrading ThinLinc servers and
+                 clusters, including considerations for configuration
+                 migration, license updates, and a step-by-step process
+                 for upgrading both master and agent servers in a
+                 ThinLinc environment.
+
+.. _install_upgrade:
+
+Upgrading ThinLinc
+------------------
+
+This chapter will detail the process of upgrading ThinLinc servers and
+clusters. There are several important items that have to be considered
+regarding ThinLinc upgrades:
+
+-  It is required that all servers (including HA nodes) in a cluster are
+   running the same ThinLinc version.
+
+-  All ThinLinc services will automatically be stopped during the entire
+   upgrade. They will be started again once ThinLinc setup finishes.
+
+-  Users will not be able to reconnect to running sessions when the
+   master service is stopped or when the agent service is stopped on the
+   agent server running the session.
+
+-  Users will not be able to create new sessions when the master service
+   is stopped or when no agent servers are available.
+
+-  Running sessions will be unaffected by a upgrade. This means that
+   users can continue working. This also means that running sessions
+   will not be getting the benefits from the new version.
+
+.. _upgrade_cluster:
+
+Upgrading a cluster
+~~~~~~~~~~~~~~~~~~~
+
+The recommended workflow for upgrading a ThinLinc cluster is as follows:
+
+1. Review configuration changes in the release notes for the new
+   release. More information regarding configuration migration can be
+   found in :ref:`upgrade_migration`.
+
+2. Check licenses and install new ones if needed. For details see
+   :ref:`upgrade_licenses`.
+
+3. Schedule the upgrade and if necessary prepare the users on that
+   reconnections or creation will be unavailable during the upgrade
+   process. The command :program:`tl-notify` can be used to send
+   messages to users in running sessions. Documentation for this command
+   can be found in :ref:`commands`.
+
+4. Stop the agent services on all agent servers. The command
+   :program:`tl-ssh-all` can be used to run commands on all agent
+   servers in the cluster. Documentation for this command can be found
+   in :ref:`commands`. This step will prevent reconnections and the
+   creation of new sessions.
+
+5. Remove all agent servers from the cluster by clearing the
+   configuration parameter
+   :servconf:`/vsmserver/subclusters/<name>/agents` on the master.
+   Details on this parameter can be found in
+   :ref:`configuration_subcluster_params`. Restart the master service to
+   take the change into effect. If HA is used, do this on both master
+   servers.
+
+6. Upgrade the master server. Details for installing an upgrade can be
+   found in :ref:`upgrade_packages` and :ref:`upgrade_migration`. If HA
+   is used, stop the master service on both master servers and then
+   upgrade both servers.
+
+7. Upgrade each agent server and manually add them back into the
+   upgraded cluster. Upgrading agents works the same way as upgrading a
+   master server. Add each upgraded agent to the configuration parameter
+   :servconf:`/vsmserver/subclusters/<name>/agents` on the master.
+   Restart the master service afterward. If HA is used, do this on both
+   master servers. Once at least one agent is added users will again be
+   able to create new sessions.
+
+Once all agent servers are upgraded and added back into the cluster all
+users will be able to reconnect to existing sessions and the upgrade is
+complete.
+
+.. _upgrade_licenses:
+
+New licenses
+~~~~~~~~~~~~
+
+Before performing an upgrade the first step is to find out if new
+license files are required to run the new version. ThinLinc license
+files delivered with version **x.y.z** will still work for versions with
+the same **x** and **y** but higher **z**, but not for increased
+**x** or **y**. For example, license files for ThinLinc 3.1.0 will still
+work for ThinLinc 3.1.1, but not for ThinLinc 3.2.0 or ThinLinc 4.0.0.
+
+As the new licenses will work with the old (current) version, it's a
+good idea to install them as the first step in the upgrade process.
+
+.. _upgrade_packages:
+
+Upgrading the package
+~~~~~~~~~~~~~~~~~~~~~
+
+The same installation program that you used to install ThinLinc is also
+used to upgrade it. It is located in the root directory of the server
+bundle. Extract the bundle and start the installation program as
+follows:
+
+.. code:: console
+
+   $ sh ./install-server
+
+and answer the questions. If you prefer, you can also upgrade the
+ThinLinc package by hand. This package is located in the subdirectory
+:file:`packages` in the server bundle.
+
+If :program:`install-server` was used, it will ask if ThinLinc setup
+should be started at the end of the package upgrade. If ThinLinc setup
+wasn't started automatically, it should be started manually after the
+package upgrade by running :program:`/opt/thinlinc/sbin/tl-setup`.
+
+.. _upgrade_migration:
+
+Configuration migration
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Once the package has been upgraded, a decision will sometimes be
+required regarding how to migrate the configuration. When a conflict
+between the saved configuration and the configuration in the new release
+arises, a choice has to be made.
+
+ThinLinc setup will present choices regarding migration of Hiveconf
+files. Conflicting files that aren't Hiveconf files are not affected by
+ThinLinc setup. In these cases the package upgrade will have kept your
+configuration in place and saved the new default values from the new
+ThinLinc version as :file:`.rpmnew` or :file:`.dpkg-dist` versions of
+the conflicting files. Potential migration of non-Hiveconf files has to
+be done manually.
+
+The three options that are presented in ThinLinc setup are as follows:
+
+-  Use the new Hiveconf files and migrate the parameters and values from
+   the old files.
+
+   With this option, all configuration changes done in the earlier
+   version are preserved. The configuration will be based on the new
+   files. Values of parameters that have been moved or renamed in the
+   new release will be migrated to the new parameters. Parameters that
+   have been removed will be deleted. Comments will not be migrated. The
+   file structure and file names may also be different. All parameters
+   and values from the listed Hiveconf files are copied over. This means
+   that unchanged parameters in these files will use the default values
+   from the earlier release.
+
+   Note that a certain parameter will be defined if it is defined either
+   in the new or old Hiveconf files. This means that if you have removed
+   some parameters, for example one of the example profiles, those
+   parameters will again exist after the migration. For profiles,
+   however, this will not affect the user session, since profiles are
+   only visible if they are also listed in the "order" parameter.
+
+   Parameters will be removed from the new Hiveconf files if they are
+   defined elsewhere. For example,
+   if :servconf:`/vsmagent/agent_hostname` has been moved from
+   :file:`vsmagent.hconf` to :file:`local.hconf`, this change
+   will be preserved.
+
+-  Use all old Hiveconf files.
+
+   With this option, all the old files are used. Custom comments and the
+   file structure are preserved, but no new parameters or comments from
+   the new release are introduced. Please note that configuration files
+   which are identical in the old and new release are not listed or
+   processed. This means that new default values in such files are
+   introduced even with this option.
+
+-  Ignore old Hiveconf files and use the new files.
+
+   With this option, the listed configuration files are ignored and the
+   new files are used instead. Please note that configuration files
+   which are identical in the old and new release are not listed or
+   processed. This means that configuration changes to such files are
+   preserved even with this option.

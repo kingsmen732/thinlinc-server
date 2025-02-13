@@ -1,0 +1,122 @@
+.. meta::
+   :description: Instructions for configuring ThinLinc to use smart card
+                 public key authentication, leveraging enhanced security
+                 measures for user authentication.
+
+.. _scpublickey_authentication:
+
+Using smart card public key authentication
+------------------------------------------
+
+Introduction
+~~~~~~~~~~~~
+
+Smart card public key authentication is an advanced version of the
+method described in :ref:`publickey_authentication`. It uses the same
+basic principle but stores the private key on a smart card, where it can
+never be extracted. This section will describe how to configure ThinLinc
+to use it.
+
+General requirements
+~~~~~~~~~~~~~~~~~~~~
+
+-  Smart cards with an appropriate PKCS#11 library. The library included
+   with ThinLinc requires PKCS#15 compliant smart cards and PC/SC
+   libraries on the client system.
+
+Key generation
+~~~~~~~~~~~~~~
+
+The keys on the smart card are generated when the smart card is issued.
+How this is done is not covered by this guide.
+
+Server configuration
+~~~~~~~~~~~~~~~~~~~~
+
+To use a smart card with ThinLinc, the public key must be extracted off
+the card and associated with a user on the ThinLinc server. The method
+for doing this depends on your smart card and your SSH server.
+
+On Linux, with the OpenSSH server and an PKCS#15 compliant smart card,
+the tool :command:`pkcs15-tool` (part of the OpenSC suite) is able to
+extract the public key.
+
+The first step is identifying the certificate on the card:
+
+.. code:: console
+
+   $ pkcs15-tool --list-certificates
+   X.509 Certificate [identification]
+           Flags    : 0
+           Authority: no
+           Path     : 3f0050154331
+           ID       : 45
+
+The second step is to extract the key, based on the ID number:
+
+.. code:: console
+
+   $ pkcs15-tool --read-ssh-key 45
+   1024 65537 918282501237151981353694684191630174855276113858858644490084487922635
+   27407657612671471887563630990149686313179737831148878256058532261207121307761545
+   37226554073750496652425001832055579758510787971892507619849564722087378266977930
+   9875752082163453335538210518946058646748977963861144645730357512544251473818679
+   ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQCCxIx/xtVoDR2qwY4Pym7F6yKmdJsB26MUbbTiGT7o
+   6M6G4A2l5Go1kdQRNjOWDJE9HZWToaApSkVprNeiQLeOkbELz2yND2Te/Oyl3u44YeIUImT1v4t7q9jC
+   MTpfZ+TpxLf0sd3DAk2So8EBAtUkhib/ugKqfTCqB7WNoHf0Nw==
+
+The second line, starting with ``ssh-rsa``, is the one needed for SSH
+version 2 authentication. For instructions on how to associate this key
+with a user, see :ref:`publickey_authentication`.
+
+Client configuration
+~~~~~~~~~~~~~~~~~~~~
+
+The ThinLinc client requires no special configuration to use the smart
+card.
+
+.. _smartcard_auto:
+
+Automatic connection
+~~~~~~~~~~~~~~~~~~~~
+
+The client is able to automatically connect to the server when a smart
+card is inserted (see :ref:`client_security_tab`). It does, however,
+require that the user is able to log in using the subject name on the
+card. As that is rarely a valid username, ThinLinc ships with a special
+NSS module, called **nss-passwdaliases**, that enables alternate names
+for users.
+
+The module is configured by editing the file :file:`/etc/passwdaliases`.
+The file is a colon-delimited table of alternate names and their
+corresponding user ids. Example::
+
+   givenname=John,sn=Doe,c=us:572
+
+To activate the nss-passwdaliases module, it must be added to the list
+of NSS modules for the **passwd** database. This is specified in the
+file :file:`/etc/nsswitch.conf`. For example, replace the following
+line::
+
+   passwd: files ldap
+
+with this line::
+
+   passwd: files ldap passwdaliases
+
+.. _certalias:
+
+LDAP automatic update (tl-ldap-certalias)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ThinLinc includes the tool :program:`tl-ldap-certalias` that can
+automatically update the local databases needed for smart card public
+key authentication, provided the system uses the OpenSSH server (or any
+SSH server that uses a compatible format and location for authorized
+public keys) and standards compliant LDAP servers where users and
+certificates are stored.
+
+.. FIXME: This isn't needed once :program: becomes proper references
+
+For details about using this command, see the full documentation for
+:doc:`man/tl-ldap-certalias.8`.

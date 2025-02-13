@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Instructions for accessing ThinLinc Web Access, browser requirements, logging in, and using the toolbar, clipboard, and touch gestures. Essential for efficient use of ThinLinc Web Access." name="description" />
+
+    <title>Usage &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Accessing client resources from the ThinLinc session" href="redirection.html" />
+    <link rel="prev" title="Server configuration" href="tlwebaccess_server.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tlwebaccess_server.html" title="Previous document">Server configuration</a>
+        </li>
+        <li>
+          <a href="redirection.html" title="Next document">Accessing client resources from the ThinLinc session</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="usage">
+<span id="tlwebaccess-usage"></span><h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>ThinLinc Web Access is accessed with your web browser by browsing to the
+master machine, for example <a class="reference external" href="https://thinlinc-master.example.com:300">https://thinlinc-master.example.com:300</a>.
+If you have configured the service to run on port 443, “:300” can be
+omitted.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On iOS and Android devices, you can add an icon to the home screen.
+When the ThinLinc Web Access is launched from the home screen, it
+will run in full-screen mode.</p>
+</div>
+<section id="requirements">
+<span id="tlwebaccess-requirements"></span><h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>ThinLinc Web Access requires a web browser that supports modern web
+technologies such as WebSockets and Canvas. It is verified to work
+correctly on the latest versions of the major web browsers:</p>
+<ul class="simple">
+<li><p>Microsoft Edge</p></li>
+<li><p>Firefox</p></li>
+<li><p>Google Chrome</p></li>
+<li><p>Safari</p></li>
+</ul>
+</section>
+<section id="logging-in-to-a-thinlinc-server">
+<span id="tlwebaccess-login"></span><h2>Logging in to a ThinLinc server<a class="headerlink" href="#logging-in-to-a-thinlinc-server" title="Permalink to this headline">¶</a></h2>
+<p>The first thing presented to the user when browsing to ThinLinc Web
+Access is a login form where the user’s username and password can be
+specified.</p>
+<figure class="align-default" id="id1">
+<img alt="_images/tlwebaccess-login.svg" src="_images/tlwebaccess-login.svg" /><figcaption>
+<p><span class="caption-number">Fig. 19 </span><span class="caption-text">ThinLinc Web Access login</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>To log in to a ThinLinc server Web Access needs to do a successful
+user authentication. For most systems the password will be
+sufficient. If more information is needed, e.g. when using one-time
+passwords or when a password change is needed, then Web Access will
+present a series of prompts for the user until the user has been fully
+authenticated.</p>
+<p>If the login attempt is successful a ThinLinc session will start or an
+old one will be reused, depending on if the user already has a session
+running or not.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>ThinLinc Web Access does not fully support multiple sessions for the same
+user. If the user has multiple sessions, a random session will be chosen.</p>
+</div>
+</section>
+<section id="the-toolbar">
+<span id="tlwebaccess-toolbar"></span><h2>The toolbar<a class="headerlink" href="#the-toolbar" title="Permalink to this headline">¶</a></h2>
+<p>Once connected ThinLinc Web Access will display a toolbar on one side of
+the browser window for various functions. This toolbar can be hidden by
+clicking the small tab on the side of it. Clicking the tab again will
+make the toolbar reappear. The toolbar can also be moved to either side
+by grabbing the tab and dragging it to the desired side.</p>
+<figure class="align-default" id="id2">
+<img alt="_images/tlwebaccess-toolbar.svg" src="_images/tlwebaccess-toolbar.svg" /><figcaption>
+<p><span class="caption-number">Fig. 20 </span><span class="caption-text">ThinLinc Web Access toolbar</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The ThinLinc Web Access toolbar has the following functions:</p>
+<dl class="simple">
+<dt><span class="guilabel">Move/Drag viewport</span></dt><dd><p>Toggle between sending mouse events to the ThinLinc session or
+panning a session that is larger than the current browser window.
+This button will only be shown on devices that do not have visible
+scrollbars.</p>
+</dd>
+<dt><span class="guilabel">Show keyboard</span></dt><dd><p>Toggle the on-screen keyboard for the device. This button will only
+be shown if a touch device has been detected.</p>
+</dd>
+<dt><span class="guilabel">Show extra keys</span></dt><dd><p>Displays a secondary toolbar with virtual keys for devices with
+limited or no physical keyboard. See <a class="reference internal" href="#tlwebaccess-extra-keys"><span class="std std-ref">Extra keys</span></a>
+for details.</p>
+</dd>
+<dt><span class="guilabel">Clipboard</span></dt><dd><p>Opens the clipboard dialog. See <a class="reference internal" href="#tlwebaccess-clipboard"><span class="std std-ref">Clipboard</span></a> for
+details.</p>
+</dd>
+<dt><span class="guilabel">Disconnect</span></dt><dd><p>Disconnects ThinLinc Web Access from the current session.</p>
+</dd>
+</dl>
+</section>
+<section id="extra-keys">
+<span id="tlwebaccess-extra-keys"></span><h2>Extra keys<a class="headerlink" href="#extra-keys" title="Permalink to this headline">¶</a></h2>
+<p>Some physical keyboards and most on screen keyboards lack a number of
+keys that are commonly used in applications and desktop environments. To
+simplify use of these an extra toolbar is available that can simulate
+these keys.</p>
+<figure class="align-default" id="id3">
+<img alt="_images/tlwebaccess-extra-keys.svg" src="_images/tlwebaccess-extra-keys.svg" /><figcaption>
+<p><span class="caption-number">Fig. 21 </span><span class="caption-text">ThinLinc Web Access extra keys</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<dl class="simple">
+<dt><span class="guilabel">Control</span></dt><dd><p>Simulates pressing or releasing the left <kbd class="kbd docutils literal notranslate">Control</kbd> key.</p>
+</dd>
+<dt><span class="guilabel">Alt</span></dt><dd><p>Simulates pressing or releasing the left <kbd class="kbd docutils literal notranslate">Alt</kbd> key.</p>
+</dd>
+<dt><span class="guilabel">Windows</span></dt><dd><p>Simulates pressing or releasing the left <kbd class="kbd docutils literal notranslate">Windows</kbd> key.</p>
+</dd>
+<dt><span class="guilabel">Tab</span></dt><dd><p>Simulates pressing and releasing the <kbd class="kbd docutils literal notranslate">Tab</kbd> key in sequence.</p>
+</dd>
+<dt><span class="guilabel">Escape</span></dt><dd><p>Simulates pressing and releasing the <kbd class="kbd docutils literal notranslate">Escape</kbd> key in sequence.</p>
+</dd>
+<dt><span class="guilabel">Ctrl+Alt+Delete</span></dt><dd><p>Simulates pressing and releasing the <kbd class="kbd docutils literal notranslate">Control</kbd>, <kbd class="kbd docutils literal notranslate">Alt</kbd> and
+<kbd class="kbd docutils literal notranslate">Delete</kbd> keys in sequence.</p>
+</dd>
+</dl>
+</section>
+<section id="clipboard">
+<span id="tlwebaccess-clipboard"></span><h2>Clipboard<a class="headerlink" href="#clipboard" title="Permalink to this headline">¶</a></h2>
+<p>For security reasons the browsers prevent ThinLinc Web Access from
+directly integrating with the local clipboard. Copying text to or from
+the ThinLinc session must therefore be handled manually via the
+clipboard dialog.</p>
+<figure class="align-default" id="id4">
+<img alt="_images/tlwebaccess-clipboard.svg" src="_images/tlwebaccess-clipboard.svg" /><figcaption>
+<p><span class="caption-number">Fig. 22 </span><span class="caption-text">ThinLinc Web Access clipboard dialog</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The contents of the clipboard dialog will automatically be updated
+whenever the contents of the clipboard in the ThinLinc session changes.
+Correspondingly, if the contents of the clipboard dialog is changed by
+the user then the clipboard in the session will be updated to match.</p>
+</section>
+<section id="touch-gestures">
+<span id="tlwebaccess-gestures"></span><h2>Touch gestures<a class="headerlink" href="#touch-gestures" title="Permalink to this headline">¶</a></h2>
+<p>ThinLinc Web Access has support for the same touch gestures as the
+ThinLinc client when used on a touch capable monitor. These gestures
+allow the user to simulate certain mouse operations that would otherwise
+not be possible. Please see <a class="reference internal" href="client_gestures.html#client-gestures"><span class="std std-ref">Client touch gestures</span></a> for details on what
+gestures are available.</p>
+</section>
+<section id="command-and-alt-keys-on-macos-and-ios">
+<span id="tlwebaccess-macos"></span><h2>Command and Alt keys on macOS and iOS<a class="headerlink" href="#command-and-alt-keys-on-macos-and-ios" title="Permalink to this headline">¶</a></h2>
+<p>The <kbd class="kbd docutils literal notranslate">Alt</kbd> key (also known as the <kbd class="kbd docutils literal notranslate">Option</kbd> key) behaves very
+differently on macOS and iOS compared to its behavior on other
+platforms. It closely resembles the PC <kbd class="kbd docutils literal notranslate">AltGr</kbd> key, found on
+international keyboards. ThinLinc therefore treats these keys in a
+special manner on macOS and iOS in order to provide a good integration
+between the client and the remote ThinLinc system.</p>
+<p>For more information on how ThinLinc treats these keys see
+<a class="reference internal" href="client_macos.html#macosalt"><span class="std std-ref">Command and Alt keys on macOS</span></a>.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tlwebaccess_server.html" title="Previous document">Server configuration</a>
+        </li>
+        <li>
+          <a href="redirection.html" title="Next document">Accessing client resources from the ThinLinc session</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tlwebaccess_server.html">Server configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logging-in-to-a-thinlinc-server">Logging in to a ThinLinc server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-toolbar">The toolbar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extra-keys">Extra keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clipboard">Clipboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#touch-gestures">Touch gestures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#command-and-alt-keys-on-macos-and-ios">Command and Alt keys on macOS and iOS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="tlwebaccess.html">ThinLinc Web Access</a><ul>
+      <li>Previous: <a href="tlwebaccess_server.html" title="previous chapter">Server configuration</a></li>
+      <li>Next: <a href="redirection.html" title="next chapter">Accessing client resources from the ThinLinc session</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/tlwebaccess_usage.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

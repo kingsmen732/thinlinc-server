@@ -1,0 +1,221 @@
+.. meta::
+   :description: This section covers methods to restrict user access to
+                 ThinLinc servers, including disabling SSH access, shell
+                 access, and port forwarding, as well as controlling
+                 clipboard and drive access.
+
+.. _lockdown:
+
+Restricting access to ThinLinc servers
+======================================
+
+In some cases it might be desirable or required to restrict the users'
+access to the ThinLinc servers and their ability to move data in and out
+of the system. This chapter describes some ways this can be achieved, as
+well as the consequences of such restrictions.
+
+Disabling SSH access
+--------------------
+
+The system's SSH server often includes a lot of functionality for
+accessing the system. Completely disabling this service is a quick way
+to restrict most of the external access to the system. However the
+native ThinLinc client requires SSH to function so users will be limited
+to only using the web client ThinLinc Web Access.
+
+Many SSH servers also support limiting access to just certain users.
+OpenSSH has settings such as ``AllowGroups`` and ``Match`` that can
+limit functionality without completely disabling the SSH server.
+
+Disabling shell access
+----------------------
+
+User sessions are normally started via the user's configured shell, so
+restricting the shell is a good method to restrict what kind of sessions
+the user can start. Primarily, this is useful to prevent users from
+running custom commands via SSH.
+
+Changing the configured shell
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Commonly the user's shell is configured to :command:`/bin/false` in
+order to disable shell access. Unfortunately this also prevents access
+to ThinLinc as it needs to run the commands :program:`thinlinc-login`
+and :program:`/opt/thinlinc/etc/xsession` via the user's shell. As an
+alternative it is possible to configure
+:program:`/usr/bin/thinlinc-login` as the shell. This will allow
+ThinLinc to function whilst preventing any other type of session.
+
+Note that this method prevents any terminals inside the session from
+functioning as well. In most cases it also does not prevent users from
+running custom scripts and shell commands as they can use a text editor
+to construct such scripts.
+
+Using ForceCommand
+~~~~~~~~~~~~~~~~~~
+
+OpenSSH has the ability to ignore the user's configured shell and run a
+different command instead. This makes it possible to keep a normal shell
+for the user and only restrict access when connecting via SSH. However
+this prevents the native ThinLinc client from connecting as it needs to
+be able to run the command :program:`thinlinc-login` with specific
+arguments. The following script can be specified as ``ForceCommand`` to
+allow only ThinLinc access via SSH:
+
+.. code:: bash
+
+   #!/bin/bash
+   thinlinc-login -c "${SSH_ORIGINAL_COMMAND}"
+
+It is also possible to apply this restriction only to a subset of users
+by using the ``Match`` setting. Please see OpenSSH's documentation for
+how to configure this mechanism.
+
+Disabling port forwarding
+-------------------------
+
+ThinLinc relies on SSH port forwarding in order to function. However it
+is possible to limit that port forwarding in order to avoid unwanted
+network access. ThinLinc only requires forwarding via the loopback
+interface, so the SSH server can always be configured to only allow this
+without limiting ThinLinc in any way. For OpenSSH this is configured by
+specifying the following in :file:`sshd_config`::
+
+   GatewayPorts no
+   PermitOpen 127.0.0.1:*
+
+Note that it is also necessary to disable shell access in order to
+completely prevent users from forwarding ports as otherwise they could
+run their own forwarding software over the shell channel.
+
+Disabling remote port forwarding
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is possible to use ThinLinc with remote port forwarding completely
+disabled. However this will prevent local devices such as sound, drives
+and printers from functioning. In OpenSSH this is configured by adding
+the following to :file:`/etc/ssh/sshd_config`::
+
+   AllowTcpForwarding local
+
+It is also possible to apply this restriction only to a subset of users
+by using the ``Match`` setting. Please see OpenSSH's documentation for
+how to configure this mechanism.
+
+.. note::
+
+   Local port forwarding cannot be disabled as it is required for even
+   the basic ThinLinc functionality.
+
+..
+  ### FIXME: Change this once bug 5775 is fixed ###
+
+  Disabling local port forwarding
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Local port forwarding cannot be completely disabled as it is required
+  for even the basic ThinLinc functionality. It is possible to limit it
+  though by having ThinLinc automatically update the SSH configuration to
+  only allow the necessary ports for the currently active sessions. This
+  requires that the system is using OpenSSH 4.1 or later. Add the
+  following to the end of file :file:`/etc/ssh/sshd_config`::
+
+     PermitOpen none
+     # @thinlinc-begin@
+     # @thinlinc-end@
+
+  .. note::
+
+     Support for :option:`none` was added to OpenSSH 6.1. For older
+     systems the line ``PermitOpen 127.0.0.1:22`` can be used
+     instead.
+
+  Please note that this not only restricts the possible ports, it also
+  restricts the ports to only be used by the correct user. A side effect
+  of this is that shadowing will be prevented and must be manually
+  allowed. For example, to exclude root from port forwarding restrictions
+  and allow shadowing, add this to the configuration::
+
+     Match User root
+     PermitOpen any
+
+Disabling clipboard
+-------------------
+
+It is possible to disable clipboard transfers in either direction in
+order to avoid easily moving data to and from the server. The first step
+is adding :option:`-noclipboard` to the ThinLinc setting
+:servconf:`/vsmagent/xserver_args`. This prevents the user from later
+changing the clipboard settings. Next add :option:`-AcceptCutText=0` to
+disable clipboard transfers going to the server, and
+:option:`-SendCutText=0` to prevent transfers going from the server.
+
+Disabling local drives
+----------------------
+
+ThinLinc local drives redirection relies on being able to ask the kernel
+to mount a NFS share. This is a privileged operation that only root is
+permitted to perform, and as such this feature requires a setuid helper
+binary. This helper is called
+:program:`/opt/thinlinc/libexec/tl-mount-personal` and the setuid
+permission can be removed by running the follow:
+
+.. code:: console
+
+   $ sudo chmod u-s /opt/thinlinc/libexec/tl-mount-personal
+
+Note that this only disables the ability to use the kernel NFS client.
+If a user can start some other NFS client then they can still access the
+local drive redirection. The setuid permission is also restored each
+time ThinLinc is upgraded.
+
+.. _homecreatefilter:
+
+Restricting write access to users' home directories
+---------------------------------------------------
+
+When accessing directories from CIFS and NCP servers, these are mounted
+in subdirectories of the users' Linux home directory. It is not possible
+to place the Linux home directory on a CIFS or NCP server, since these
+typically do not support the necessary POSIX file system semantics (such
+as hard links). In a typical setup, applications such as Mozilla uses
+the Linux home directory for settings (:file:`~/.mozilla`), while the
+user saves documents in :file:`~/MyDocuments`. In this case, it might be
+desirable to restrict access to the Linux home directory: Forbid saving
+arbitrary files to it. This can be solved by using a feature of ThinLinc
+called **homecreatefilter**.
+
+To activate homecreatefilter, create a symbolic link in the
+:file:`xstartup.d` directory:
+
+.. code:: console
+
+   $ sudo ln -s /opt/thinlinc/libexec/tl-homecreatefilter.sh \
+      /opt/thinlinc/etc/xstartup.d/06-tl-homecreatefilter.sh
+
+Configuration
+~~~~~~~~~~~~~
+
+The configuration file :file:`/opt/thinlinc/etc/homecreatefilter.conf`
+controls which files and directories are allowed. By default, all files
+starting with a dot are allowed, as well as the files necessary for KDE
+to start.
+
+The configuration file is line-based. A line not starting with a colon
+specifies a file object pattern that should be allowed. A line starting
+with a colon specifies a command line pattern. Processes matching this
+pattern will also be allowed write access, even if no file object
+pattern allows access.
+
+Security considerations and limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The homecreatefilter feature is based on the :environ:`LD_PRELOAD`
+mechanism, which means it does not support statically linked
+applications. Since environment variables can be modified by the user,
+the user can disable the filter at will. homecreatefilter should not be
+regarded as a security mechanism, but rather a mechanism that prevents
+the user from saving documents to the Linux home directory by mistake.
+
+In addition to the home directory, homecreatefilter restricts write
+access to the :file:`~/Desktop` directory.

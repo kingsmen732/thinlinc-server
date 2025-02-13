@@ -1,0 +1,616 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Comprehensive list of available cryptographic algorithms and protocols supported in ThinLinc, including cipher suites, certificates, key exchange algorithms, and public key systems." name="description" />
+
+    <title>Available algorithms &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SELinux enabled distributions" href="install_selinux.html" />
+    <link rel="prev" title="Standard configuration" href="gnutls-priorities-standard.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="gnutls-priorities-standard.html" title="Previous document">Standard configuration</a>
+        </li>
+        <li>
+          <a href="install_selinux.html" title="Next document">SELinux enabled distributions</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="available-algorithms">
+<h1>Available algorithms<a class="headerlink" href="#available-algorithms" title="Permalink to this headline">¶</a></h1>
+<p>Here are all the available algorithms for use in a priority string in
+ThinLinc.</p>
+<section id="cipher-suites">
+<h2>Cipher suites<a class="headerlink" href="#cipher-suites" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>TLS_AES_128_GCM_SHA256
+TLS_AES_256_GCM_SHA384
+TLS_CHACHA20_POLY1305_SHA256
+TLS_AES_128_CCM_SHA256
+TLS_AES_128_CCM_8_SHA256
+TLS_RSA_NULL_MD5
+TLS_RSA_NULL_SHA1
+TLS_RSA_NULL_SHA256
+TLS_RSA_ARCFOUR_128_SHA1
+TLS_RSA_ARCFOUR_128_MD5
+TLS_RSA_3DES_EDE_CBC_SHA1
+TLS_RSA_AES_128_CBC_SHA1
+TLS_RSA_AES_256_CBC_SHA1
+TLS_RSA_CAMELLIA_128_CBC_SHA256
+TLS_RSA_CAMELLIA_256_CBC_SHA256
+TLS_RSA_CAMELLIA_128_CBC_SHA1
+TLS_RSA_CAMELLIA_256_CBC_SHA1
+TLS_RSA_AES_128_CBC_SHA256
+TLS_RSA_AES_256_CBC_SHA256
+TLS_RSA_AES_128_GCM_SHA256
+TLS_RSA_AES_256_GCM_SHA384
+TLS_RSA_CAMELLIA_128_GCM_SHA256
+TLS_RSA_CAMELLIA_256_GCM_SHA384
+TLS_RSA_AES_128_CCM
+TLS_RSA_AES_256_CCM
+TLS_RSA_AES_128_CCM_8
+TLS_RSA_AES_256_CCM_8
+TLS_DHE_DSS_ARCFOUR_128_SHA1
+TLS_DHE_DSS_3DES_EDE_CBC_SHA1
+TLS_DHE_DSS_AES_128_CBC_SHA1
+TLS_DHE_DSS_AES_256_CBC_SHA1
+TLS_DHE_DSS_CAMELLIA_128_CBC_SHA256
+TLS_DHE_DSS_CAMELLIA_256_CBC_SHA256
+TLS_DHE_DSS_CAMELLIA_128_CBC_SHA1
+TLS_DHE_DSS_CAMELLIA_256_CBC_SHA1
+TLS_DHE_DSS_AES_128_CBC_SHA256
+TLS_DHE_DSS_AES_256_CBC_SHA256
+TLS_DHE_DSS_AES_128_GCM_SHA256
+TLS_DHE_DSS_AES_256_GCM_SHA384
+TLS_DHE_DSS_CAMELLIA_128_GCM_SHA256
+TLS_DHE_DSS_CAMELLIA_256_GCM_SHA384
+TLS_DHE_RSA_3DES_EDE_CBC_SHA1
+TLS_DHE_RSA_AES_128_CBC_SHA1
+TLS_DHE_RSA_AES_256_CBC_SHA1
+TLS_DHE_RSA_CAMELLIA_128_CBC_SHA256
+TLS_DHE_RSA_CAMELLIA_256_CBC_SHA256
+TLS_DHE_RSA_CAMELLIA_128_CBC_SHA1
+TLS_DHE_RSA_CAMELLIA_256_CBC_SHA1
+TLS_DHE_RSA_AES_128_CBC_SHA256
+TLS_DHE_RSA_AES_256_CBC_SHA256
+TLS_DHE_RSA_AES_128_GCM_SHA256
+TLS_DHE_RSA_AES_256_GCM_SHA384
+TLS_DHE_RSA_CAMELLIA_128_GCM_SHA256
+TLS_DHE_RSA_CAMELLIA_256_GCM_SHA384
+TLS_DHE_RSA_CHACHA20_POLY1305
+TLS_DHE_RSA_AES_128_CCM
+TLS_DHE_RSA_AES_256_CCM
+TLS_DHE_RSA_AES_128_CCM_8
+TLS_DHE_RSA_AES_256_CCM_8
+TLS_ECDHE_RSA_NULL_SHA1
+TLS_ECDHE_RSA_3DES_EDE_CBC_SHA1
+TLS_ECDHE_RSA_AES_128_CBC_SHA1
+TLS_ECDHE_RSA_AES_256_CBC_SHA1
+TLS_ECDHE_RSA_AES_256_CBC_SHA384
+TLS_ECDHE_RSA_ARCFOUR_128_SHA1
+TLS_ECDHE_RSA_CAMELLIA_128_CBC_SHA256
+TLS_ECDHE_RSA_CAMELLIA_256_CBC_SHA384
+TLS_ECDHE_ECDSA_NULL_SHA1
+TLS_ECDHE_ECDSA_3DES_EDE_CBC_SHA1
+TLS_ECDHE_ECDSA_AES_128_CBC_SHA1
+TLS_ECDHE_ECDSA_AES_256_CBC_SHA1
+TLS_ECDHE_ECDSA_ARCFOUR_128_SHA1
+TLS_ECDHE_ECDSA_CAMELLIA_128_CBC_SHA256
+TLS_ECDHE_ECDSA_CAMELLIA_256_CBC_SHA384
+TLS_ECDHE_ECDSA_AES_128_CBC_SHA256
+TLS_ECDHE_RSA_AES_128_CBC_SHA256
+TLS_ECDHE_ECDSA_CAMELLIA_128_GCM_SHA256
+TLS_ECDHE_ECDSA_CAMELLIA_256_GCM_SHA384
+TLS_ECDHE_ECDSA_AES_128_GCM_SHA256
+TLS_ECDHE_ECDSA_AES_256_GCM_SHA384
+TLS_ECDHE_RSA_AES_128_GCM_SHA256
+TLS_ECDHE_RSA_AES_256_GCM_SHA384
+TLS_ECDHE_ECDSA_AES_256_CBC_SHA384
+TLS_ECDHE_RSA_CAMELLIA_128_GCM_SHA256
+TLS_ECDHE_RSA_CAMELLIA_256_GCM_SHA384
+TLS_ECDHE_RSA_CHACHA20_POLY1305
+TLS_ECDHE_ECDSA_CHACHA20_POLY1305
+TLS_ECDHE_ECDSA_AES_128_CCM
+TLS_ECDHE_ECDSA_AES_256_CCM
+TLS_ECDHE_ECDSA_AES_128_CCM_8
+TLS_ECDHE_ECDSA_AES_256_CCM_8
+TLS_ECDHE_PSK_3DES_EDE_CBC_SHA1
+TLS_ECDHE_PSK_AES_128_CBC_SHA1
+TLS_ECDHE_PSK_AES_256_CBC_SHA1
+TLS_ECDHE_PSK_AES_128_CBC_SHA256
+TLS_ECDHE_PSK_AES_256_CBC_SHA384
+TLS_ECDHE_PSK_ARCFOUR_128_SHA1
+TLS_ECDHE_PSK_NULL_SHA1
+TLS_ECDHE_PSK_NULL_SHA256
+TLS_ECDHE_PSK_NULL_SHA384
+TLS_ECDHE_PSK_CAMELLIA_128_CBC_SHA256
+TLS_ECDHE_PSK_CAMELLIA_256_CBC_SHA384
+TLS_PSK_ARCFOUR_128_SHA1
+TLS_PSK_3DES_EDE_CBC_SHA1
+TLS_PSK_AES_128_CBC_SHA1
+TLS_PSK_AES_256_CBC_SHA1
+TLS_PSK_AES_128_CBC_SHA256
+TLS_PSK_AES_256_GCM_SHA384
+TLS_PSK_CAMELLIA_128_GCM_SHA256
+TLS_PSK_CAMELLIA_256_GCM_SHA384
+TLS_PSK_AES_128_GCM_SHA256
+TLS_PSK_NULL_SHA1
+TLS_PSK_NULL_SHA256
+TLS_PSK_CAMELLIA_128_CBC_SHA256
+TLS_PSK_CAMELLIA_256_CBC_SHA384
+TLS_PSK_AES_256_CBC_SHA384
+TLS_PSK_NULL_SHA384
+TLS_RSA_PSK_ARCFOUR_128_SHA1
+TLS_RSA_PSK_3DES_EDE_CBC_SHA1
+TLS_RSA_PSK_AES_128_CBC_SHA1
+TLS_RSA_PSK_AES_256_CBC_SHA1
+TLS_RSA_PSK_CAMELLIA_128_GCM_SHA256
+TLS_RSA_PSK_CAMELLIA_256_GCM_SHA384
+TLS_RSA_PSK_AES_128_GCM_SHA256
+TLS_RSA_PSK_AES_128_CBC_SHA256
+TLS_RSA_PSK_NULL_SHA1
+TLS_RSA_PSK_NULL_SHA256
+TLS_RSA_PSK_AES_256_GCM_SHA384
+TLS_RSA_PSK_AES_256_CBC_SHA384
+TLS_RSA_PSK_NULL_SHA384
+TLS_RSA_PSK_CAMELLIA_128_CBC_SHA256
+TLS_RSA_PSK_CAMELLIA_256_CBC_SHA384
+TLS_DHE_PSK_ARCFOUR_128_SHA1
+TLS_DHE_PSK_3DES_EDE_CBC_SHA1
+TLS_DHE_PSK_AES_128_CBC_SHA1
+TLS_DHE_PSK_AES_256_CBC_SHA1
+TLS_DHE_PSK_AES_128_CBC_SHA256
+TLS_DHE_PSK_AES_128_GCM_SHA256
+TLS_DHE_PSK_NULL_SHA1
+TLS_DHE_PSK_NULL_SHA256
+TLS_DHE_PSK_NULL_SHA384
+TLS_DHE_PSK_AES_256_CBC_SHA384
+TLS_DHE_PSK_AES_256_GCM_SHA384
+TLS_DHE_PSK_CAMELLIA_128_CBC_SHA256
+TLS_DHE_PSK_CAMELLIA_256_CBC_SHA384
+TLS_DHE_PSK_CAMELLIA_128_GCM_SHA256
+TLS_DHE_PSK_CAMELLIA_256_GCM_SHA384
+TLS_PSK_AES_128_CCM
+TLS_PSK_AES_256_CCM
+TLS_DHE_PSK_AES_128_CCM
+TLS_DHE_PSK_AES_256_CCM
+TLS_PSK_AES_128_CCM_8
+TLS_PSK_AES_256_CCM_8
+TLS_DHE_PSK_AES_128_CCM_8
+TLS_DHE_PSK_AES_256_CCM_8
+TLS_DHE_PSK_CHACHA20_POLY1305
+TLS_ECDHE_PSK_CHACHA20_POLY1305
+TLS_RSA_PSK_CHACHA20_POLY1305
+TLS_PSK_CHACHA20_POLY1305
+TLS_DH_ANON_ARCFOUR_128_MD5
+TLS_DH_ANON_3DES_EDE_CBC_SHA1
+TLS_DH_ANON_AES_128_CBC_SHA1
+TLS_DH_ANON_AES_256_CBC_SHA1
+TLS_DH_ANON_CAMELLIA_128_CBC_SHA256
+TLS_DH_ANON_CAMELLIA_256_CBC_SHA256
+TLS_DH_ANON_CAMELLIA_128_CBC_SHA1
+TLS_DH_ANON_CAMELLIA_256_CBC_SHA1
+TLS_DH_ANON_AES_128_CBC_SHA256
+TLS_DH_ANON_AES_256_CBC_SHA256
+TLS_DH_ANON_AES_128_GCM_SHA256
+TLS_DH_ANON_AES_256_GCM_SHA384
+TLS_DH_ANON_CAMELLIA_128_GCM_SHA256
+TLS_DH_ANON_CAMELLIA_256_GCM_SHA384
+TLS_ECDH_ANON_NULL_SHA1
+TLS_ECDH_ANON_3DES_EDE_CBC_SHA1
+TLS_ECDH_ANON_AES_128_CBC_SHA1
+TLS_ECDH_ANON_AES_256_CBC_SHA1
+TLS_ECDH_ANON_ARCFOUR_128_SHA1
+TLS_GOSTR341112_256_28147_CNT_IMIT
+</pre></div>
+</div>
+</section>
+<section id="certificate-types">
+<h2>Certificate types<a class="headerlink" href="#certificate-types" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CTYPE-X.509
+CTYPE-Raw Public Key
+</pre></div>
+</div>
+</section>
+<section id="protocols">
+<h2>Protocols<a class="headerlink" href="#protocols" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>VERS-TLS1.0
+VERS-TLS1.1
+VERS-TLS1.2
+VERS-TLS1.3
+VERS-DTLS0.9
+VERS-DTLS1.0
+VERS-DTLS1.2
+</pre></div>
+</div>
+</section>
+<section id="ciphers">
+<h2>Ciphers<a class="headerlink" href="#ciphers" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>AES-256-CBC
+AES-192-CBC
+AES-128-CBC
+AES-128-GCM
+AES-192-GCM
+AES-256-GCM
+AES-128-CCM
+AES-256-CCM
+AES-128-CCM-8
+AES-256-CCM-8
+ARCFOUR-128
+ESTREAM-SALSA20-256
+SALSA20-256
+CHACHA20-32
+CHACHA20-64
+CAMELLIA-256-CBC
+CAMELLIA-192-CBC
+CAMELLIA-128-CBC
+CHACHA20-POLY1305
+CAMELLIA-128-GCM
+CAMELLIA-256-GCM
+GOST28147-TC26Z-CFB
+GOST28147-CPA-CFB
+GOST28147-CPB-CFB
+GOST28147-CPC-CFB
+GOST28147-CPD-CFB
+AES-128-CFB8
+AES-192-CFB8
+AES-256-CFB8
+AES-128-XTS
+AES-256-XTS
+AES-128-SIV
+AES-256-SIV
+AES-128-SIV-GCM
+AES-256-SIV-GCM
+GOST28147-TC26Z-CNT
+MAGMA-CTR-ACPKM
+KUZNYECHIK-CTR-ACPKM
+3DES-CBC
+DES-CBC
+RC2-40
+NULL
+</pre></div>
+</div>
+</section>
+<section id="macs">
+<h2>MACs<a class="headerlink" href="#macs" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SHA1
+SHA256
+SHA384
+SHA512
+SHA224
+UMAC-96
+UMAC-128
+AEAD
+MD5
+GOSTR341194
+STREEBOG-256
+STREEBOG-512
+AES-CMAC-128
+AES-CMAC-256
+AES-GMAC-128
+AES-GMAC-192
+AES-GMAC-256
+GOST28147-TC26Z-IMIT
+OMAC-MAGMA
+OMAC-KUZNYECHIK
+PBMAC1
+</pre></div>
+</div>
+</section>
+<section id="digests">
+<h2>Digests<a class="headerlink" href="#digests" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SHA1
+SHA256
+SHA384
+SHA512
+SHA224
+MD5
+GOSTR341194
+STREEBOG-256
+STREEBOG-512
+</pre></div>
+</div>
+</section>
+<section id="key-exchange-algorithms">
+<h2>Key exchange algorithms<a class="headerlink" href="#key-exchange-algorithms" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ECDHE-RSA
+ECDHE-ECDSA
+RSA
+DHE-RSA
+DHE-DSS
+PSK
+RSA-PSK
+DHE-PSK
+ECDHE-PSK
+ANON-DH
+ANON-ECDH
+VKO-GOST-12
+RSA-EXPORT
+</pre></div>
+</div>
+</section>
+<section id="compression">
+<h2>Compression<a class="headerlink" href="#compression" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>COMP-NULL
+COMP-ZLIB
+</pre></div>
+</div>
+</section>
+<section id="groups">
+<h2>Groups<a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GROUP-SECP192R1
+GROUP-SECP224R1
+GROUP-SECP256R1
+GROUP-SECP384R1
+GROUP-SECP521R1
+GROUP-X25519
+GROUP-GC256B
+GROUP-GC512A
+GROUP-X448
+GROUP-FFDHE2048
+GROUP-FFDHE3072
+GROUP-FFDHE4096
+GROUP-FFDHE6144
+GROUP-FFDHE8192
+</pre></div>
+</div>
+</section>
+<section id="public-key-systems">
+<h2>Public Key Systems<a class="headerlink" href="#public-key-systems" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RSA
+RSA-PSS
+RSA-OAEP
+RSA
+DSA
+GOST R 34.10-2012-512
+GOST R 34.10-2012-256
+GOST R 34.10-2001
+EC/ECDSA
+EdDSA (Ed25519)
+EdDSA (Ed448)
+DH
+ECDH (X25519)
+ECDH (X448)
+</pre></div>
+</div>
+</section>
+<section id="pk-signatures">
+<h2>PK-signatures<a class="headerlink" href="#pk-signatures" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SIGN-RSA-SHA256
+SIGN-RSA-SHA384
+SIGN-RSA-SHA512
+SIGN-RSA-PSS-SHA256
+SIGN-RSA-PSS-RSAE-SHA256
+SIGN-RSA-PSS-SHA384
+SIGN-RSA-PSS-RSAE-SHA384
+SIGN-RSA-PSS-SHA512
+SIGN-RSA-PSS-RSAE-SHA512
+SIGN-EdDSA-Ed25519
+SIGN-EdDSA-Ed448
+SIGN-ECDSA-SHA256
+SIGN-ECDSA-SHA384
+SIGN-ECDSA-SHA512
+SIGN-ECDSA-SECP256R1-SHA256
+SIGN-ECDSA-SECP384R1-SHA384
+SIGN-ECDSA-SECP521R1-SHA512
+SIGN-ECDSA-SHA3-224
+SIGN-ECDSA-SHA3-256
+SIGN-ECDSA-SHA3-384
+SIGN-ECDSA-SHA3-512
+SIGN-RSA-SHA3-224
+SIGN-RSA-SHA3-256
+SIGN-RSA-SHA3-384
+SIGN-RSA-SHA3-512
+SIGN-DSA-SHA3-224
+SIGN-DSA-SHA3-256
+SIGN-DSA-SHA3-384
+SIGN-DSA-SHA3-512
+SIGN-RSA-RAW
+SIGN-RSA-SHA1
+SIGN-RSA-SHA1
+SIGN-RSA-SHA224
+SIGN-RSA-RMD160
+SIGN-DSA-SHA1
+SIGN-DSA-SHA1
+SIGN-DSA-SHA224
+SIGN-DSA-SHA256
+SIGN-RSA-MD5
+SIGN-RSA-MD5
+SIGN-RSA-MD2
+SIGN-ECDSA-SHA1
+SIGN-ECDSA-SHA224
+SIGN-GOSTR341012-512
+SIGN-GOSTR341012-256
+SIGN-GOSTR341001
+SIGN-DSA-SHA384
+SIGN-DSA-SHA512
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="gnutls-priorities-standard.html" title="Previous document">Standard configuration</a>
+        </li>
+        <li>
+          <a href="install_selinux.html" title="Next document">SELinux enabled distributions</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gnutls-priorities-standard.html">Standard configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Available algorithms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cipher-suites">Cipher suites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#certificate-types">Certificate types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#protocols">Protocols</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ciphers">Ciphers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macs">MACs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#digests">Digests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#key-exchange-algorithms">Key exchange algorithms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compression">Compression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#groups">Groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#public-key-systems">Public Key Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pk-signatures">PK-signatures</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="gnutls-priorities.html">GnuTLS priority strings</a><ul>
+      <li>Previous: <a href="gnutls-priorities-standard.html" title="previous chapter">Standard configuration</a></li>
+      <li>Next: <a href="install_selinux.html" title="next chapter">SELinux enabled distributions</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/gnutls-priorities-all.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,77 @@
+.. meta::
+   :description: Overview of configuring ThinLinc for High Availability
+                 (HA) to eliminate single points of failure by using a
+                 dual master server setup, including background reasons,
+                 theory of operation, and ensuring continuous service
+                 with minimal interruption.
+
+High availability overview
+--------------------------
+
+Background --- reasons for a HA setup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In a standard ThinLinc setup, there is a single point of failure --- the
+machine running the VSM server. If the VSM server is down, no new
+ThinLinc connections can be made, and reconnections to existing sessions
+can't be established. Existing connections to VSM agent machines still
+running will however continue to work. A ThinLinc cluster of medium size
+with one machine running as VSM server and three VSM agent machines is
+illustrated in :numref:`vsm-server-agent-arch`.
+
+.. _vsm-server-agent-arch:
+
+.. figure:: images/vsm-server-agent-arch.svg
+
+   A non-HA ThinLinc cluster setup
+
+Here the incoming connections are handled by the VSM server which
+distributes the connections to the three VSM agent machines. If the VSM
+server goes down, no new connections can occur. The VSM server is a
+single point of failure in your ThinLinc setup.
+
+Solution --- elimination of single point of failure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to eliminate the single point of failure, we configure the VSM
+server in a HA configuration where two machines share the responsibility
+for keeping the service running. Note that ThinLinc's HA functionality
+only handles the parts of your HA setup that keeps the ThinLinc session
+database synchronized between the two machines. Supplementary software
+is required, read more about this in :ref:`HA-theory-of-operation`.
+
+When ThinLinc as well as your systems are configured this way, the two
+machines are in constant contact with each other, each checking if the
+other one is up and running. If one of the machines goes down for some
+reason, for example hardware failure, the other machine detects the
+failure and automatically takes over the service with only a short
+interruption for the users. No action is needed from the system
+administrator.
+
+.. _HA-theory-of-operation:
+
+Theory of operation
+~~~~~~~~~~~~~~~~~~~
+
+.. _vsm-server-agent-HA-arch:
+
+.. figure:: images/vsm-server-agent-HA-arch.svg
+
+   A ThinLinc HA cluster setup
+
+In a HA setup, as illustrated in :numref:`vsm-server-agent-HA-arch` two
+equal machines are used to keep the VSM server running. One of the
+machines is primary, the other one is secondary. The primary machine is
+normally handling VSM server requests, but if it fails, the secondary
+machine kicks in. When the primary machine comes online, it takes over
+again. That is, in normal operation, it's always the primary machine
+that's working, the secondary is in standby, receiving information from
+the primary about new and deleted sessions, maintaining its own copy of
+the session database.
+
+Both machines have a unique hostname and a unique IP address, but
+there is also a third IP address that is active only on the node
+currently responsible for the VSM server service. This is usually
+referred to as a resource IP address, which the clients are connecting
+to. ThinLinc does not move this resource IP address between servers,
+supplementary software is required for this purpose.

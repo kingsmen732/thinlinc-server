@@ -1,0 +1,44 @@
+.. meta::
+   :description: The tlctl command inspects and controls the state of a
+                 ThinLinc cluster, providing functionality to manage
+                 sessions and view cluster load information when run on
+                 a master machine.
+
+.. raw:: pdf
+
+   PageBreak
+
+tlctl
+=====
+
+Synopsis
+--------
+
+**tlctl** [*options*] <*command*> [*args*]
+
+Description
+-----------
+
+:program:`tlctl` can be used to inspect and control the state of a
+ThinLinc cluster. Note that this command only works when executed on a
+master machine in the ThinLinc cluster.
+
+Options
+-------
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+.. option:: --version
+
+   Prints the ThinLinc version and exits.
+
+Commands
+--------
+
+:program:`tlctl-load`\ (8)
+   Show cluster load information.
+
+:program:`tlctl-session`\ (8)
+   Manage sessions.

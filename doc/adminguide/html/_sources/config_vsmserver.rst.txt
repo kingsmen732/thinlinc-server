@@ -1,0 +1,113 @@
+.. meta::
+   :description: Overview of configuration parameters for the master
+                 in ThinLinc, covering settings for administrative
+                 email, load balancing, session management, and high
+                 availability configurations.
+
+.. _configuration_vsmserver:
+
+.. server-config-folder:: /vsmserver
+
+Parameters in /vsmserver/
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this section, we will describe all the parameters currently used by
+the VSM server. These configuration parameters reside in
+:file:`/opt/thinlinc/etc/conf.d/vsmserver.hconf`.
+
+.. server-config:: /vsmserver/admin_email
+
+   The administrator's email address. This is where warnings about
+   overuse of Licenses are sent, among with other administrative
+   messages. Make sure this is a valid address.
+
+.. server-config:: /vsmserver/allowed_clients
+
+   A space-separated list of hosts from which privileged operations are
+   allowed. The default (empty) allows localhost to do this. Privileged
+   operations are for example to deactivate a session, something that
+   should be allowed by the host running the ThinLinc Web Administration
+   service.
+
+.. server-config:: /vsmserver/allowed_groups
+
+   ThinLinc access can be limited to certain groups. If the
+   |allowed_groups| space-separated list is empty, all users are
+   accepted. Otherwise, the user must be a member of the groups listed
+   below, to be able to use ThinLinc. Example:
+
+   .. code:: ini
+
+       allowed_groups = students teachers
+
+   .. |allowed_groups| replace::
+      :servconf:`allowed_groups </vsmserver/allowed_groups>`
+
+.. server-config:: /vsmserver/bogomips_per_user
+
+   Estimated bogomips required for each user.
+
+.. server-config:: /vsmserver/existing_users_weight
+
+   This parameter decides the importance of the number of logged-in
+   users on a VSM agent host when calculating load balance parameters. A
+   host with low load, but a lot of users, is generally more likely to
+   get a higher load within a short time when the users get active. For
+   this reason, the load balance calculating code takes the number of
+   users at a certain host into its calculation. The
+   :servconf:`/vsmserver/existing_users_weight` controls how important
+   this factor is. A higher value of this parameter means the load
+   balancing code will care less about a high number of users on a
+   certain machine.
+
+   .. note::
+
+      This parameter should normally not be changed, unless when
+      fine-tuning the load balancing.
+
+.. server-config:: /vsmserver/HA/enabled
+
+   If this parameter is true, the VSM server will try to replicate
+   information about sessions to the other VSM server node. See
+   :ref:`HA` for more information about ThinLinc in a high availability
+   configuration.
+
+.. server-config:: /vsmserver/HA/nodes
+
+   This parameter lists the hostnames of both nodes in a ThinLinc high
+   availability setup. The space-separated list should include the hostname of the
+   current node. This means that :file:`vsmserver.hconf` can be
+   identical on both nodes.
+
+.. server-config:: /vsmserver/listen_port
+
+   The TCP port VSM Server listen to for incoming requests. This should
+   normally be set to the same value as
+   :servconf:`/vsm/vsm_server_port`.
+
+.. server-config:: /vsmserver/load_update_cycle
+
+   The number of seconds allowed for updating the load status in the
+   entire cluster.
+
+.. server-config:: /vsmserver/max_sessions_per_user
+
+   The maximum number of sessions allowed per user. ``0`` means no
+   limit. The master will attempt to keep all sessions for a user on the
+   same agent server in order to avoid problems. The problems usually
+   come from applications that incorrectly assumes unrivaled access to
+   the user's home directory. When on the same machine the conditions
+   allow the applications to handle things better.
+
+.. server-config:: /vsmserver/ram_per_user
+
+   Integer, number of estimated MiB memory required for each session.
+
+.. server-config:: /vsmserver/unbind_ports_at_login
+
+   If this parameter is true, processes occupying the users' interval of
+   forwarded ports will be killed at login. This means that if a user
+   logs in twice to the same session, the second login will get working
+   tunnel ports, if this parameter is true. The first session's tunnel
+   ports will stop working. If the parameter is false, the first session
+   will keep the ports.

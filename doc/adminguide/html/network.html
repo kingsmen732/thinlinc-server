@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Overview of network requirements for setting up ThinLinc, including configurations for simple and NAT/split-DNS environments." name="description" />
+
+    <title>Network requirements &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installing the ThinLinc server" href="install_install.html" />
+    <link rel="prev" title="Server requirements" href="requirements_server.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="requirements_server.html" title="Previous document">Server requirements</a>
+        </li>
+        <li>
+          <a href="install_install.html" title="Next document">Installing the ThinLinc server</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="network-requirements">
+<span id="network"></span><h1>Network requirements<a class="headerlink" href="#network-requirements" title="Permalink to this headline">¶</a></h1>
+<p>Naturally, the network at the site where ThinLinc is to be installed
+needs to be prepared for the installation. This section aims to help in
+understanding the requirements of the network for a successful ThinLinc
+installation.</p>
+<p>We will start by describing a simple setup, where all ThinLinc servers
+are directly accessible by the client. We will then explain how a site
+with NAT can use a NAT/split-DNS setup to access ThinLinc efficiently
+both from the inside network and from the Internet.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Regardless of network configuration, each server in a ThinLinc
+cluster must be reachable by the client, either directly or
+indirectly.</p>
+</div>
+<section id="a-simple-thinlinc-setup">
+<span id="network-simple"></span><h2>A simple ThinLinc setup<a class="headerlink" href="#a-simple-thinlinc-setup" title="Permalink to this headline">¶</a></h2>
+<figure class="align-default" id="id1">
+<span id="network-simple-fig"></span><img alt="_images/network-simple.svg" src="_images/network-simple.svg" /><figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">A simple ThinLinc setup</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In <a class="reference internal" href="#network-simple-fig"><span class="std std-numref">Fig. 1</span></a>, a simple ThinLinc setup is shown. In
+this setup, clients are configured to connect to
+<strong>thinlinc.example.com</strong>, DNS is configured with information about what
+IP addresses correspond to the hostnames <strong>thinlinc.example.com</strong>,
+<strong>tlagent1.example.com</strong> and <strong>tlagent2.example.com</strong> and no firewalls
+are in the path between the clients and the servers.</p>
+<p>The number of agents will range from 1 (possibly on the same host as the
+master) to a larger number, based on the number of users who are using the
+system. In this example, there is one host running both master (the process
+controlling the whole ThinLinc cluster) and agent services, and two dedicated
+agent hosts running only sessions.</p>
+<p>Native clients will communicate with the servers solely via SSH (port 22
+by default). Browser clients will connect via TLS at port 300.</p>
+</section>
+<section id="thinlinc-in-a-nat-split-dns-environment">
+<span id="network-nat"></span><h2>ThinLinc in a NAT/split-DNS environment<a class="headerlink" href="#thinlinc-in-a-nat-split-dns-environment" title="Permalink to this headline">¶</a></h2>
+<figure class="align-default" id="id2">
+<span id="network-nat-fig"></span><img alt="_images/network-NAT.svg" src="_images/network-NAT.svg" /><figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">ThinLinc in a NAT/Split-DNS environment</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>At many sites, the internal network is behind a firewall doing Network
+Address Translation (NAT). This means that the IP addresses on the
+internal network are private, and not accessible from the Internet.</p>
+<p>As long as ThinLinc servers are only meant to be accessed from the
+internal network, this is no problem, and the situation will be like the
+one described in <a class="reference internal" href="#network-simple"><span class="std std-ref">A simple ThinLinc setup</span></a>. However, if the ThinLinc servers
+are meant to be accessed from the Internet as well, some network
+configuration is required.</p>
+<section id="relays">
+<span id="network-nat-relays"></span><h3>Relays<a class="headerlink" href="#relays" title="Permalink to this headline">¶</a></h3>
+<p>First, relays must be configured in the firewall. One IP address
+reachable from the outside network per ThinLinc server needs to be
+available, and each should be equipped with a relay forwarding traffic
+from TCP port 22 on the outside to TCP port 22 on one specific ThinLinc
+server. In our example, as shown in <a class="reference internal" href="#network-nat-fig"><span class="std std-numref">Fig. 2</span></a>, there is
+one relay listening to TCP port 22 on the externally reachable IP
+address <strong>x.12.253.1</strong> forwarding traffic to the ThinLinc server on the
+internal network with IP address <strong>10.0.0.12</strong>, one relay listening on
+TCP port 22 on the externally reachable IP address <strong>x.12.253.2</strong>
+forwarding traffic to the ThinLinc server on the internal network with
+IP address <strong>10.0.0.13</strong>, and so on.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For single-node ThinLinc clusters where master and agent services are
+running on the same host, it is possible to use port forwarding
+instead of NAT. In this instance, a single port may be forwarded from
+the public interface to the host, and the ThinLinc client configured
+to use this port.</p>
+</div>
+</section>
+<section id="dns">
+<span id="network-nat-dns"></span><h3>DNS<a class="headerlink" href="#dns" title="Permalink to this headline">¶</a></h3>
+<p>After configuring the relays, DNS must be configured so DNS queries for
+the hostnames of the ThinLinc servers get different answers depending on
+the origin of the query. DNS queries originating from the internal
+network should be answered with the real IP addresses of the servers,
+and DNS queries originating from the outside network should be answered
+with the IP addresses on the firewall, where the relays are listening.</p>
+<p>In our example, if a host on the internal network is asking for the IP
+address of the hostname <strong>thinlinc.example.com</strong> it should get the IP
+address <strong>10.0.0.12</strong> as the answer. If an outside host is asking for
+the IP address of the same hostname it should instead get the IP address
+<strong>x.12.253.1</strong> as the answer.</p>
+<p>When configured this way, a client connecting from the internal network
+will communicate directly with the ThinLinc servers, without the need to
+pass the firewall, while clients connecting from the outside will pass
+through the firewall and the relays to communicate with the ThinLinc
+servers. This will ensure optimal performance for clients from the
+internal network, at the same time lowering the load on the firewall.</p>
+</section>
+<section id="configuring-the-agents">
+<span id="network-nat-vsmagent"></span><h3>Configuring the agents<a class="headerlink" href="#configuring-the-agents" title="Permalink to this headline">¶</a></h3>
+<p>Finally, after configuring relays and DNS, the agents must be configured
+to respond with the correct hostname when asked by the master what
+hostname the clients should connect to. The default behavior is to
+respond with the IP address of the host, but that will not work in this
+case since clients connecting from the external network won’t have any
+route to for example <strong>10.0.0.13</strong>. Instead, the agents should be
+configured to respond with the hostnames that can be found in both the
+internal and the external DNS.</p>
+<p>For information on performing this configuration, see
+<a class="reference internal" href="install_install.html#install-agent-hostname"><span class="std std-ref">External access behind NAT</span></a>.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="requirements_server.html" title="Previous document">Server requirements</a>
+        </li>
+        <li>
+          <a href="install_install.html" title="Next document">Installing the ThinLinc server</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Network requirements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-simple-thinlinc-setup">A simple ThinLinc setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#thinlinc-in-a-nat-split-dns-environment">ThinLinc in a NAT/split-DNS environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relays">Relays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dns">DNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-the-agents">Configuring the agents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="requirements_server.html" title="previous chapter">Server requirements</a></li>
+      <li>Next: <a href="install_install.html" title="next chapter">Installing the ThinLinc server</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/network.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

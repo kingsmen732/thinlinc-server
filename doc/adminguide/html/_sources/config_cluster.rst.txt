@@ -1,0 +1,220 @@
+.. meta::
+   :description: Detailed guide on configuring and managing ThinLinc
+                 clusters, including subcluster setup, agent
+                 synchronization, and session management.
+
+.. _configuration_cluster:
+
+Cluster configuration
+---------------------
+
+This chapter details the configuration possibilities of a pre-existing
+ThinLinc cluster with multiple agent servers. For information regarding
+the initial setup of a ThinLinc cluster, see :ref:`install_cluster`.
+
+.. _configuration_subcluster:
+
+Subclusters
+~~~~~~~~~~~
+
+A subcluster is a group of agents assigned to a number of individual
+users and/or user groups. Each subcluster can serve a specific purpose
+within the ThinLinc cluster. The dimension for grouping can be chosen at
+will and could for example be; location, project, application etc.
+
+ThinLinc ships with one default subcluster configuration which is used
+for creating new sessions by any user.
+
+To associate a user with a subcluster, either use the |users| or
+|groups| configuration parameter for the specific subcluster. See
+:ref:`configuration_subcluster_params` for details on these subcluster
+configuration parameters.
+
+.. |users| replace::
+   :servconf:`users </vsmserver/subclusters/<name>/users>`
+.. |groups| replace::
+   :servconf:`groups </vsmserver/subclusters/<name>/groups>`
+
+If a subcluster does have neither user nor group associations
+configured, it is used as a default subcluster. Users that do not
+belong to any subcluster, will have their sessions created on the
+default subcluster. If a user is not associated with a subcluster and
+there is no default subcluster configured, the user will not be able to
+log on to the ThinLinc cluster.
+
+Load balancing of new sessions is performed using the list of agents defined
+in the |agents| parameter within each subcluster. See
+:ref:`limit_number_of_users_per_agent` for how to limit concurrent users per
+agent, which excludes the agent from the load balancer when the limit is
+reached. See :ref:`stop_new_sessions_on_agent` for details on preventing new
+sessions on some agents.
+
+.. |agents| replace::
+   :servconf:`agents </vsmserver/subclusters/<name>/agents>`
+
+.. note::
+
+   The subcluster association rules limit the creation of new sessions
+   and do not apply to already existing sessions. So given a case
+   where subcluster association was changed after session startup, the
+   user can reconnect to a session outside their configured
+   subcluster. However, next time this user creates a session it will be
+   created on the configured subcluster.
+
+A subcluster is defined as a folder under the
+:servconf:`/vsmserver/subclusters` configuration folder in
+:file:`vsmserver.hconf` on the master. The folder name defines a unique
+subcluster name.
+
+Here follows an example subcluster configuration for a geographic
+location-based grouping of agents:
+
+.. code:: ini
+
+   [/vsmserver/subclusters/Default]
+   agents=tla01.eu.cendio.com tla02.eu.cendio.com
+
+   [/vsmserver/subclusters/usa]
+   agents=tla01.usa.cendio.com tla02.usa.cendio.com
+   groups=ThinLinc_USA
+
+   [/vsmserver/subclusters/india]
+   agents=tal01.india.cendio.com tla02.india.cendio.com
+   groups=ThinLinc_India
+
+During the selection process for which subcluster a new session is
+created on, the following rules apply:
+
+1. |users| has precedence over |groups|. This means that if a user
+   belongs to a group that is associated with subcluster A and the user
+   also is specified in |users| for subcluster B, the user session will
+   be created on subcluster B.
+
+2. |groups| has precedence over the default subcluster. This means that
+   if a user belongs to a group that is associated with subcluster B,
+   the user session will be created subcluster B and not on the default
+   subcluster A.
+
+3. If the user does not belong to an associated group nor is explicitly
+   specified by |users| for a subcluster, the new session will be
+   created on the default subcluster.
+
+.. note::
+
+   Avoid the following configurations that will result in undefined
+   behaviors for subclusters:
+
+   1. Avoid two subclusters without associated |users| and |groups|,
+      e.g. default subclusters. It is undefined which of them that will
+      be the default subcluster used for users that are not associated
+      to a specific subcluster.
+
+   2. If a user is a member of two user groups which are used for two
+      different subclusters, it is undefined which subcluster the new
+      session will be created on.
+
+   3. If a user is specified in |users| of two different subclusters, it
+      is undefined which subcluster the new session will be created on.
+
+.. _keeping_agents_synced:
+
+Keeping agent configuration synchronized in a cluster
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When multiple agents have been configured as part of a cluster, it is
+usually desirable to keep their configurations synchronized. Instead of
+making the same change separately on each agent, ThinLinc ships with the
+tool :program:`tl-rsync-all` to ensure that configuration changes can be
+synchronized easily across all agents in a cluster. See
+:ref:`commands` for more information on how to use this tool.
+
+The :program:`tl-rsync-all` command should be run on the master server,
+since it is the master which has the knowledge of which agents are part
+of the cluster.
+
+Using the master node as a staging agent
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For the reasons above, it is often useful to configure the master server
+as an agent as well. This allows the master to be used as a staging
+agent, where configuration changes can be made and tested by an
+administrator before pushing them out to the rest of the agents in the
+cluster. In this way, configuration changes are never made on the agents
+themselves; rather, the changes are always made on the master server,
+and then distributed to the agents using :program:`tl-rsync-all`.
+
+.. note::
+
+   :program:`tl-rsync-all` and its sibling :program:`tl-ssh-all` are not
+   subcluster aware. They will affect all agents within all subclusters.
+
+An example of how one might implement such a system is to configure the
+master server as an agent which only accepts sessions for a single
+administrative user:
+
+1. Configure the master as an agent too. On a ThinLinc master, the
+   **vsmagent** service should already have been installed during the
+   ThinLinc installation process; make sure that this service is
+   running.
+
+2. Create an administrative user, for example, **tladmin**. Give this
+   user administrative privileges if required, i.e. sudo access.
+
+3. Create a :ref:`subcluster <configuration_subcluster>` for the master
+   server and associate administrator user **tladmin** to it. See the
+   following example:
+
+   .. code:: ini
+
+      [/vsmserver/subclusters/Staging]
+      agents=127.0.0.1
+      users=tladmin
+
+   See :ref:`configuration_subcluster` for details on subcluster
+   configuration.
+
+4. Restart the **vsmserver** service.
+
+In this way, configuration changes are never made on the agents
+themselves; rather, the changes are always made on the master server,
+and then tested by logging in as the **tladmin** user. If successful,
+these changes are then distributed to the agents using
+:program:`tl-rsync-all`.
+
+.. _limit_number_of_users_per_agent:
+
+Limiting number of users per agent
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In certain use cases, it may be desirable to limit the number of users that
+can be active on one agent at a time. The max_users_per_agent parameter
+provides this functionality, ensuring that the agent will no longer be
+considered by the load balancer for new user sessions if the limit is
+reached. Please see
+:servconf:`/vsmserver/subclusters/<name>/max_users_per_agent` for more
+details. Once the limit has been reached on all agents new users are denied
+from starting new sessions, with a message that there are no available
+agents. Because of this, one might also want to consider
+:ref:`configuration_limiting_lifetime`.
+
+This configuration could, for example, be relevant in scenarios where GPU
+access needs to be restricted, since some applications expect full access to
+the GPU, and as a result, are not designed to handle memory allocation
+failures.
+
+.. _stop_new_sessions_on_agent:
+
+Stopping new session creation on select agents in a cluster
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When, for example, a maintenance window is scheduled for some agents
+servers, it is sometimes desirable that no new sessions are started on
+that part of the cluster. It is possible to prevent new sessions from
+being started without affecting running sessions.
+
+To stop new session creation on specific agents, those agents need to be
+removed from the |agents| configuration variable in the associated
+subcluster. Once the **vsmserver** service is restarted on the master
+server, new user sessions will not be created on the removed agents.
+Users with existing sessions can continue working normally, and users
+with disconnected sessions will still be able to reconnect.

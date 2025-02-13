@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Explore the configuration parameters for ThinLinc servers, covering profiles, session startup, shadowing, web access, master, agent, subclusters, and various utilities." name="description" />
+
+    <title>Server configuration parameters &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parameters in /profiles/" href="config_profiles.html" />
+    <link rel="prev" title="tl-support" href="man/tl-support.8.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="man/tl-support.8.html" title="Previous document">tl-support</a>
+        </li>
+        <li>
+          <a href="config_profiles.html" title="Next document">Parameters in /profiles/</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="server-configuration-parameters">
+<h1>Server configuration parameters<a class="headerlink" href="#server-configuration-parameters" title="Permalink to this headline">¶</a></h1>
+<p>The ThinLinc server is configured using a number of configuration
+parameters stored in Hiveconf. For information about how to access and
+set the parameters, please refer to <a class="reference internal" href="hiveconf.html#hiveconf"><span class="std std-ref">Hiveconf</span></a>. In this chapter, we
+will describe the different parameters and their meaning.</p>
+<p>The parameters used in ThinLinc are divided into a number of folders,
+each having zero or more subfolders. The following folders exist:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="config_profiles.html#std-server-config-folder-profiles"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/profiles</span></code></a> contains parameters for configuring the
+different session profiles. This folder normally resides in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/profiles.hconf</span></code>.</p></li>
+<li><p><a class="reference internal" href="config_sessionstart.html#std-server-config-folder-sessionstart"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/sessionstart</span></code></a> contains some parameters used during
+session startup. This folder normally resides in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/sessionstart.hconf</span></code>.</p></li>
+<li><p><a class="reference internal" href="config_shadowing.html#std-server-config-folder-shadowing"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/shadowing</span></code></a> contains parameters used to control access to
+the shadowing feature. This folder normally resides in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/shadowing.hconf</span></code>.</p></li>
+<li><p><a class="reference internal" href="config_tlwebadm.html#std-server-config-folder-tlwebadm"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/tlwebadm</span></code></a> contains parameters for the tlwebadm web
+configuration interface. This folder normally resides in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/tlwebadm.hconf</span></code>.</p></li>
+<li><p><a class="reference internal" href="config_utils.html#std-server-config-folder-utils"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/utils</span></code></a> contains parameters used by miscellaneous
+ThinLinc utilities. Each utility has its own configuration file, but
+all parameters are then merged in under <a class="reference internal" href="config_utils.html#std-server-config-folder-utils"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/utils</span></code></a> when read
+by the Hiveconf framework.</p></li>
+<li><p><a class="reference internal" href="config_vsm.html#std-server-config-folder-vsm"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsm</span></code></a> contains parameters common to both the VSM agent
+and the VSM server. This folder normally resides in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/vsm.hconf</span></code>.</p></li>
+<li><p><a class="reference internal" href="config_vsmagent.html#std-server-config-folder-vsmagent"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent</span></code></a> contains parameters specific to the VSM agent.
+This folder normally resides in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/vsmagent.hconf</span></code>.</p></li>
+<li><p><a class="reference internal" href="config_vsmserver.html#std-server-config-folder-vsmserver"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver</span></code></a> contains parameters specific to the VSM
+server. This folder normally resides in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/vsmserver.hconf</span></code>.</p></li>
+<li><p><a class="reference internal" href="config_subclusters.html#std-server-config-folder-vsmserver-subclusters"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/subclusters</span></code></a> contains definitions of
+subclusters within the ThinLinc cluster. This folder normally resides
+in <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/vsmserver.hconf</span></code>.</p></li>
+<li><p><a class="reference internal" href="config_webaccess.html#std-server-config-folder-webaccess"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/webaccess</span></code></a> contains parameters for the server part of
+ThinLinc Web Access. This folder normally resides in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/webaccess.hconf</span></code>.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="man/tl-support.8.html" title="Previous document">tl-support</a>
+        </li>
+        <li>
+          <a href="config_profiles.html" title="Next document">Parameters in /profiles/</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Server configuration parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config_profiles.html">Parameters in /profiles/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_tlwebadm.html">Parameters in /tlwebadm/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_sessionstart.html">Parameters in /sessionstart/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_shadowing.html">Parameters in /shadowing/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_utils.html">Parameters in /utils/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsm.html">Parameters in /vsm/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsmagent.html">Parameters in /vsmagent/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsmserver.html">Parameters in /vsmserver/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_subclusters.html">Parameters in /vsmserver/subclusters/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_webaccess.html">Parameters in /webaccess/</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="man/tl-support.8.html" title="previous chapter">tl-support</a></li>
+      <li>Next: <a href="config_profiles.html" title="next chapter">Parameters in /profiles/</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/config_params.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

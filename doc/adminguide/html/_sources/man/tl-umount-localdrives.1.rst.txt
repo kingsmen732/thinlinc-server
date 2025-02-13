@@ -1,0 +1,70 @@
+.. meta::
+   :description: The tl-umount-localdrives command unmounts local drives
+                 previously mounted by tl-mount-localdrives, with
+                 options to unmount drives for the current session, all
+                 user sessions, or all users on the server.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-umount-localdrives
+=====================
+
+Synopsis
+--------
+
+**tl-umount-localdrives** [*options*]
+
+Description
+-----------
+
+The :program:`tl-umount-localdrives` command is used to unmount local
+drives previously set up by :program:`tl-mount-localdrives`\ (1). By
+default it only unmounts the local drives for the current session, but
+it can also unmount the local drives for all of the user's sessions by
+specifying :option:`-s`, or all local drives for all users on the
+current agent by specifying :option:`-a`.
+
+Options
+-------
+
+.. option:: -a, --all-users
+
+   Unmount all shared local drives for all users on this server (root
+   required).
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+.. option:: -l, --no-adjust-symlink
+
+   Do not update the :file:`~/thindrives` link when unmounting
+   file systems.
+
+.. option:: -s, --all-sessions
+
+   Unmount all shared local drives for the current user on this server.
+
+.. option:: -v, --verbose
+
+   Print more details about what actions are taken.
+
+.. option:: --version
+
+   Prints the ThinLinc version and exits.
+
+Notes
+-----
+
+When using multiple sessions per user, the :file:`~/thindrives` link
+will point to the newest session that executed
+:program:`tl-mount-localdrives`\ (1). :program:`tl-umount-localdrives`
+will restore the link to the newest session which is not newer than the
+current session and which has mounted local drives.
+
+See also
+--------
+
+:program:`tl-mount-localdrives`\ (1)

@@ -1,0 +1,337 @@
+.. meta::
+   :description: Learn how to customize desktop environments for
+                 specific users or groups using ThinLinc desktop
+                 customizer via a web interface. Manage applications,
+                 menu structures, and user permissions effectively.
+
+.. _tldc_tldesktopcustomizer:
+
+Using the ThinLinc desktop customizer
+-------------------------------------
+
+Using the ThinLinc desktop customizer, the system administrator can
+decide what applications should be available in the menu and/or on the
+desktop for specific users or for users that are members of some Linux
+group. The ThinLinc desktop customizer is configured via a web
+interface, part of the ThinLinc Web Administration. :ref:`tlwebadm`
+describes the interface in general, this section will describe the
+desktop customizer part of it.
+
+Concepts
+~~~~~~~~
+
+.. figure:: images/tl-desktop-customizer-concepts.svg
+
+   ThinLinc desktop customizer concepts
+
+The main concept in the ThinLinc desktop customizer is the *application
+group*. The application group combines data about applications, a menu
+structure, Linux groups and users, and some other settings.
+
+.. _tldc_dskcustomizer_applications:
+
+Applications
+^^^^^^^^^^^^
+
+The applications referred to in the application groups are found by
+scanning the space-separated list of directories defined in the Hiveconf
+parameter :servconf:`/utils/tl-desktop-customizer/xdg_data_dirs` for
+files named :file:`*.desktop`. The files are read according to the
+`Freedesktop.org`_ Desktop Menu Specification. The TLDC scans the
+directories in the same way that KDE will do when building the menu.
+
+Some applications are marked by the operating system to be shown only
+for root, or in some cases only for specific desktop environments. On
+SUSE, there is also a ``X-SuSE-Unimportant`` parameter in some
+:file:`*.desktop` files, which will make the KDE packaged with SUSE hide
+the application. TLDC handles this by adding a comment to the
+application in the applications listing, and in the boxes used to select
+applications when creating application groups.
+
+In addition to the desktop files automatically found, it is also
+possible to manually define applications. This is needed for example
+when an application without a ``*.desktop``-file has been installed or
+when an application has been installed in a non-standard location.
+
+.. _freedesktop.org: https://www.freedesktop.org/
+
+Menu structure
+^^^^^^^^^^^^^^
+
+Each application group can add applications to a specific place in the
+menu structure. The available menu structure is edited in the
+:guilabel:`Menu structure` part of the Web Administration interface.
+
+Linux groups and users
+^^^^^^^^^^^^^^^^^^^^^^
+
+An application group is used by zero or more Linux groups and by zero or
+more specific users. An example would be an educational environment.
+Let's say that all pupils attending the class "biology 4" are members of
+the Linux group "bio4". By creating an application group named "Biology
+4" with all applications that are specific to the biology class, and
+then adding the "bio4" Linux group as one of the groups that should be
+assigned the "Biology 4" application group, all students attending the
+class will automatically get the applications specific to the biology
+class in their menu. By adding the teacher of the class as a specific
+user, he/she as well will also get access to the applications.
+
+Using the ThinLinc desktop customizer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The daily use of the TLDC consists of one or several of the following
+steps:
+
+-  Create an application
+
+-  Create a folder in the menu structure
+
+-  Bind one or several applications to a folder in the menu structure,
+   using an application group
+
+In the following sections, we will more thoroughly describe the
+different actions that may be needed.
+
+.. _tldc-applications:
+
+Handling applications
+~~~~~~~~~~~~~~~~~~~~~
+
+The handling of applications is normally the first step in using the
+TLDC. Click on the :guilabel:`Applications (manual)` link in the TLDC,
+and you will enter a view where the applications you've defined manually
+are listed. Several example applications are included with ThinLinc at
+installation. By clicking on the text :guilabel:`Applications defined by
+system`, you can also see what applications are found automatically by
+scanning, as described in :ref:`tldc_dskcustomizer_applications`.
+
+If the application you want to add to a menu or to the desktop is not
+found among :guilabel:`Applications defined by system`, you need to
+define it manually. This is the case for applications installed without
+adding a :file:`.desktop` file in the correct location.
+
+Defining applications manually is done by clicking on the button
+:guilabel:`Add new application` (located at the top of the list of
+applications). This brings up a pop-up where you can define the
+following properties for the new application:
+
+:guilabel:`Default application name`
+   This is the name of the application. It's the name that is written
+   next to the icon (if any), in the menu, and under the icon if the
+   application is to be added to the desktop.
+
+   The default application name is used if there is no name defined for
+   the language in use when the application is shown, or if the language
+   is English.
+
+:guilabel:`Application name (<language-code>)`
+   This is the name of the application in the language with the
+   :rfc:`1766` language code **<language-code>**. This name is shown if
+   the locale is set to that language when the menu or desktop is shown.
+
+   The languages that should be configurable are set by editing the
+   space-separated list in the parameter
+   :servconf:`/utils/tl-desktop-customizer/desktop_languages`. The
+   default value of this parameter is ``sv``, which means that the TLDC
+   will allow you to set the default name and the name in Swedish.
+
+:guilabel:`Command`
+   This specifies the command to run to start the application. Enter the
+   path to the command followed by any arguments in the
+   :guilabel:`Command` box. The input box follows bash syntax rules.
+
+   Example:
+
+   .. code:: bash
+
+      "/usr/bin/my program" --fullscreen --title "My title"
+
+:guilabel:`Path to icon file`
+   The filename of the icon for the application. If the icon is
+   available in one of the directories where your desktop environment
+   looks for icons, just the filename without the extension can be
+   given. Otherwise, the complete path must be specified.
+
+:guilabel:`Enable startup feedback`
+   Enable the switch to instruct the window manager to show a special
+   icon while the command is starting. Note that not all applications
+   support this functionality.
+
+Press :guilabel:`Save` when done filling the fields. The application
+will now show up among the other manually defined applications.
+
+
+.. _tldc_define_menustructure:
+
+Defining a menu structure
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+With TLDC, the normal menu structure as defined by the Linux distributor
+is not used. Instead, a new menu structure is defined. This gives more
+flexibility in designing menus. The TLDC administrator can fully decide
+where in the menu structure a certain application is placed.
+
+To define the menu structure, click on the :guilabel:`Menu structure`
+submenu in the left pane of the TLDC administration interface. This
+leads to a view where a menu structure can be defined. The root menu
+folder is always available and can't be removed.
+
+.. note::
+
+   A menu called **Hidden menu** is shipped with the default ThinLinc
+   configuration. See :ref:`tldc_kde_home_icon` for an explanation of
+   its functionality. Please don't remove it if you are planning to use
+   KDE.
+
+The following properties can be edited for a menu:
+
+:guilabel:`Default menu name`
+   This is the name of the menu, as it will be shown in the menu.
+
+:guilabel:`Menu name (<language-code>)`
+   This is the name of the menu in the language with the :rfc:`1766`
+   language code **<language-code>**. This name is shown if the locale
+   is set to the language at runtime.
+
+:guilabel:`Path to icon file`
+   The filename of the icon for the menu, shown to the left of the menu
+   name in the menu. If the icon is available in one of the directories
+   where your desktop environment looks for icons, just the filename
+   without the extension can be given. Otherwise, the complete path must
+   be specified.
+
+:guilabel:`Hide this menu`
+   If this switch is enabled the menu will be a hidden menu. It will not
+   be shown in the menu. Note that any applications that are added to
+   this hidden menu via an application group will be available in file
+   associations on KDE.
+
+Just as for applications, the name of the menu can be defined in several
+languages. The :guilabel:`Default menu name` is used if no
+language-specific name is defined, or if the locale specifies that the
+language is English. The list of languages that can be defined using the
+TLDC is found in
+:servconf:`/utils/tl-desktop-customizer/desktop_languages`.
+
+.. _tldc_define_applications:
+
+Defining application groups
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Enter the :guilabel:`Applications groups` part of the desktop
+customizer. This will present you with a list of existing application
+groups and their settings.
+
+.. note::
+
+   An application group called **Hidden** is shipped with the default
+   ThinLinc configuration. See :ref:`tldc_kde_home_icon` for an
+   explanation of its functionality. Please don't remove it if you are
+   planning to use KDE.
+
+Press the button :guilabel:`Add new group` (located at the top in the
+table of existing application groups) to create a new application group.
+This will open a rather large pop-up, where you can define the following
+properties:
+
+:guilabel:`Name of the application group`
+   This is the name of the application group. This is not displayed to
+   the users, but only to the system administrator using the ThinLinc
+   desktop customizer. Set to something that reflects the contents of
+   the application group.
+
+:guilabel:`Menu of application group`
+   A dropdown box for the menu structure folder of the application
+   group. Applications chosen in the boxes below will be added to the
+   chosen menu folder.
+
+:guilabel:`Applications added to menu`
+   Add to the left box, labeled :guilabel:`Selected`, the applications
+   that should appear in the menu folder selected above. This will only
+   apply for users that are assigned this application group. The right
+   box, labeled :guilabel:`Available`, lists applications, both manually
+   defined and ones found installed on the system. If no applications
+   are available, applications can be defined, as documented in
+   :ref:`tldc_define_applications`.
+
+:guilabel:`Applications added to desktop`
+   Add to the left box, labeled :guilabel:`Selected`, the applications
+   that should appear as icons on the desktop. This will only apply for
+   users that are assigned this application group. Just as for
+   applications added to the menu, only applications earlier defined, or
+   automatically found, will show up as selectable, in the box labeled
+   :guilabel:`Available`.
+
+:guilabel:`Linux groups with this application group`
+   This is where you map Linux groups to application groups. If for
+   example a specific school should be assigned an application group,
+   and all the pupils of that school are members of the Linux group
+   "school-1", using the right text box, add the Linux group "school-1"
+   to the left box, labeled :guilabel:`Selected`. When logging in, the
+   group memberships of each user is inspected to determine which
+   application groups to assign to the user.
+
+   .. note::
+
+      If the mapping between the numerical group id and the group name
+      doesn't work, the group is shown as :samp:`#{<gid>}`. This might
+      be because the group has been removed from the system, or because
+      the operating system has problems in the connection to the
+      directory service used.
+
+:guilabel:`Specific users with this application group`
+   This parameter allows you to decide if specific users should be
+   assigned this application group as well, even if they are not a
+   member of one of the groups that were added above. This way, for very
+   specialized applications, no Linux group needs to be created. Another
+   way of using this field would be that the teachers of a specific
+   class could be added to the application group for that class, if the
+   teachers are not part of the Linux group that is associated with the
+   class.
+
+   .. note::
+
+      If the mapping between the numerical user id and the user name
+      doesn't work, the user is shown as :samp:`#{<uid>}`. This might be
+      because the user has been removed from the system, or because the
+      operating system has problems in the connection to the directory
+      service used.
+
+:guilabel:`ThinLinc profiles with this application group`
+   This setting allows you to connect the application group to ThinLinc
+   profiles as documented in :ref:`configuration_profiles-xstartup`.
+   This allows for different application groups to be selected based on
+   user input after login.
+
+:guilabel:`Shell command activating this application group`
+   This setting allows you to activate application groups based on the
+   return value of an arbitrary command. If the command returns 0 (which
+   is the standard return code for success for shell commands), the
+   application group will be activated.
+
+   This can be used for example to activate application groups based on
+   group membership by using the :program:`tl-memberof-group` command.
+   It can also be used to activate an application group for all users by
+   running :command:`/bin/true` as activation command.
+
+   The command is run via the shell in the current user's environment
+   when running :program:`tl-desktop-activate.sh`. The environment
+   variable :environ:`TLDCGROUP` is set to the application group
+   currently under consideration for activation.
+
+:guilabel:`Save!`
+   Don't forget to press the :guilabel:`Save` button, or none of the
+   changes will be written to the database.
+
+Distribute configuration to all agent hosts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+After doing changes to the desktop configuration, the new configuration
+must be copied to all VSM agent hosts. The files/directories to be
+copied are :file:`/opt/thinlinc/etc/conf.d/tl-desktop-customizer.hconf`
+and all subdirectories of :file:`/opt/thinlinc/desktops`.
+
+.. tip::
+
+   Use the :program:`tl-rsync-all` command as described in
+   :ref:`commands` to copy the files.

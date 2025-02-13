@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Troubleshooting guide for ThinLinc, covering common session issues, client errors, and session startup problems. Includes general troubleshooting methods and specific error resolution steps." name="description" />
+
+    <title>Troubleshooting ThinLinc &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Restricting access to ThinLinc servers" href="lockdown.html" />
+    <link rel="prev" title="On a machine running VSM Agent" href="tcp-ports_agent.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tcp-ports_agent.html" title="Previous document">On a machine running VSM Agent</a>
+        </li>
+        <li>
+          <a href="lockdown.html" title="Next document">Restricting access to ThinLinc servers</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="troubleshooting-thinlinc">
+<span id="troubleshoot"></span><h1>Troubleshooting ThinLinc<a class="headerlink" href="#troubleshooting-thinlinc" title="Permalink to this headline">¶</a></h1>
+<p>In this appendix, we will describe how to troubleshoot common problems
+in a ThinLinc installation.</p>
+<p>We will begin by giving a general view of the recommended
+troubleshooting method, and then continue with more detailed
+instructions for troubleshooting specific problems.</p>
+<section id="general-troubleshooting-method">
+<h2>General troubleshooting method<a class="headerlink" href="#general-troubleshooting-method" title="Permalink to this headline">¶</a></h2>
+<p>In most cases, troubleshooting a ThinLinc session problem should follow
+the method outlined in <a class="reference internal" href="#troubleshoot-fig"><span class="std std-numref">Fig. 33</span></a>.</p>
+<figure class="align-default" id="id1">
+<span id="troubleshoot-fig"></span><img alt="_images/troubleshoot.svg" src="_images/troubleshoot.svg" /><figcaption>
+<p><span class="caption-number">Fig. 33 </span><span class="caption-text">The general troubleshooting method</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The method is to first check that the user was let in by SSH on the VSM
+server. This information is found on different places on different
+distributions. Common log filenames for SSH information are
+<code class="file docutils literal notranslate"><span class="pre">/var/log/secure</span></code>, <code class="file docutils literal notranslate"><span class="pre">/var/log/auth.log</span></code> or
+<code class="file docutils literal notranslate"><span class="pre">/var/log/daemon.log</span></code>. If the user was let in by SSH, the VSM
+server log (<code class="file docutils literal notranslate"><span class="pre">/var/log/vsmserver.log</span></code>) is inspected. In some cases,
+the reason for session failure can be found there, but most of the
+time, it’s necessary to find out which VSM agent was selected for the
+session, and inspect the VSM agent log (<code class="file docutils literal notranslate"><span class="pre">/var/log/vsmagent.log</span></code>)
+on the server in question.</p>
+<p>If inspecting <code class="file docutils literal notranslate"><span class="pre">/var/log/vsmagent.log</span></code> on the server that was
+selected for the session does not reveal the reason for the failure,
+there is a per-session log in
+<code class="file docutils literal notranslate"><span class="pre">/var/opt/thinlinc/sessions/&lt;username&gt;/last/xinit.log</span></code> where the
+output of commands run during session startup is stored.</p>
+<p>In very rare cases, it might also be necessary to inspect the SSH log on
+the VSM agent.</p>
+</section>
+<section id="troubleshooting-specific-problems">
+<h2>Troubleshooting specific problems<a class="headerlink" href="#troubleshooting-specific-problems" title="Permalink to this headline">¶</a></h2>
+<p>The first step should be to check if your specific problem is mentioned
+in the platform-specific notes available at
+<a class="reference external" href="https://www.cendio.com/thinlinc/docs/platforms">https://www.cendio.com/thinlinc/docs/platforms</a>. If your problem isn’t
+mentioned in the platform-specific notes you should read the sections
+below.</p>
+<section id="problems-where-the-client-reports-an-error">
+<h3>Problems where the client reports an error<a class="headerlink" href="#problems-where-the-client-reports-an-error" title="Permalink to this headline">¶</a></h3>
+<p>In the following sections, we will describe how to cope with problems
+where the ThinLinc client is reporting an error.</p>
+<section id="couldn-t-set-up-secure-tunnel-to-thinlinc-server-couldn-t-establish-ssh-tunnel-ssh-terminated">
+<h4>Couldn’t set up secure tunnel to ThinLinc server. (Couldn’t establish SSH tunnel, SSH terminated.)<a class="headerlink" href="#couldn-t-set-up-secure-tunnel-to-thinlinc-server-couldn-t-establish-ssh-tunnel-ssh-terminated" title="Permalink to this headline">¶</a></h4>
+<p>This error is caused by failure to connect to the SSH daemon on the
+ThinLinc server (the server running the VSM server). This could be
+caused by the fact that the SSH daemon is simply not running, or that it
+is not letting the user in for some reason.</p>
+<p>Another possible reason is that there is a firewall between the user and
+the ThinLinc server, that forbids communication.</p>
+</section>
+<section id="login-failed-wrong-username-or-password">
+<h4>“Login failed! Wrong username or password.”<a class="headerlink" href="#login-failed-wrong-username-or-password" title="Permalink to this headline">¶</a></h4>
+<p>This error is very often caused simply by the user entering an incorrect
+password. Begin by verifying that the user is actually entering the
+correct username and password.</p>
+<p>If the username and password are correct and this is the first time the
+user tries to log in, check the SSH logs of the server. If SSH says that
+the user is invalid, that means that something is incorrect in the
+user’s user information database entry. For example, this may happen if
+a user stored in eDirectory has two <code class="docutils literal notranslate"><span class="pre">cn</span></code> attributes, one of them
+different from the other.</p>
+<p>The <strong class="command">getent</strong> command can be a valuable tool to dissect problems
+of this type. If the output of <strong class="command">getent passwd &lt;username&gt;</strong>
+doesn’t produce any output, that is a sign that the user is in fact
+invalid.</p>
+</section>
+<section id="the-ssh-connection-succeeded-but-the-thinlinc-server-connection-failed-perhaps-this-server-doesn-t-run-a-thinlinc-server">
+<h4>The SSH connection succeeded, but the ThinLinc server connection failed. Perhaps this server doesn’t run a ThinLinc server?<a class="headerlink" href="#the-ssh-connection-succeeded-but-the-thinlinc-server-connection-failed-perhaps-this-server-doesn-t-run-a-thinlinc-server" title="Permalink to this headline">¶</a></h4>
+<p>This error is most often caused by the fact that the VSM server is not
+running on the server. Start the VSM server and try again.</p>
+<p>A user entering the wrong hostname, for example the hostname of one of
+the VSM agents, would also get this error message. Check that the user
+has entered the correct hostname. In very rare cases, this could also be
+caused by incorrect DNS data.</p>
+</section>
+<section id="thinlinc-login-failed-no-agent-server-was-available">
+<h4>ThinLinc login failed. (No agent server was available)<a class="headerlink" href="#thinlinc-login-failed-no-agent-server-was-available" title="Permalink to this headline">¶</a></h4>
+<p>This error is reported if there were no working VSM agents available
+according to the load balance information in the VSM server.</p>
+<p>In a system with few VSM agent servers, restoring a VSM agent that has
+been down for some reason doesn’t take effect immediately — the load
+balance information is only updated once every 40 seconds by default.
+Either wait for the load balance cycle to complete, or restart the VSM
+server.</p>
+<p>The load balance information can be inspected in the <a class="reference internal" href="tlwebadm_status.html#tlwebadm-status"><span class="std std-ref">ThinLinc Web Administration</span></a>, or
+using the <a class="reference internal" href="cli.html#cli-load"><span class="std std-ref">command line</span></a>.</p>
+</section>
+<section id="thinlinc-login-failed-couldn-t-create-your-session">
+<h4>ThinLinc login failed. (Couldn’t create your session)<a class="headerlink" href="#thinlinc-login-failed-couldn-t-create-your-session" title="Permalink to this headline">¶</a></h4>
+<p>When this error occurs, the user was valid on the VSM server, but for
+some reason, the session couldn’t be created on the VSM agent.</p>
+<p>One very common reason for this problem is that the VSM agent has lost
+its connection to the user database backend (LDAP, Windows domain or
+other database), so the user exists on the VSM server, but not on the
+VSM agent. If this is the case, the VSM agent log on the selected server
+will clearly state that the user doesn’t exist on the system.</p>
+<p>Another very common reason is home directory trouble on the VSM agent.
+Verify that the home directory exists on the selected server, and that
+it is owned by the correct uidNumber/gidNumber. Of course, the user must
+have write permissions in their home directory.</p>
+<p>To verify that the home directory works, the following command can be
+used:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ssh &lt;username&gt;@&lt;agenthost&gt; touch .
+</pre></div>
+</div>
+<p>If the home directory is correctly mounted and writable by the user, the
+above command will not produce any output except the password question.</p>
+</section>
+<section id="couldn-t-set-up-secure-tunnel-to-vnc-couldn-t-establish-ssh-tunnel-ssh-terminated">
+<h4>Couldn’t set up secure tunnel to VNC! (Couldn’t establish SSH tunnel, SSH terminated.)<a class="headerlink" href="#couldn-t-set-up-secure-tunnel-to-vnc-couldn-t-establish-ssh-tunnel-ssh-terminated" title="Permalink to this headline">¶</a></h4>
+<p>This error is caused by failure to connect to the SSH daemon on the
+selected VSM agent. This could be caused by the fact that the SSH daemon
+is simply not running, or that it is not letting the user in for some
+reason.</p>
+<p>Another possible reason is that there is a firewall between the user and
+the selected VSM agent that disallows communication.</p>
+</section>
+</section>
+<section id="problems-that-occur-after-session-start">
+<h3>Problems that occur after session start<a class="headerlink" href="#problems-that-occur-after-session-start" title="Permalink to this headline">¶</a></h3>
+<p>In this section we will discuss some problems that can occur after the
+successful login, that is, after the ThinLinc login window has closed.
+In this phase, a number of session startup problems can occur</p>
+<section id="session-starts-but-closes-down-immediately">
+<h4>Session starts, but closes down immediately<a class="headerlink" href="#session-starts-but-closes-down-immediately" title="Permalink to this headline">¶</a></h4>
+<p>If the ThinLinc login window closes, and the session starts up but then
+immediately shuts down, inspect <code class="file docutils literal notranslate"><span class="pre">xinit.log</span></code> found in
+<code class="file docutils literal notranslate"><span class="pre">/var/opt/thinlinc/sessions/&lt;username&gt;/last/</span></code> on the selected VSM
+agent. Some of the commands run during session startup will probably
+have written an error message that will be stored in that file.</p>
+<p>It may also be of value to inspect the VSM agent log on the selected
+server.</p>
+</section>
+<section id="at-login-user-is-reconnected-to-previous-faulty-session">
+<h4>At login, user is reconnected to previous, faulty, session<a class="headerlink" href="#at-login-user-is-reconnected-to-previous-faulty-session" title="Permalink to this headline">¶</a></h4>
+<p>If a previous session still exists and is faulty, for example because of
+desktop environment failures, the user is reconnected to the same
+session when logging in. Disconnect from the session, enable the
+<span class="guilabel">End existing session</span> checkbox and log in again. That will
+terminate the current session and start a new one.</p>
+</section>
+<section id="login-succeeds-but-the-thinlinc-desktop-configuration-fails">
+<h4>Login succeeds, but the ThinLinc desktop configuration fails<a class="headerlink" href="#login-succeeds-but-the-thinlinc-desktop-configuration-fails" title="Permalink to this headline">¶</a></h4>
+<p>When using the ThinLinc desktop customizer, as documented in
+<a class="reference internal" href="tldc.html#tldc"><span class="std std-ref">Building custom Linux desktops with the ThinLinc desktop customizer</span></a>, the KDE or Gnome menu and the entries on the desktop
+are customized at each login. If this fails, quota problems are very
+often the problem. Check the quota of the user in question.</p>
+</section>
+<section id="login-succeeds-but-kde-fails-to-start">
+<h4>Login succeeds, but KDE fails to start<a class="headerlink" href="#login-succeeds-but-kde-fails-to-start" title="Permalink to this headline">¶</a></h4>
+<p>If KDE fails to start, complaining about being unable to create symlinks
+and similar, quota problems are commonly the problem. Check the quota of
+the user in question.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tcp-ports_agent.html" title="Previous document">On a machine running VSM Agent</a>
+        </li>
+        <li>
+          <a href="lockdown.html" title="Next document">Restricting access to ThinLinc servers</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Troubleshooting ThinLinc</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-troubleshooting-method">General troubleshooting method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting-specific-problems">Troubleshooting specific problems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#problems-where-the-client-reports-an-error">Problems where the client reports an error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#problems-that-occur-after-session-start">Problems that occur after session start</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="tcp-ports_agent.html" title="previous chapter">On a machine running VSM Agent</a></li>
+      <li>Next: <a href="lockdown.html" title="next chapter">Restricting access to ThinLinc servers</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/troubleshoot.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

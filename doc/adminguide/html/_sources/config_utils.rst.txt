@@ -1,0 +1,141 @@
+.. meta::
+   :description: Overview of configuration parameters for utilities in
+                 ThinLinc, including settings for the desktop
+                 customizer, LDAP certificate aliasing, and mounting
+                 local drives.
+
+.. _configuration_utils:
+
+.. server-config-folder:: /utils
+
+Parameters in /utils/
+~~~~~~~~~~~~~~~~~~~~~
+
+In this section, we will describe all the parameters currently used by
+various utilities.
+
+.. server-config-folder:: /utils/tl-desktop-customizer
+
+Parameters in /utils/tl-desktop-customizer/
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this section we will describe all the parameters currently used by
+the ThinLinc desktop customizer. These configuration parameters reside
+in :file:`/opt/thinlinc/etc/conf.d/tl-desktop-customizer.hconf`.
+
+.. server-config:: /utils/tl-desktop-customizer/xdg_data_dirs
+
+   A space separated list of directories that ThinLinc desktop
+   customizer should look for applications in.
+
+.. server-config:: /utils/tl-desktop-customizer/desktop_languages
+
+   A space separated list of :rfc:`1766` language codes. The specified
+   languages will be available for translating application and menu
+   names in the ThinLinc desktop customizer.
+
+.. _configuration_tl_ldap_certalias:
+
+.. server-config-folder:: /utils/tl-ldap-certalias
+
+Parameters in /utils/tl-ldap-certalias/
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this section we will describe all the parameters currently used by
+:program:`tl-ldap-certalias`. These configuration parameters reside in
+:file:`/opt/thinlinc/etc/conf.d/tl-ldap-certalias.hconf`.
+
+.. server-config:: /utils/tl-ldap-certalias/ldap_schema
+
+   Specify the schema type that is used on the target LDAP server. Valid
+   options are ``rfc2307`` and ``AD``.
+
+   ``rfc2307`` is default and should be used with standard LDAP servers
+   that comply with :rfc:`2307`.
+
+   ``AD`` should be used if the target LDAP server is an Active
+   Directory.
+
+.. server-config:: /utils/tl-ldap-certalias/allow_invalid_certificates
+
+   This parameter controls whether to perform validation on certificates
+   found in the LDAP database. Possible values are ``yes`` and ``no``.
+
+   Please note that by setting this to yes, you will allow users with
+   expired, invalid, revoked or untrusted certificates to log in as if
+   their certificates are valid.
+
+   .. note::
+
+      If you want :program:`tl-ldap-certalias` to match the behavior of
+      :program:`tl-ldap-certalias` versions earlier than 3.2.0, set this
+      to ``yes``.
+
+.. server-config:: /utils/tl-ldap-certalias/certificate_user_match
+
+   The method to use for finding certificates assigned to the user.
+   Valid options are ``sameobject`` and
+   ``novell_certificate_subjectname``.
+
+   ``sameobject`` makes :program:`tl-ldap-certalias` search for
+   certificates in the ``userCertificate`` attribute on user objects it
+   finds.
+
+   ``novell_certificate_subjectname`` allows for certificates to be
+   stored in another LDAP tree. User objects are associated to
+   certificates by storing subject names of certificates in a
+   multivalued attribute called ``sasAllowableSubjectName`` (OID
+   2.16.840.1.113719.1.39.42.1.0.69) on the user object.
+   :program:`tl-ldap-certalias` can handle both DN:s as written by
+   Novell iManager (``DC=com.DC=example.OU=test.CN=foo``) and as
+   returned by :option:`tl-certtool --subject`
+   (``cn=foo,ou=test,dc=example,dc=com``).
+
+.. server-config:: /utils/tl-ldap-certalias/users/uri
+
+   An LDAP server URI for finding users on the form
+   ``ldap[s]://name[:port]``
+
+.. server-config:: /utils/tl-ldap-certalias/users/base
+
+   The LDAP search base for finding users.
+
+.. server-config:: /utils/tl-ldap-certalias/users/binddn
+
+   The username to bind as for searching for users. If left blank, no
+   bind is performed.
+
+.. server-config:: /utils/tl-ldap-certalias/users/bindpw
+
+   The password to use in combination with |binddn| for bind operations
+   If |binddn| is left empty, this can also be left empty.
+
+   .. |binddn| replace::
+      :servconf:`binddn </utils/tl-ldap-certalias/users/binddn>`
+
+.. server-config:: /utils/tl-ldap-certalias/certs/uri
+.. server-config:: /utils/tl-ldap-certalias/certs/base
+.. server-config:: /utils/tl-ldap-certalias/certs/binddn
+.. server-config:: /utils/tl-ldap-certalias/certs/bindpw
+
+   If |certificate_user_match| is not ``sameobject``, these settings
+   will be used to determine where to look for certificates. They follow
+   the same rules as the settings for users.
+
+   .. |certificate_user_match| replace::
+      :servconf:`certificate_user_match
+      </utils/tl-ldap-certalias/certificate_user_match>`
+
+.. server-config-folder:: /utils/tl-mount-localdrives
+
+Parameters in /utils/tl-mount-localdrives/
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this section we will describe all the parameters currently used by
+:program:`tl-mount-localdrives`. These configuration parameters reside
+in :file:`/opt/thinlinc/etc/conf.d/tl-mount-localdrives.hconf`.
+
+.. server-config:: /utils/tl-mount-localdrives/mount_args
+
+   Specifies any extra mount parameters to be used when mounting local
+   drives from a client.

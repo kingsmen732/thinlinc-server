@@ -1,0 +1,29 @@
+.. meta::
+   :description: Introduction to configuring the ThinLinc client,
+                 including details on accessing the options window and
+                 descriptions of settings across various tabs such as
+                 display, local devices, optimization, security, and
+                 advanced options.
+
+Client configuration
+--------------------
+
+To configure the ThinLinc client you press the button labeled
+:guilabel:`Options...` in the client window. That brings up the client
+options window. This window contains several pages of settings, ordered
+in tab sets. The following sections will describe each of these pages
+and all individual settings.
+
+When a user presses the :guilabel:`OK` button, all the current settings
+in the options window is saved. For more information about the config
+file format, see :ref:`clientconf`.
+
+.. toctree::
+   :hidden:
+
+   client_options_display
+   client_options_local_devices
+   client_options_optimization
+   client_options_security
+   client_options_advanced
+   client_config

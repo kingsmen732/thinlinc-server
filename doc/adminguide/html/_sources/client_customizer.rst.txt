@@ -1,0 +1,78 @@
+.. meta::
+   :description: Guide to using the ThinLinc client customizer for
+                 creating customized Windows client installations,
+                 including setting default configurations, adding custom
+                 branding, and enhancing security with pre-configured
+                 SSH host keys.
+
+.. _clientcustomizer:
+
+Client customizer
+-----------------
+
+Introduction
+~~~~~~~~~~~~
+
+This software lets you create customized ThinLinc client installation
+programs. This means that when users install the customized version,
+they will automatically get the default settings you have configured.
+
+One advantage with this is that you can provide, for example, a default
+server name. A custom client can also be used to enhance security: You
+can distribute SSH host keys with the client itself, so that users don't
+need to be concerned with SSH host key fingerprint verification.
+
+.. note::
+
+   The client customizer only works for the Windows client.
+
+Installation
+~~~~~~~~~~~~
+
+Before you can start, you have to install the build environment. This is
+done by running the command
+:program:`tl-x.y.z-client-customizer.exe` located in the client
+bundle. This will also create a shortcut to the build directory in the
+Start menu.
+
+Building a customized client
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To create a customized client, do the following:
+
+1. Edit :file:`settings.reg`. This file contains all the parameter names
+   and default values that are used in :program:`tlclient`. To customize
+   the client, edit any of these values, and they will be installed in
+   the registry when you install the customized client itself. You can
+   also add your server's SSH host keys (see below).
+
+2. Custom branding can be added to the client by simply dropping a file
+   called :file:`branding.png` in the root directory of the client
+   customizer. See :ref:`client_branding` for more details.
+
+3. Run :file:`build.bat` in the same directory. The file
+   :file:`setup.exe` will now be created. This is the installation
+   program for the customized client.
+
+Adding SSH host keys
+~~~~~~~~~~~~~~~~~~~~
+
+To add your server's SSH host key to :file:`settings.reg`, do the
+following:
+
+1. Use :program:`tlclient` to connect to your server, if you haven't
+   already done so. Confirm the server's host key, if necessary.
+
+2. Run the registry editor, and select
+   ``HKEY_CURRENT_USER\Software\Cendio\ThinLinc\tlclient\KnownHosts``
+
+3. Export this key to an external text file.
+
+4. Open the text file from the previous step in an editor.
+
+5. Copy the line corresponding to your ThinLinc server. Paste this line
+   into :file:`settings.reg`, section
+   ``HKEY_LOCAL_MACHINE\Software\Cendio\ThinLinc\tlclient\KnownHosts``
+
+6. Save :file:`settings.reg`, and proceed to create the customized
+   client as described above.

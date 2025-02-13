@@ -1,0 +1,126 @@
+.. meta::
+   :description: Overview of managing a ThinLinc cluster using
+                 command-line tools, including session management, user
+                 notifications, and monitoring cluster load.
+
+Command line
+============
+
+This chapter gives an overview of how to manage a ThinLinc cluster using
+the command line. Detailed descriptions of available commands can be
+found in :ref:`commands`.
+
+.. note::
+
+   It is recommended to configure :command:`sudo` so that these commands
+   can be run without having to specify an absolute path. See
+   :ref:`install_sudo_configuration` for details.
+
+Managing sessions
+-----------------
+
+Users' sessions can be examined and controlled using :program:`tlctl
+session`. With this tool, it is possible to list sessions currently
+running on the cluster:
+
+.. code:: console
+
+   $ sudo tlctl session list
+   USER   DISPLAY  AGENT               STATUS     AGE
+   ========================================================
+   alice  12       agent1.example.com  connected  11 day(s)
+   bob    32       agent2.example.com  connected  5 hour(s)
+
+   Listed 2 session(s).
+
+If only some sessions are interesting, then it is possible to list just
+those:
+
+.. code:: console
+
+   $ sudo tlctl session list --agent agent2.example.com
+   USER  DISPLAY  AGENT               STATUS     AGE
+   =======================================================
+   bob   32       agent2.example.com  connected  5 hour(s)
+
+   Listed 1 session(s).
+
+Something may have gone wrong with a user's session, meaning it needs to
+be restarted. The :program:`tlctl session` command can then be used to
+terminate that session:
+
+.. code:: console
+
+   $ sudo tlctl session terminate --user bob
+   Refreshing session information...
+
+   Terminating:
+   USER  DISPLAY  AGENT
+   =================================
+   bob   32       agent2.example.com
+
+   Summary:
+     Terminate 1 session(s)
+
+   Is this ok? [y/N]: y
+
+Notifying users
+---------------
+
+Sometimes it may be necessary to inform users of important events, e.g.
+that a server needs to be restarted. Historically, the :command:`wall`
+command was used for this, but it is mostly ignored by desktop
+environments and users may not have a terminal open.
+
+ThinLinc includes the tool :program:`tl-notify` that instead uses the
+notification mechanism built into most desktop environments. With this
+tool, it is easy to send a message to users:
+
+.. code:: console
+
+   $ sudo tl-notify The system will be restarted in one hour
+
+Note that this command only notifies the users on the agent where the
+command is run. It is therefore recommended to also use
+:program:`tl-ssh-all`:
+
+.. code:: console
+
+   $ sudo tl-ssh-all tl-notify The system will be restarted in one hour
+
+.. _cli_load:
+
+Cluster load
+------------
+
+The current status of ThinLinc's load monitoring can be examined using
+:program:`tlctl load`. The command :program:`tlctl load list` can be
+used to get a brief overview of the entire cluster:
+
+.. code:: console
+
+   $ sudo tlctl load list
+   AGENT               USERS  MEM  CPU  RATING
+   ===========================================
+   agent1.example.com     11  14%   0%   10.85
+   agent2.example.com     10  10%   0%   29.88
+
+More details can be fetched about a specific agent using :program:`tlctl
+load show`:
+
+.. code:: console
+
+   $ sudo tlctl load show agent.example.com
+   DETAILS FOR AGENT "agent1.example.com"
+   --------------------------------------
+          Number of users: 11
+   Memory (used RAM+swap): 14%
+         RAM (used/total): 0.5/1.8 GiB
+        Swap (used/total): 0.0/1.6 GiB
+             Load (1 min): 0.0
+           Number of CPUs: 2
+                      CPU: 0%
+                 Bogomips: 11999.98
+                   Rating: 10.85
+           Penalty points: 0
+             Last updated: 24 s ago

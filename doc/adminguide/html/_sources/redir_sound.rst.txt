@@ -1,0 +1,125 @@
+.. meta::
+   :description: Overview of sound device redirection in ThinLinc,
+                 detailing how to enable and configure audio redirection
+                 for PulseAudio, ALSA, and OSS applications.
+
+
+.. _sound-redirection:
+
+Using sound device redirection
+------------------------------
+
+Introduction
+~~~~~~~~~~~~
+
+With ThinLinc, it is possible to access the client's sound device from
+the ThinLinc session. This means that you can run sound applications on
+the remote desktop servers and listen to the sound through the client's
+sound device and speakers. Input devices such as microphones can also be
+used.
+
+ThinLinc can support sound redirection for almost all applications,
+provided that the correct libraries and utilities are installed on the
+ThinLinc server.
+
+Requirements
+~~~~~~~~~~~~
+
+-  PulseAudio client libraries to support applications with native
+   PulseAudio support and the ALSA plugin. ThinLinc supports version
+   0.9 of PulseAudio.
+
+-  :command:`padsp` to support OSS applications via PulseAudio.
+
+-  alsa-plugins, version 1.0.12 or later, to support ALSA applications
+   via PulseAudio.
+
+PulseAudio applications
+~~~~~~~~~~~~~~~~~~~~~~~
+
+All applications that can communicate using the PulseAudio protocol will
+also work automatically in ThinLinc. Most current distributions are
+configured to use PulseAudio by default, but older ones might require
+some configuration to work properly.
+
+.. _sound-redirection_oss:
+
+OSS applications
+~~~~~~~~~~~~~~~~
+
+Most applications that use the Open Sound System (OSS) can be made to
+work with ThinLinc through the :command:`padsp` application.
+
+:command:`padsp` redirects OSS applications to the PulseAudio protocol.
+The following command line should be used::
+
+   padsp <application>
+
+See the :command:`padsp` manual page for more information.
+
+The application which communicates with the sound device must be
+dynamically linked to glibc. It is not possible to intercept the
+accesses to OSS in a statically linked application. Most applications
+that you find on a Linux system will satisfy this requirement, but a
+test with :command:`ldd` can also be done:
+
+.. code:: console
+
+   $ ldd /usr/bin/someapp
+           not a dynamic executable
+
+When using :command:`padsp` on 64-bit platforms, make sure that you have
+both 32- and 64-bit versions of the necessary libraries
+(:file:`libpulsedsp.so` and :file:`libpulse.so.0` ). Usually, these are
+found in :file:`/usr/lib` and :file:`/usr/lib64`. Also, the
+:command:`padsp` script must not contain absolute references to these
+libraries. Instead, the system should automatically select the correct
+library, depending on if you are executing a 32- or 64-bit application.
+In this case it's necessary to have both library directories included in
+:file:`/etc/ld.so.conf`.
+
+Although it is rare, some applications manage to misuse the OSS API in a
+way that works with local sound cards but not :command:`padsp` . If you
+encounter problems, try updating the application to the latest version
+as it might contain fixes for such bugs.
+
+ALSA applications
+~~~~~~~~~~~~~~~~~
+
+All applications that use the Advanced Linux Sound Architecture (ALSA)
+will also work well with ThinLinc provided the correct plugins are
+installed and configured. The plugins can be found in the alsa-plugins
+package (called libasound2-plugins on Debian-based distributions). The
+PulseAudio client libraries are also needed to build and use the
+plugins.
+
+To redirect ALSA applications to use the plugins, the ALSA
+configuration must be modified. This can be done on a global level in
+:file:`/etc/asound.conf` or per user in :file:`~/.asoundrc`. Add the
+following to the file (creating it if necessary)::
+
+   pcm.!default {
+       type pulse
+   }
+   ctl.!default {
+       type pulse
+   }
+
+Unfortunately, there are some applications that use the ALSA API in an
+incorrect way. When using local hardware this usually doesn't matter,
+but when advanced ALSA features, like dmix or this plugin, are used,
+then problems start to appear. If an application misbehaves, the first
+step should be to upgrade it to the latest version.
+
+Choosing sound system
+~~~~~~~~~~~~~~~~~~~~~
+
+Many applications support several sound systems and it can be difficult
+to know which one to use. Applications should be configured in the
+following manner, listed from the best solution to the worst:
+
+1. Native PulseAudio application.
+
+2. ALSA appliction using the PulseAudio plugin.
+
+3. OSS appliction using :command:`padsp`.

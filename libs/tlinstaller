@@ -1,0 +1,753 @@
+#!/opt/thinlinc/libexec/python3
+# -*-mode: python; coding: utf-8 -*-
+#
+# Copyright 2002-2024 Cendio AB.
+# For more information, see http://www.cendio.com
+# Author: Peter Åstrand <astrand@cendio.se>
+if 82 - 82: Iii1i
+import os
+import sys
+import glob
+import logging
+import _thread
+import traceback
+import locale
+if 87 - 87: Ii % i1i1i1111I . Oo / OooOoo * I1Ii1I1 - I1I
+from thinlinc import prefix , sudorelaunch
+from thinlinc import tlgtk , wizard
+from thinlinc import rpm , deb
+from thinlinc . rpmvercmp import rpmVersionCompare
+from thinlinc . systemtype import *
+if 81 - 81: i1 + ooOOO / oOo0O00 * i1iiIII111 * IiIIii11Ii
+OOoOoo000O00 = "/var/log/thinlinc-install.log"
+Ooo0Ooo = "https://www.cendio.com/thinlinc/docs/platforms"
+ii1I1iII1I1I = "https://www.cendio.com/thinlinc/docs/platforms/ubuntu"
+if 71 - 71: IIiIIiIi11I1
+iI111iiIi11i = "ThinLinc server installer"
+if 77 - 77: iIiii1i - ooo0O0oO00 . o00o0OO00O
+if 57 - 57: iiIi1 - ii % iiI * IIi1i111IiII . I1I
+iIIIII1i111i = iI111iiIi11i
+if 8 - 8: i1iiIII111 * i1 . I1I / ii
+if 58 - 58: I1Ii1I1 - ooOOO
+if 60 - 60: ooo0O0oO00 . ii
+i1iiiiIIIiIi = "\nSend a copy of %s to the ThinLinc support.\nVisit https://www.cendio.com/thinlinc/support for information on how to contact us." % OOoOoo000O00
+if 22 - 22: IIiIIiIi11I1 . ooo0O0oO00 + iIiii1i + ii
+if 85 - 85: OooOoo - oOo0O00 / Ii / ii % i1iiIII111 . Ii
+if 7 - 7: iiIi1 - I1Ii1I1 % iiIi1 . I1Ii1I1 . i1i1i1111I
+def ii1i11i1 ( text , secondary_text ) :
+ if tlgtk . has_gtk :
+  if 11 - 11: iiI * iiIi1 % ooOOO + I1I
+  if 86 - 86: i1 + IIiIIiIi11I1 + oOo0O00 / i1iiIII111 - Iii1i . ooo0O0oO00
+  ii1IiIiiII = None
+  for I1I111i11I in tlgtk . Gtk . Window . list_toplevels ( ) :
+   if I1I111i11I . get_property ( "visible" ) :
+    ii1IiIiiII = I1I111i11I
+    if 85 - 85: OooOoo
+  o00 = tlgtk . SimpleMessageDialog (
+ title = iI111iiIi11i ,
+ text = text ,
+ transient_for = ii1IiIiiII ,
+ modal = True ,
+ message_type = tlgtk . Gtk . MessageType . ERROR )
+  o00 . format_secondary_markup ( secondary_text )
+  o00 . run ( )
+  o00 . destroy ( )
+ else :
+  wizard . text_print_wrapped ( text )
+  wizard . text_print_wrapped ( secondary_text )
+  if 20 - 20: IIi1i111IiII + i1iiIII111 / I1I
+def Ooo0OO ( ) :
+ if 6 - 6: i1iiIII111
+ if 99 - 99: ooOOO * I1Ii1I1
+ if 95 - 95: iIiii1i % Iii1i % i1i1i1111I . OooOoo
+ if 70 - 70: IiIIii11Ii
+ if 75 - 75: iIiii1i / Ii / IiIIii11Ii + IiIIii11Ii . I1I
+ if 88 - 88: Oo * IiIIii11Ii
+ for oooOo in [ "LC_ALL" , "LC_CTYPE" , "LANG" ] :
+  if oooOo in os . environ :
+   I11iIi1i = os . environ [ oooOo ]
+   break
+ else :
+  I11iIi1i = None
+  if 49 - 49: o00o0OO00O
+  if 29 - 29: IiIIii11Ii - oOo0O00
+ for i1IIiII11 in [ "LANGUAGE" , "LANG" , "LC_ALL" , "LC_COLLATE" , "LC_CTYPE" ,
+ "LC_MESSAGES" , "LC_MONETARY" , "LC_NUMERIC" , "LC_TIME" ] :
+  if i1IIiII11 in os . environ :
+   del os . environ [ i1IIiII11 ]
+   if 52 - 52: i1iiIII111 % Oo . I1Ii1I1 + ooOOO % Oo . IIi1i111IiII
+   if 56 - 56: i1iiIII111 * IIi1i111IiII - iiIi1
+ if I11iIi1i is not None :
+  os . environ [ "LC_CTYPE" ] = I11iIi1i
+  if 15 - 15: I1I % Ii + iIiii1i * Iii1i
+  if 67 - 67: I1I * iIiii1i + i1iiIII111 . i1iiIII111 % Oo
+  if 93 - 93: oOo0O00 % iIiii1i * i1iiIII111
+def OooO0O00o0 ( wzd ) :
+ wzd . add_text_handler ( OoOOoO000O )
+ wzd . add_gui_handler ( O0o0O0o0o )
+ if 37 - 37: IIi1i111IiII * i1i1i1111I + oOo0O00 / I1I / OooOoo
+iI1iI = "The currently installed version of ThinLinc is " "too old to be directly upgraded. See the " "platform specific notes on how to upgrade from " "this version:\n\n%s" % ii1I1iII1I1I
+if 54 - 54: I1I % IIiIIiIi11I1 * IIiIIiIi11I1 - OooOoo / Iii1i * Oo
+if 100 - 100: I1Ii1I1 / iiIi1 * Ii - ii
+if 32 - 32: ooo0O0oO00
+if 18 - 18: iiIi1 * IIi1i111IiII % ooo0O0oO00 + IIi1i111IiII
+def O0OO ( ) :
+ if 34 - 34: ooOOO * iiIi1
+ if PACKAGE_FORMAT is RPM :
+  return False
+  if 63 - 63: ooOOO / i1i1i1111I - oOo0O00 * ooOOO / i1iiIII111 + ii
+ try :
+  if 11 - 11: i1 / IIiIIiIi11I1
+  if 89 - 89: I1I * i1i1i1111I
+  with open ( '/opt/thinlinc/etc/thinlinc-release' ) as O0OOooO :
+   oOOoOOOO000 = O0OOooO . readline ( )
+ except OSError :
+  if 70 - 70: o00o0OO00O / ooOOO / o00o0OO00O - IIiIIiIi11I1 . i1iiIII111
+  if 86 - 86: I1Ii1I1 - OooOoo - ii % IIiIIiIi11I1 . iiI % Iii1i
+  return False
+  if 11 - 11: OooOoo - I1Ii1I1 - ooOOO . i1iiIII111 - ooo0O0oO00 / i1iiIII111
+  if 44 - 44: iIiii1i + i1i1i1111I + Iii1i - ii
+ if not oOOoOOOO000 . startswith ( "ThinLinc " ) :
+  return False
+  if 7 - 7: i1i1i1111I / Ii * Iii1i
+  if 32 - 32: IIi1i111IiII . OooOoo
+ i1i1iI1II = oOOoOOOO000 . strip ( ) . split ( ) [ - 1 ]
+ if rpmVersionCompare ( ( 0 , i1i1iI1II , '1' ) , ( 0 , '4.12.0' , '1' ) ) >= 0 :
+  return False
+  if 22 - 22: Oo % oOo0O00 / iiI . oOo0O00 . iiI
+ return True
+ if 87 - 87: I1I - iiI . i1 * Oo
+def OoOOoO000O ( ) :
+ if not O0OO ( ) :
+  return
+  if 90 - 90: IIi1i111IiII * iiI . Ii
+ wizard . text_print_wrapped ( iI1iI )
+ sys . exit ( os . EX_SOFTWARE )
+ if 45 - 45: IiIIii11Ii - iiIi1 . i1iiIII111 * iIiii1i . o00o0OO00O
+def I1I1iIi ( * args , ** kwargs ) :
+ return not O0OO ( )
+ if 94 - 94: ooOOO * ii % ooo0O0oO00 - iiI - ooOOO
+def O0o0O0o0o ( wizard ) :
+ if 42 - 42: ooOOO . ooo0O0oO00
+ if PACKAGE_FORMAT is RPM :
+  return
+  if 32 - 32: IIi1i111IiII % IIiIIiIi11I1 * Iii1i + o00o0OO00O
+ ooOOOO00O = wizard . add_page ( "Old version" )
+ if 72 - 72: iiIi1
+ i1II1 = tlgtk . wizard . centered_label ( tlgtk . linkify_text ( iI1iI ) )
+ i1II1 . show_all ( )
+ ooOOOO00O . add ( i1II1 )
+ if 98 - 98: o00o0OO00O * o00o0OO00O
+ ooOOOO00O . connect ( "page-unwilling" , I1I1iIi )
+ ooOOOO00O . set_property ( "page-forwardable" , False )
+ if 58 - 58: i1i1i1111I
+ if 38 - 38: i1 - oOo0O00
+ if 85 - 85: o00o0OO00O + iiIi1 % iIiii1i + ii * i1iiIII111
+OOOoo0 = None
+if 25 - 25: ii . I1Ii1I1 * I1I
+def I1111I ( wzd ) :
+ wzd . add_text_handler ( iiIiIi )
+ wzd . add_gui_handler ( IioOoo0OOOOOoo )
+ if 33 - 33: i1i1i1111I . o00o0OO00O - iiI . Ii
+def iIiii1I111i ( s ) :
+ if 100 - 100: ooo0O0oO00 - oOo0O00 - iIiii1i % iiI + IIi1i111IiII
+ if 8 - 8: Oo * I1I / i1i1i1111I + i1 / I1Ii1I1
+ iI = prefix . get_tl_prefix ( ) + "/../packages"
+ iI = os . path . normpath ( iI )
+ if 58 - 58: o00o0OO00O % Ii + oOo0O00 / oOo0O00 * ooo0O0oO00 * i1i1i1111I
+ I11iIi1i1iIi = glob . glob ( os . path . join ( iI , s ) )
+ I11iIi1i1iIi = filter ( os . path . isfile , I11iIi1i1iIi )
+ if not I11iIi1i1iIi :
+  logging . error ( "The ThinLinc source directory is not complete. The file %s is missing." % s )
+  return [ None ]
+  if 10 - 10: I1Ii1I1
+ return I11iIi1i1iIi
+ if 40 - 40: iiI * ooo0O0oO00 + ooo0O0oO00 . oOo0O00 * IIiIIiIi11I1
+def Oo0oO0O0O ( ) :
+ if PACKAGE_FORMAT is RPM :
+  if CPU_ARCH is X86_64 :
+   i111i = "x86_64"
+   if 98 - 98: iiI + I1Ii1I1 . iiIi1 - ooo0O0oO00 * I1Ii1I1 + iiI
+   if 56 - 56: i1i1i1111I - IiIIii11Ii - i1iiIII111 - Oo + i1iiIII111 / iIiii1i
+  OO0oOoOOOoO0 = "thinlinc-server-[0-9]*-*.%s.rpm" % i111i
+ elif PACKAGE_FORMAT is DEB :
+  if CPU_ARCH is X86_64 :
+   i111i = "amd64"
+  OO0oOoOOOoO0 = "thinlinc-server_*-*_%s.deb" % i111i
+ else :
+  return None
+  if 1 - 1: ooo0O0oO00 % Ii - iiIi1 / IIi1i111IiII + ooo0O0oO00 - Ii
+ IiII1Iii11 = [ ]
+ if 31 - 31: oOo0O00 / Iii1i % iIiii1i % i1 . ooo0O0oO00 . Oo
+ IiII1Iii11 . extend ( iIiii1I111i ( OO0oOoOOOoO0 ) )
+ if 83 - 83: oOo0O00 - iiIi1
+ if 91 - 91: o00o0OO00O - i1 - ooo0O0oO00
+ if None in IiII1Iii11 :
+  return None
+  if 71 - 71: I1I - IIi1i111IiII
+ return IiII1Iii11
+ if 66 - 66: i1i1i1111I / iIiii1i + iiIi1 + Iii1i + oOo0O00 + iiI
+def o0OOO00OO ( ) :
+ oo0OoOoO0O0OO = Oo0oO0O0O ( )
+ if oo0OoOoO0O0OO is None :
+  return None
+  if 85 - 85: o00o0OO00O / OooOoo . iiI % Oo + Oo - iiIi1
+ if PACKAGE_FORMAT is RPM :
+  ooO0ooOOO00O0 = rpm . determine_upgrade ( oo0OoOoO0O0OO )
+ elif PACKAGE_FORMAT is DEB :
+  ooO0ooOOO00O0 = deb . determine_upgrade ( oo0OoOoO0O0OO )
+ else :
+  ooO0ooOOO00O0 = None
+  if 11 - 11: ii * i1iiIII111 - o00o0OO00O
+ if ooO0ooOOO00O0 is not None :
+  if len ( ooO0ooOOO00O0 [ "remove" ] ) > 0 :
+   logging . info ( "Packages to remove: %s" % ", " . join ( ooO0ooOOO00O0 [ "remove" ] ) )
+  if len ( ooO0ooOOO00O0 [ "install" ] ) > 0 :
+   logging . info ( "Packages to install: %s" % ", " . join ( map ( os . path . basename , ooO0ooOOO00O0 [ "install" ] ) ) )
+  if len ( ooO0ooOOO00O0 [ "upgrade" ] ) > 0 :
+   logging . info ( "Packages to upgrade: %s" % ", " . join ( map ( os . path . basename , ooO0ooOOO00O0 [ "upgrade" ] ) ) )
+  if len ( ooO0ooOOO00O0 [ "ignore" ] ) > 0 :
+   logging . info ( "Packages to ignore: %s" % ", " . join ( map ( os . path . basename , ooO0ooOOO00O0 [ "ignore" ] ) ) )
+  if len ( ooO0ooOOO00O0 [ "obsolete" ] ) > 0 :
+   logging . info ( "Obsolete packages: %s" % ", " . join ( ooO0ooOOO00O0 [ "obsolete" ] ) )
+   if 70 - 70: IIi1i111IiII
+   if 9 - 9: oOo0O00 * i1
+   if 96 - 96: iIiii1i
+   if 13 - 13: Oo * I1Ii1I1 - oOo0O00 * Ii . Ii + oOo0O00
+   if 46 - 46: OooOoo - iiIi1 / iIiii1i
+   if 73 - 73: I1Ii1I1 / i1i1i1111I / IIiIIiIi11I1 % i1 % iiI - OooOoo
+ if ( PACKAGE_FORMAT is RPM ) and ( 'thinlinc-rdesktop' in ooO0ooOOO00O0 [ "obsolete" ] ) :
+  if 30 - 30: ooOOO * ooOOO - Iii1i * ooo0O0oO00
+  ooO0ooOOO00O0 [ "remove" ] += ooO0ooOOO00O0 [ "obsolete" ]
+  ooO0ooOOO00O0 [ "obsolete" ] = [ ]
+  if 37 - 37: I1Ii1I1 % ooo0O0oO00 . iiI + iIiii1i + ooOOO * ooo0O0oO00
+ return ooO0ooOOO00O0
+ if 39 - 39: o00o0OO00O - Oo
+II1I1Ii1IIi = "Determining packages to install..."
+if 73 - 73: Ii * o00o0OO00O % i1 + IiIIii11Ii % I1I / IIi1i111IiII
+oo00oOOo0O0o = "There was an error determining which packages to install."
+I1Iiii1 = "This system already has an up to date installation of ThinLinc."
+if 47 - 47: ooOOO % ooOOO / oOo0O00 - i1iiIII111 * Oo
+oo00 = "The following packages will be removed:"
+OOo = "The following packages will be installed:"
+oO000O0O0 = "The following packages will be upgraded:"
+if 48 - 48: i1
+def iiIiIi ( ) :
+ global OOOoo0
+ if 61 - 61: IIi1i111IiII
+ print ( II1I1Ii1IIi , end = ' ' )
+ sys . stdout . flush ( )
+ if 72 - 72: i1 % i1i1i1111I * ooo0O0oO00
+ ooO0ooOOO00O0 = o0OOO00OO ( )
+ print ( "done." )
+ print ( )
+ if 90 - 90: iIiii1i * OooOoo . Ii
+ if ooO0ooOOO00O0 is None :
+  wizard . text_print_wrapped ( oo00oOOo0O0o )
+  wizard . text_print_wrapped ( i1iiiiIIIiIi )
+  sys . exit ( os . EX_SOFTWARE )
+  if 5 - 5: Oo - i1 . ii
+  if 18 - 18: IiIIii11Ii - ii * iiI - OooOoo
+ for type in ( "remove" , "install" , "upgrade" ) :
+  if len ( ooO0ooOOO00O0 [ type ] ) > 0 :
+   break
+ else :
+  wizard . text_print_wrapped ( I1Iiii1 )
+  sys . exit ( os . EX_OK )
+  if 54 - 54: o00o0OO00O . iIiii1i % Ii + IiIIii11Ii * ooo0O0oO00 / ooo0O0oO00
+ OOOoo0 = ooO0ooOOO00O0
+ if 31 - 31: IiIIii11Ii . IiIIii11Ii % Ii
+ if len ( ooO0ooOOO00O0 [ "remove" ] + ooO0ooOOO00O0 [ "obsolete" ] ) > 0 :
+  wizard . text_print_wrapped ( oo00 )
+  print ( )
+  if 51 - 51: Oo / i1i1i1111I - I1I
+  for iii1ii1 in ooO0ooOOO00O0 [ "remove" ] + ooO0ooOOO00O0 [ "obsolete" ] :
+   print ( "\t" , iii1ii1 )
+  print ( )
+  if 27 - 27: i1 / OooOoo + Iii1i % OooOoo + OooOoo
+ if len ( ooO0ooOOO00O0 [ "install" ] ) > 0 :
+  wizard . text_print_wrapped ( OOo )
+  print ( )
+  if 70 - 70: Oo / Iii1i * OooOoo
+  for iii1ii1 in map ( os . path . basename , ooO0ooOOO00O0 [ "install" ] ) :
+   print ( "\t" , iii1ii1 )
+  print ( )
+  if 2 - 2: iiI / Iii1i + I1Ii1I1
+ if len ( ooO0ooOOO00O0 [ "upgrade" ] ) > 0 :
+  wizard . text_print_wrapped ( oO000O0O0 )
+  print ( )
+  if 34 - 34: OooOoo
+  for iii1ii1 in map ( os . path . basename , ooO0ooOOO00O0 [ "upgrade" ] ) :
+   print ( "\t" , iii1ii1 )
+  print ( )
+  if 95 - 95: Oo % i1i1i1111I * ooo0O0oO00 - IiIIii11Ii
+ wizard . text_wait_prompt ( )
+ print ( )
+ if 66 - 66: ooo0O0oO00 . i1 % Ii % iiIi1 * oOo0O00
+def oO ( page , notebook , package_vbox , actions ) :
+ global OOOoo0
+ if 52 - 52: Oo * ooo0O0oO00 - i1i1i1111I . i1iiIII111
+ if 78 - 78: OooOoo . ooOOO
+ for O0OO00Oo0o0 in ( "remove" , "install" , "upgrade" ) :
+  if len ( actions [ O0OO00Oo0o0 ] ) > 0 :
+   break
+ else :
+  notebook . set_current_page ( 3 )
+  page . set_page_busy ( False )
+  page . set_page_forwardable ( False )
+  return
+  if 84 - 84: I1I * ooo0O0oO00 - iIiii1i / ooo0O0oO00 + IIiIIiIi11I1
+ notebook . set_current_page ( 1 )
+ page . set_page_busy ( False )
+ if 54 - 54: i1iiIII111 . i1iiIII111 - ooOOO * OooOoo + o00o0OO00O * i1i1i1111I
+ OOOoo0 = actions
+ if 12 - 12: i1i1i1111I
+ package_vbox . foreach ( package_vbox . remove )
+ if 56 - 56: IiIIii11Ii
+ if len ( actions [ "remove" ] + actions [ "obsolete" ] ) > 0 :
+  i11I1iII1I1 = tlgtk . factory . boxed_label_list (
+ actions [ "remove" ] + actions [ "obsolete" ] ,
+ title = oo00
+ )
+  package_vbox . pack_start ( i11I1iII1I1 , expand = False , fill = False , padding = 0 )
+  if 7 - 7: oOo0O00 % Oo + iiI
+ if len ( actions [ "install" ] ) > 0 :
+  i11I1iII1I1 = tlgtk . factory . boxed_label_list (
+ list ( map ( os . path . basename , actions [ "install" ] ) ) ,
+ title = OOo
+ )
+  package_vbox . pack_start ( i11I1iII1I1 , expand = False , fill = False , padding = 0 )
+  if 65 - 65: o00o0OO00O / i1
+ if len ( actions [ "upgrade" ] ) > 0 :
+  i11I1iII1I1 = tlgtk . factory . boxed_label_list (
+ list ( map ( os . path . basename , actions [ "upgrade" ] ) ) ,
+ title = oO000O0O0
+ )
+  package_vbox . pack_start ( i11I1iII1I1 , expand = False , fill = False , padding = 0 )
+  if 14 - 14: IiIIii11Ii % ooOOO . iiI
+ package_vbox . show_all ( )
+ if 29 - 29: IIi1i111IiII % ii % IIi1i111IiII . ooOOO
+def i1IIIi ( page , notebook ) :
+ notebook . set_current_page ( 2 )
+ page . set_page_busy ( False )
+ page . set_page_forwardable ( False )
+ if 24 - 24: IIiIIiIi11I1 % i1i1i1111I
+def i11 ( page , notebook , package_vbox ) :
+ ooO0ooOOO00O0 = o0OOO00OO ( )
+ if 28 - 28: ooo0O0oO00 - I1Ii1I1 + oOo0O00 + i1iiIII111
+ if ooO0ooOOO00O0 is None :
+  tlgtk . GLib . idle_add ( i1IIIi ,
+ page , notebook )
+  return
+  if 100 - 100: i1i1i1111I % OooOoo . IIi1i111IiII / i1i1i1111I . ooOOO
+ tlgtk . GLib . idle_add ( oO ,
+ page , notebook , package_vbox , ooO0ooOOO00O0 )
+ if 57 - 57: o00o0OO00O - ooo0O0oO00 % ooOOO - iiIi1 / IiIIii11Ii . iIiii1i
+def I11I11IiiI1i ( page , wizard , first , notebook , package_vbox ) :
+ if not first :
+  return
+  if 1 - 1: I1I + OooOoo
+ notebook . set_current_page ( 0 )
+ page . set_page_busy ( True )
+ if 98 - 98: i1iiIII111 + Iii1i . o00o0OO00O
+ _thread . start_new_thread ( i11 , ( page , notebook , package_vbox ) )
+ if 96 - 96: OooOoo / ii - i1 * iiIi1
+def IioOoo0OOOOOoo ( wizard ) :
+ ooOOOO00O = wizard . add_page ( "Packages" )
+ if 72 - 72: i1i1i1111I + Ii - Iii1i - i1i1i1111I - iiI + iIiii1i
+ OoOoOo = tlgtk . Gtk . Notebook ( )
+ OoOoOo . set_show_tabs ( False )
+ OoOoOo . set_show_border ( False )
+ ooOOOO00O . add ( OoOoOo )
+ if 80 - 80: IiIIii11Ii * iIiii1i . i1 . iIiii1i
+ if 76 - 76: i1i1i1111I % oOo0O00 - i1iiIII111 * i1
+ o00iI11iii = tlgtk . factory . spinner_text ( II1I1Ii1IIi )
+ OoOoOo . append_page ( o00iI11iii )
+ if 19 - 19: I1Ii1I1 / OooOoo % i1i1i1111I
+ if 23 - 23: ooo0O0oO00 - iiI % iiI - IIi1i111IiII * i1iiIII111 + OooOoo
+ if 57 - 57: o00o0OO00O
+ O0oO0o , OooOOo0o0 = tlgtk . wizard . centered_view ( scrollable = True )
+ OoOoOo . append_page ( O0oO0o )
+ if 77 - 77: ooo0O0oO00 - ii % Ii * iiI - I1I
+ if 42 - 42: iiIi1 - Ii / Oo - i1i1i1111I + iiIi1
+ if 83 - 83: i1 . ooo0O0oO00
+ OoOoOo . append_page ( tlgtk . wizard . centered_label (
+ "%s\n%s" % ( oo00oOOo0O0o , i1iiiiIIIiIi ) ,
+ ) )
+ if 57 - 57: IIi1i111IiII % IiIIii11Ii / oOo0O00 + iIiii1i - i1iiIII111
+ if 87 - 87: i1iiIII111 . i1iiIII111 . ii . IIiIIiIi11I1 * oOo0O00
+ if 33 - 33: IIi1i111IiII * i1iiIII111 / iiI . OooOoo * oOo0O00 + IIiIIiIi11I1
+ OoOoOo . append_page ( tlgtk . wizard . centered_label ( I1Iiii1 ) )
+ if 17 - 17: i1i1i1111I * ii + i1iiIII111 - iiIi1 / i1i1i1111I
+ if 83 - 83: iiIi1 - Iii1i + oOo0O00 + I1I / o00o0OO00O + I1I
+ if 29 - 29: i1i1i1111I / oOo0O00
+ OoOoOo . show_all ( )
+ if 13 - 13: iiIi1 % i1iiIII111 . OooOoo % IIiIIiIi11I1 % OooOoo
+ ooOOOO00O . connect ( "page-show" , I11I11IiiI1i , OoOoOo , OooOOo0o0 )
+ if 21 - 21: IIi1i111IiII * I1Ii1I1
+ if 93 - 93: iIiii1i . i1 + IIi1i111IiII - oOo0O00
+ if 97 - 97: i1 - i1 % o00o0OO00O + IiIIii11Ii / iiI * ooo0O0oO00
+def O00Ooo0o ( wzd ) :
+ wzd . add_text_handler ( oOO0o00oOooO )
+ wzd . add_gui_handler ( oooOOoOo )
+ if 51 - 51: i1 + i1i1i1111I - i1 + i1iiIII111 . Oo
+ooOO = "Performing package installation..."
+if 90 - 90: o00o0OO00O * ooo0O0oO00
+iIi111IiIiIi = "There was an error installing the packages."
+i11IiiI1 = "All packages were installed successfully."
+if 69 - 69: iiIi1
+def iIi1Ii ( progress_cb ) :
+ if 74 - 74: i1i1i1111I / IiIIii11Ii % iiIi1 . ii
+ if 65 - 65: Iii1i % o00o0OO00O - IIiIIiIi11I1 . ooOOO + Iii1i
+ oo000o0 = os . getcwd ( )
+ os . chdir ( "/tmp" )
+ if 95 - 95: Ii / ii + i1iiIII111
+ if PACKAGE_FORMAT is RPM :
+  II1iii1IiIiii = rpm . perform_upgrade ( OOOoo0 , progress_cb )
+ elif PACKAGE_FORMAT is DEB :
+  II1iii1IiIiii = deb . perform_upgrade ( OOOoo0 , progress_cb )
+ else :
+  II1iii1IiIiii = False
+  if 6 - 6: iiIi1 + ii - o00o0OO00O
+ os . chdir ( oo000o0 )
+ if 33 - 33: I1I
+ return II1iii1IiIiii
+ if 37 - 37: i1iiIII111 . Oo + IiIIii11Ii
+def OOOOoO0OO0Oo0 ( percent ) :
+ print ( "\r%s%d%%" % ( ooOO , percent ) , end = ' ' )
+ sys . stdout . flush ( )
+ if 55 - 55: iIiii1i
+def oOO0o00oOooO ( ) :
+ print ( ooOO , end = ' ' )
+ sys . stdout . flush ( )
+ if 78 - 78: oOo0O00 % i1iiIII111
+ II1iii1IiIiii = iIi1Ii ( OOOOoO0OO0Oo0 )
+ if 14 - 14: i1iiIII111
+ print ( "\r%s done." % ooOO )
+ print ( )
+ if 85 - 85: ooo0O0oO00 + iIiii1i % I1Ii1I1
+ if not II1iii1IiIiii :
+  wizard . text_print_wrapped ( iIi111IiIiIi )
+  wizard . text_print_wrapped ( i1iiiiIIIiIi )
+  sys . exit ( os . EX_SOFTWARE )
+  if 89 - 89: ooo0O0oO00 + IiIIii11Ii . iIiii1i % ooOOO
+ wizard . text_print_wrapped ( i11IiiI1 )
+ print ( )
+ if 82 - 82: i1i1i1111I
+ wizard . text_wait_prompt ( )
+ print ( )
+ if 86 - 86: IiIIii11Ii - I1Ii1I1 % OooOoo . ooo0O0oO00 % OooOoo . i1i1i1111I
+def II1i1i1 ( progress , percent ) :
+ tlgtk . GLib . idle_add ( progress . set_fraction ,
+ float ( percent ) / 100.0 )
+ if 58 - 58: ooo0O0oO00 + iiI . OooOoo
+def O0Oooo0 ( page , text , progress ) :
+ page . set_page_busy ( False )
+ page . set_page_backable ( False )
+ if 24 - 24: IIiIIiIi11I1 % Oo % ooOOO + ooo0O0oO00
+ text . set_text ( i11IiiI1 )
+ progress . set_fraction ( 1.0 )
+ if 28 - 28: o00o0OO00O + Oo / i1i1i1111I / I1Ii1I1 - ooo0O0oO00
+def II1i11IIi111 ( page , text , progress ) :
+ page . set_page_busy ( False )
+ page . set_page_backable ( False )
+ page . set_page_forwardable ( False )
+ if 82 - 82: iiIi1 + i1
+ text . set_markup ( "%s\n%s" % ( iIi111IiIiIi , i1iiiiIIIiIi ) )
+ progress . hide ( )
+ if 16 - 16: i1 / o00o0OO00O
+def I1II1i1iiI ( page , text , progress ) :
+ OOO0ooO0oO = lambda O000 : II1i1i1 ( progress , O000 )
+ II1iii1IiIiii = iIi1Ii ( OOO0ooO0oO )
+ if 24 - 24: iiIi1 - Ii
+ if not II1iii1IiIiii :
+  tlgtk . GLib . idle_add ( II1i11IIi111 ,
+ page , text , progress )
+  return
+ tlgtk . GLib . idle_add ( O0Oooo0 ,
+ page , text , progress )
+ if 16 - 16: oOo0O00 / I1Ii1I1 / i1 + iiIi1 + oOo0O00
+def I11Ii ( page , wizard , first , text , progress ) :
+ if not first :
+  return
+  if 81 - 81: ii % iiIi1 . I1Ii1I1
+ page . set_page_busy ( True )
+ if 76 - 76: I1Ii1I1 / IIi1i111IiII * IIi1i111IiII * iiI + Ii
+ _thread . start_new_thread ( I1II1i1iiI , ( page , text , progress ) )
+ if 4 - 4: Ii
+def oooOOoOo ( wizard ) :
+ ooOOOO00O = wizard . add_page ( "Installing" )
+ if 83 - 83: I1I + iIiii1i % Iii1i % ii - oOo0O00
+ O0oO0o , O0OOO = tlgtk . wizard . centered_view ( spacing = 6 )
+ O0oO0o . set_valign ( tlgtk . Gtk . Align . CENTER )
+ ooOOOO00O . add ( O0oO0o )
+ if 10 - 10: I1Ii1I1 . iIiii1i - ooo0O0oO00 - i1iiIII111 / OooOoo % i1iiIII111
+ OoO00oOo = tlgtk . Label ( label = ooOO ,
+ max_width_chars = 0 ,
+ wrap = True ,
+ xalign = 0.5 ,
+ justify = tlgtk . Gtk . Justification . CENTER ,
+ halign = tlgtk . Gtk . Align . FILL ,
+ valign = tlgtk . Gtk . Align . CENTER )
+ O0OOO . pack_start ( OoO00oOo , expand = False , fill = True , padding = 0 )
+ if 60 - 60: ooOOO
+ oooO = tlgtk . Gtk . ProgressBar ( valign = tlgtk . Gtk . Align . CENTER )
+ O0OOO . pack_start ( oooO , expand = False , fill = False , padding = 0 )
+ if 50 - 50: i1 - i1iiIII111 / i1iiIII111 % I1Ii1I1 / o00o0OO00O
+ O0oO0o . show_all ( )
+ if 66 - 66: oOo0O00 - Iii1i - IIiIIiIi11I1 . iiIi1
+ ooOOOO00O . connect ( "page-show" , I11Ii , OoO00oOo , oooO )
+ if 59 - 59: iiI / IiIIii11Ii
+ if 7 - 7: oOo0O00
+ if 64 - 64: o00o0OO00O * ii + Oo . OooOoo - ooOOO
+OoOo00o = None
+if 47 - 47: i1i1i1111I + iiIi1 - ii - IIi1i111IiII + IIi1i111IiII
+def iII ( wzd ) :
+ wzd . add_text_handler ( Oo00 )
+ wzd . add_gui_handler ( oo )
+ if 18 - 18: o00o0OO00O + ooo0O0oO00 % IIi1i111IiII / OooOoo % IIi1i111IiII + i1iiIII111
+ if 21 - 21: oOo0O00 % i1iiIII111 % iiIi1 % ii
+OoOO0oO0O = "Installation of ThinLinc completed"
+if 93 - 93: Iii1i * o00o0OO00O % iiI + i1 % Ii * iiI
+o000Oo0oo0 = "Before using ThinLinc, you must configure it using /opt/thinlinc/sbin/tl-setup."
+iIOO0o = "Run ThinLinc setup now"
+if 53 - 53: o00o0OO00O % Ii * OooOoo * I1I % ii
+def Oo00 ( ) :
+ global OoOo00o
+ if 42 - 42: iiIi1 - i1iiIII111 - ooo0O0oO00 / i1iiIII111 % IiIIii11Ii % ooOOO
+ wizard . text_print_wrapped ( OoOO0oO0O )
+ print ( )
+ if 79 - 79: i1 / ii + i1 + oOo0O00
+ wizard . text_print_wrapped ( o000Oo0oo0 )
+ print ( )
+ if 99 - 99: I1I * o00o0OO00O * i1iiIII111
+ O0OOo000OO = wizard . text_prompt ( iIOO0o , [ "Yes" , "no" ] )
+ print ( )
+ if 45 - 45: Ii + oOo0O00
+ OoOo00o = O0OOo000OO == "yes"
+ if 92 - 92: IiIIii11Ii
+def OOoo0O00Ooo00 ( page , wizard , first , text ) :
+ global OoOo00o
+ if 76 - 76: Ii / iiIi1
+ if not first :
+  return
+  if 29 - 29: Ii / iIiii1i . o00o0OO00O + OooOoo . ii . I1Ii1I1
+ text . set_text ( tlgtk . sanitise_wrap ( o000Oo0oo0 ) )
+ OoOo00o = True
+ if 53 - 53: o00o0OO00O - I1I * i1iiIII111 + Ii + iiI . i1
+ if 69 - 69: Ii * iIiii1i / Ii / o00o0OO00O - oOo0O00 / Ii
+ if 2 - 2: IIi1i111IiII % i1iiIII111 . oOo0O00
+ if 59 - 59: iiIi1 % OooOoo - ooo0O0oO00 % I1I + i1iiIII111 . I1Ii1I1
+ if 94 - 94: ooOOO * I1Ii1I1 * i1iiIII111 . oOo0O00
+ wizard . close_button . set_label ( "_Close" )
+ i1II1IiI1ii = wizard . close_button . get_preferred_size ( ) . minimum_size . width
+ wizard . close_button . set_label ( "_Continue" )
+ IiiIIiI = wizard . close_button . get_preferred_size ( ) . minimum_size . width
+ if 97 - 97: oOo0O00 + iiI % Iii1i
+ wizard . close_button . set_size_request ( max ( i1II1IiI1ii , IiiIIiI ) , - 1 )
+ if 34 - 34: i1 + Oo . oOo0O00 - IIiIIiIi11I1 / iiIi1 * oOo0O00
+def I1iiiIi ( widget , toggle_state , wizard ) :
+ global OoOo00o
+ OoOo00o = toggle_state
+ if OoOo00o :
+  wizard . close_button . set_label ( "_Continue" )
+ else :
+  wizard . close_button . set_label ( "_Close" )
+  if 59 - 59: IiIIii11Ii % ii - ii - I1I * IIi1i111IiII / i1i1i1111I
+def oo ( wizard ) :
+ O0o = "%s/share/pixmaps/installer_finish.svg" % ( prefix . get_tl_prefix ( ) , )
+ if 8 - 8: I1I % ii % I1Ii1I1 / iiIi1 + ooo0O0oO00
+ ooOOOO00O = wizard . add_finish ( OoOO0oO0O ,
+ text = None ,
+ banner_path = O0o ,
+ width = 114 ,
+ height = 114 ,
+ )
+ if 15 - 15: iiI / i1i1i1111I - ooo0O0oO00 % ooo0O0oO00 . iiIi1 / iIiii1i
+ O0OOO = tlgtk . Gtk . Box ( orientation = tlgtk . Gtk . Orientation . VERTICAL ,
+ halign = tlgtk . Gtk . Align . FILL ,
+ valign = tlgtk . Gtk . Align . FILL )
+ O0OOO . set_spacing ( 12 )
+ ooOOOO00O . add ( O0OOO )
+ if 59 - 59: ii . oOo0O00 - Iii1i * ooOOO - Iii1i
+ iIoooOoOOoo0 = tlgtk . Gtk . Box ( orientation = tlgtk . Gtk . Orientation . HORIZONTAL )
+ O0OOO . pack_start ( iIoooOoOOoo0 , expand = False , fill = False , padding = 0 )
+ if 94 - 94: IiIIii11Ii - ooo0O0oO00 - IIiIIiIi11I1 - ii . IiIIii11Ii / Oo
+ Ii1iiiII11 , OoOOo = tlgtk . factory . switch_list ( [ iIOO0o ] )
+ O0OOO . pack_start ( Ii1iiiII11 , expand = False , fill = False , padding = 0 )
+ if 36 - 36: Oo * Ii
+ oooo0 = OoOOo [ 0 ]
+ oooo0 . set_active ( True )
+ oooo0 . connect ( "state-set" , I1iiiIi , wizard )
+ if 5 - 5: Ii % Ii / ooo0O0oO00 - i1
+ OoO00oOo = tlgtk . Label ( wrap = True ,
+ xalign = 0.5 ,
+ halign = tlgtk . Gtk . Align . FILL ,
+ valign = tlgtk . Gtk . Align . START )
+ OoO00oOo . get_style_context ( ) . add_class ( 'dim-label' )
+ O0OOO . pack_end ( OoO00oOo , expand = False , fill = False , padding = 0 )
+ if 70 - 70: OooOoo . iiIi1
+ O0OOO . show_all ( )
+ if 38 - 38: iiI * i1iiIII111
+ ooOOOO00O . connect ( "page-show" , OOoo0O00Ooo00 , OoO00oOo )
+ if 74 - 74: i1iiIII111 * oOo0O00 / iiIi1 / iIiii1i / oOo0O00
+ if 36 - 36: ii
+ if 76 - 76: iIiii1i / o00o0OO00O % IiIIii11Ii . IIiIIiIi11I1 * i1iiIII111 % iIiii1i
+def oOo0Oo ( ) :
+ try :
+  locale . setlocale ( locale . LC_ALL , "" )
+ except locale . Error as IiIi1II11iIiI :
+  print ( "\nWarning: Can't set the locale (%s); make sure $LC_* and $LANG are correct\n" %
+ IiIi1II11iIiI , file = sys . stderr )
+  if 27 - 27: i1i1i1111I * IiIIii11Ii - i1i1i1111I
+  if 69 - 69: Ii / IIiIIiIi11I1 + IIi1i111IiII * Ii % I1I . iiI
+  if 93 - 93: I1I % I1I - oOo0O00 + I1I . Oo / o00o0OO00O
+  if 32 - 32: I1I % i1 - i1iiIII111 % IIiIIiIi11I1 + ii - IiIIii11Ii
+  if 40 - 40: iiIi1 + ooo0O0oO00 - Oo
+ sys . excepthook = OOOOo
+ sys . unraisablehook = iIOoOo # novermin
+ if 49 - 49: o00o0OO00O / i1iiIII111 % o00o0OO00O + o00o0OO00O * ooo0O0oO00
+ if 22 - 22: I1Ii1I1 + ii / I1Ii1I1 - Ii % Ii % i1i1i1111I
+ Ooo0OO ( )
+ if 86 - 86: Iii1i
+ if 53 - 53: i1 * i1i1i1111I
+ if 91 - 91: I1I . iiIi1
+ if 59 - 59: IIi1i111IiII . IIi1i111IiII * o00o0OO00O
+ o0 = os . getenv ( "PATH" , "" )
+ o0 += ":/sbin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin"
+ os . environ [ "PATH" ] = o0
+ if 71 - 71: Iii1i . ooOOO % oOo0O00 % Iii1i
+ if not tlgtk . init ( wmclass = iIIIII1i111i ) :
+  wizard . text_print_wrapped ( "Could not start GTK+. Using text mode fallback..." )
+  print ( )
+  if 65 - 65: iIiii1i * Oo / iiIi1 . i1 / IIi1i111IiII / iiIi1
+  if 33 - 33: IIiIIiIi11I1 + IiIIii11Ii . IIiIIiIi11I1
+  if 59 - 59: i1 / i1i1i1111I + Ii * IIiIIiIi11I1 . IIiIIiIi11I1
+  if not os . isatty ( sys . stdin . fileno ( ) ) :
+   print ( "Not attached to a TTY. Cannot proceed with text mode..." )
+   tlgtk . message ( iI111iiIi11i ,
+ "Graphical mode is currently not possible. "
+ "Run this program from a terminal to "
+ "get the text mode fallback." )
+   sys . exit ( os . EX_USAGE )
+   if 49 - 49: Ii - Iii1i * I1Ii1I1 * o00o0OO00O . iIiii1i
+   if 83 - 83: Oo % Ii % i1
+ if tlgtk . has_gtk :
+  global i1iiiiIIIiIi , Ooo0Ooo , ii1I1iII1I1I
+  i1iiiiIIIiIi = tlgtk . linkify_text ( i1iiiiIIIiIi )
+  Ooo0Ooo = tlgtk . linkify_text ( Ooo0Ooo )
+  ii1I1iII1I1I = tlgtk . linkify_text ( ii1I1iII1I1I )
+  if 28 - 28: o00o0OO00O % Ii + ooOOO . iiI % Ii * I1Ii1I1
+  if 41 - 41: I1I
+ if CPU_ARCH is X86_64 :
+  if 76 - 76: IIiIIiIi11I1 * i1i1i1111I
+  if PACKAGE_FORMAT not in ( RPM , DEB ) :
+   ii1i11i1 ( "Unsupported package format" ,
+ "Could not find a supported package format (RPM or DEB) on this system, " + "or multiple package formats were detected. Install the packages " + "manually and run /opt/thinlinc/sbin/tl-setup." )
+   if 39 - 39: i1 % iiI
+   if 50 - 50: i1iiIII111 % OooOoo - i1i1i1111I * IiIIii11Ii % Oo . iIiii1i
+   sys . exit ( os . EX_CONFIG )
+ else :
+  ii1i11i1 ( "Unsupported architecture" ,
+ "Your architecture (%s) is not supported by ThinLinc.\n" "Refer to the documentation for a list of " "supported platforms." % os . uname ( ) [ 4 ] )
+  if 30 - 30: i1iiIII111
+  if 78 - 78: IIiIIiIi11I1 % Iii1i + ooOOO * o00o0OO00O - i1
+  sys . exit ( os . EX_CONFIG )
+  if 46 - 46: iIiii1i - iiI / IIiIIiIi11I1 * IIi1i111IiII . oOo0O00
+ if os . getuid ( ) != 0 :
+  sudorelaunch . sudo_question ( iI111iiIi11i , iI111iiIi11i )
+  if 32 - 32: i1i1i1111I . OooOoo + OooOoo - IIiIIiIi11I1 * IiIIii11Ii + Oo
+  sys . exit ( os . EX_NOPERM )
+  if 12 - 12: oOo0O00
+  if 57 - 57: Oo + i1i1i1111I / I1Ii1I1
+  if 56 - 56: ii % iIiii1i % Iii1i . i1i1i1111I
+  if 46 - 46: IIi1i111IiII . i1iiIII111 % Iii1i - iIiii1i + IIiIIiIi11I1
+ try :
+  i1i1IiiIIII = logging . getLogger ( )
+  iIII = logging . Formatter ( '%(asctime)s: %(message)s' )
+  OOO = logging . FileHandler ( OOoOoo000O00 , "a" )
+  OOO . setFormatter ( iIII )
+  i1i1IiiIIII . addHandler ( OOO )
+  i1i1IiiIIII . setLevel ( logging . DEBUG )
+ except OSError as IiIi1II11iIiI :
+  ii1i11i1 ( "Log file error" ,
+ "Could not open log file '%s': %s" % ( OOoOoo000O00 , IiIi1II11iIiI ) )
+  sys . exit ( os . EX_OSFILE )
+  if 32 - 32: o00o0OO00O * IIi1i111IiII % ooo0O0oO00 / OooOoo . Iii1i + IIiIIiIi11I1
+ logging . info ( "*** ThinLinc installer started ***" )
+ if 43 - 43: i1iiIII111 - i1iiIII111 - IIi1i111IiII - oOo0O00 / i1iiIII111
+ logging . info ( "Architecture: %s" % CPU_ARCH )
+ logging . info ( "Distribution: %s" % DISTRIBUTION )
+ logging . info ( "Package format: %s" % PACKAGE_FORMAT )
+ if 78 - 78: o00o0OO00O / I1Ii1I1 + i1iiIII111 - o00o0OO00O + i1 % i1iiIII111
+ OOo0o00o = wizard . Wizard ( )
+ if 88 - 88: ooo0O0oO00 . I1I * oOo0O00 - i1i1i1111I * iIiii1i
+ oOoO0o0OOoO0 = "%s/share/pixmaps/installer_intro.png" % ( prefix . get_tl_prefix ( ) , )
+ if 62 - 62: ii - iIiii1i % Ii % ii + IIi1i111IiII
+ if 82 - 82: Oo
+ OOo0o00o . set_title ( iI111iiIi11i )
+ OOo0o00o . set_intro ( "ThinLinc server installation" ,
+ """This program will help you install the ThinLinc software on your system.
+
+Before installing, see the platform specific notes at
+%s""" % Ooo0Ooo , "_Start installation" ,
+ oOoO0o0OOoO0 ,
+ width = 480 ,
+ height = 144 ,
+ )
+ if 99 - 99: IiIIii11Ii * I1Ii1I1
+ OooO0O00o0 ( OOo0o00o )
+ I1111I ( OOo0o00o )
+ O00Ooo0o ( OOo0o00o )
+ iII ( OOo0o00o )
+ if 83 - 83: iiI . IIiIIiIi11I1 * iIiii1i + Iii1i . Oo
+ II1iii1IiIiii = OOo0o00o . run ( )
+ if not II1iii1IiIiii :
+  logging . error ( "Installation aborted by user" )
+  sys . exit ( os . EX_USAGE )
+  if 34 - 34: iiIi1 % ii
+ logging . info ( "Installation complete." )
+ if 75 - 75: i1 % IiIIii11Ii - ooo0O0oO00 - iiI * iiIi1 * OooOoo
+ if OoOo00o :
+  logging . info ( "Starting tl-setup..." )
+  os . execlp ( "/opt/thinlinc/sbin/tl-setup" , "/opt/thinlinc/sbin/tl-setup" )
+  if 45 - 45: o00o0OO00O
+  if 14 - 14: i1i1i1111I - OooOoo . IiIIii11Ii
+Oo0OOOoO0 = _thread . get_ident ( )
+if 90 - 90: i1i1i1111I + Ii + Oo * Iii1i
+def oo0o0o0oO0OO ( ) :
+ try :
+  if 30 - 30: I1Ii1I1 * iIiii1i / Iii1i - IIi1i111IiII
+  if tlgtk . has_gtk and _thread . get_ident ( ) != Oo0OOOoO0 :
+   tlgtk . GLib . idle_add ( oo0o0o0oO0OO )
+   return
+   if 26 - 26: iIiii1i % Iii1i - I1I * I1I
+  ii1i11i1 ( "Internal error" ,
+ "Terminating the ThinLinc server installation wizard. \n" + i1iiiiIIIiIi )
+  if 36 - 36: iiI . ii . IiIIii11Ii / I1I + Oo - ooOOO
+ except :
+  pass
+  if 86 - 86: i1iiIII111 % IIiIIiIi11I1 % IIiIIiIi11I1 % iiI
+ sys . exit ( os . EX_SOFTWARE )
+ if 15 - 15: ooo0O0oO00 + I1Ii1I1 % oOo0O00
+def OOOOo ( exc_type , exc_value , exc_traceback ) :
+ try :
+  iiiIiiI = traceback . format_exception ( exc_type , exc_value , exc_traceback )
+  if 89 - 89: IIiIIiIi11I1 % iIiii1i
+  if 77 - 77: IIiIIiIi11I1 % iIiii1i
+  if 24 - 24: ii * I1Ii1I1 * I1Ii1I1 % o00o0OO00O
+  for oOO0 in iiiIiiI :
+   for oOOoOOOO000 in oOO0 . splitlines ( ) :
+    logging . error ( oOOoOOOO000 )
+ except :
+  pass
+  if 7 - 7: o00o0OO00O . I1I / IIiIIiIi11I1
+ oo0o0o0oO0OO ( )
+ if 72 - 72: o00o0OO00O * o00o0OO00O - ooo0O0oO00 - I1Ii1I1 - i1i1i1111I
+def iIOoOo ( e ) :
+ OOOOo ( e . exc_type , e . exc_value , e . exc_traceback )
+ if 73 - 73: i1
+ if 38 - 38: ooOOO
+if __name__ == "__main__" :
+ oOo0Oo ( )
+# dd678faae9ac167bc83abf78e5cb2f3f0688d3a3

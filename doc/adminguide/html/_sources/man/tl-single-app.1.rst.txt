@@ -1,0 +1,46 @@
+.. meta::
+   :description: The tl-single-app command runs a single application in
+                 a ThinLinc session, automatically starting a window
+                 manager, maximizing windows, and managing session
+                 disconnection via the client close button.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-single-app
+=============
+
+Synopsis
+--------
+
+**tl-single-app** <*command*> [*args*]
+
+Description
+-----------
+
+The :program:`tl-single-app` command can be used to execute a single
+application in a ThinLinc session. A window manager with a suitable
+configuration is automatically started. All top-level windows are
+automatically maximized. Window titles are displayed in the title bar of
+the ThinLinc client, not in the ThinLinc session. The client close
+button will disconnect the session as usual. Inner close buttons
+closes application windows. The :program:`tl-single-app` command can be
+specified as a client supplied start program (see
+:ref:`configuration_start_program`), or used with the ThinLinc profile
+selector (see :ref:`configuration_config-profiles`).
+
+.. tip::
+
+   If the application opens multiple top-level windows, you can switch
+   between them by clicking on the application icon in the top-left
+   corner.
+
+Examples
+--------
+
+Start Firefox via tl-single-app:
+
+.. code:: console
+
+   $ tl-single-app firefox

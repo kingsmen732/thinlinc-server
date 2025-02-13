@@ -1,0 +1,53 @@
+.. meta::
+   :description: The tl-mount-localdrives command mounts local drives
+                 exported from the ThinLinc client in the session,
+                 creating a symbolic link in the user’s home directory
+                 for easy access.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-mount-localdrives
+====================
+
+Synopsis
+--------
+
+**tl-mount-localdrives** [*options*]
+
+Description
+-----------
+
+The :program:`tl-mount-localdrives` command is used to mount the
+exported local drives from the ThinLinc client in the current session.
+The drives will be mounted below :file:`$TLSESSIONDATA/drives`. A
+symbolic link called :file:`thindrives` will be created in the user’s
+home directory, pointing to this directory.
+
+Options
+-------
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+.. option:: -v, --verbose
+
+   Print more details about what actions are taken.
+
+.. option:: --version
+
+   Prints the ThinLinc version and exits.
+
+Notes
+-----
+
+When using multiple sessions per user, the :file:`~/thindrives` link
+will point to the newest session that executed
+:program:`tl-mount-localdrives`.
+
+See also
+--------
+
+:program:`tl-umount-localdrives`\ (1)

@@ -1,0 +1,42 @@
+.. meta::
+   :description: The tl-rsync-all command synchronizes files and
+                 directories across all agent servers in a ThinLinc
+                 cluster using rsync over SSH, supporting standard rsync
+                 options.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-rsync-all
+============
+
+Synopsis
+--------
+
+**tl-rsync-all** [*options*] <*source*> [*source*]...
+
+Description
+-----------
+
+The :program:`tl-rsync-all` command is used to synchronize files and
+directories in a ThinLinc cluster. It runs the :command:`rsync`\ (1)
+command over SSH against all agent servers in the cluster.
+
+*options* can be any :command:`rsync`\ (1) option.
+
+All specified sources will be converted to absolute paths.
+
+Examples
+--------
+
+Synchronize directory tree:
+
+.. code:: console
+
+   $ tl-rsync-all -a --delete /some/tree
+
+See also
+--------
+
+:command:`rsync`\ (1), :program:`tl-ssh-all`\ (8)

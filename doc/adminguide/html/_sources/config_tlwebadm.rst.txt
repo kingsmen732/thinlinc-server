@@ -1,0 +1,110 @@
+.. meta::
+   :description: Configuration parameters for the ThinLinc Web
+                 Administration interface, including authentication
+                 credentials, TLS encryption, logging, and port
+                 settings.
+
+.. _configuration_tlwebadm:
+
+.. server-config-folder:: /tlwebadm
+
+Parameters in /tlwebadm/
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this section, we will describe all the parameters currently used by
+the ThinLinc Web Administration. These configuration parameters reside
+in :file:`/opt/thinlinc/etc/conf.d/tlwebadm.hconf`.
+
+.. server-config:: /tlwebadm/username
+
+   The username to authenticate with when accessing the web interface.
+
+.. server-config:: /tlwebadm/password
+
+   The password for the above user. The tool :program:`tl-gen-auth` may
+   be used to create hashes of the format required for use with this
+   parameter.
+
+.. server-config:: /tlwebadm/cert
+
+   The path to the certificate file to be used for TLS encryption.
+
+.. server-config:: /tlwebadm/certkey
+
+   The path to the certificate private key file.
+
+.. server-config:: /tlwebadm/listen_port
+
+   The local port for the web server to listen on.
+
+.. server-config:: /tlwebadm/gnutls_priority
+
+   The GnuTLS priority string is used to select the order and
+   availability of TLS versions, ciphers, key exchange, MAC,
+   compression, signature and elliptic curve algorithms for TLS
+   sessions. See :ref:`gnutls-priorities` for possible values.
+
+.. server-config:: /tlwebadm/server_tokens
+
+   If set to ``true``, Web Administration includes the ThinLinc version,
+   as well as Python version information in the "Server" response header
+   field. If set to ``false``, the "Server" response header will not
+   include any version information. The default value is ``true``.
+
+   .. note::
+
+      Disabling server_tokens might make it easier to work with some
+      security scanners that raise alerts when this type of version
+      information is included. But note that hiding version information
+      does nothing to make your server more secure.
+
+.. server-config-folder:: /tlwebadm/hsts
+
+.. server-config:: /tlwebadm/hsts/policy
+
+   Note the warnings about enabling HSTS policy, see
+   :ref:`configuring_hsts_header`. The results should be considered
+   permanent once enabled and are difficult to reverse. The only way to
+   disable the HSTS policy is to wait for the specified duration, as
+   described below, to pass until visiting the domain again.
+
+   - ``Off``: The default value. The HSTS header will not be sent.
+   - ``Testing``: Before setting the policy to permanent, it is
+     recommended to test if the policy works for the intended domains to
+     verify they support HTTPS. This value indicates to the browser that
+     it should only remember this domain for 10 minutes.
+   - ``Permanent``: This value indicates that browsers will remember
+     this domain for 2 years. This duration is refreshed every time a
+     domain is revisited, which is why it should be viewed as permanent.
+
+.. server-config:: /tlwebadm/hsts/subdomains_included
+
+   The HSTS policy will be applied to the included subdomains of the
+   ThinLinc host if enabled.
+
+   .. note::
+
+      It is recommended to verify that all subdomains support HTTPS
+      before enabling this. In order to verify, set ``policy=testing``,
+      restart the service and  then visit Web Administration in the
+      browser to enable the HSTS policy.
+
+.. server-config:: /tlwebadm/hsts/allow_browser_preload
+
+   *Requirements:* ``policy=permanent`` and ``subdomains_included=true``
+
+   With ``allow_browser_preload`` enabled, it is indicated to the
+   browser that the intention is to add the domain, and subdomains, to
+   the browsers’ lists. This would result in the HSTS policy being
+   enabled at the first visit to the domain or subdomain.
+
+   .. note::
+
+      Only use this option if you are sure to support HTTPS for domains
+      and subdomains. It may be difficult to remove domains and
+      subdomains from the preload list.
+
+.. server-config:: /tlwebadm/logging/logfile
+
+   The file to use for logging tlwebadm messages. By default, this is
+   :file:`/var/log/tlwebadm.log`.

@@ -1,0 +1,56 @@
+/*
+ * Copyright 2022 Cendio AB.
+ * For more information, see http://www.cendio.com
+*/
+
+/* ---------- COLORS ----------- */
+
+:root {
+    --thinlinc-darkblue: #00249C;
+
+    --thinlinc-blue:    #00A9E0;
+    --thinlinc-blue-75: #40BEE8;
+    --thinlinc-blue-50: #80D4F0;
+    --thinlinc-blue-25: #BFEAF7;
+
+    --thinlinc-yellow:    #FFB81C;
+    --thinlinc-yellow-75: #FFCA55;
+    --thinlinc-yellow-50: #FFDC8E;
+    --thinlinc-yellow-25: #FFEDC6;
+
+    --thinlinc-lightgrey:    #D9D9D6;
+    --thinlinc-lightgrey-75: #E2E2E0;
+    --thinlinc-lightgrey-50: #ECECEA;
+    --thinlinc-lightgrey-25: #F6F6F5;
+
+    --thinlinc-darkgrey:    #63666A;
+    --thinlinc-darkgrey-75: #8A8C8F;
+    --thinlinc-darkgrey-50: #B1B2B4;
+    --thinlinc-darkgrey-25: #D8D9DA;
+
+    /* These are not official colors, but made to match in lightness */
+
+    --thinlinc-darkred:    #9E0000;
+    --thinlinc-darkred-75: #B64040;
+    --thinlinc-darkred-50: #CE8080;
+    --thinlinc-darkred-25: #E7BFBF;
+
+    --thinlinc-darkyellow:    #7F8000;
+    --thinlinc-darkyellow-75: #9FA040;
+    --thinlinc-darkyellow-50: #BFC080;
+    --thinlinc-darkyellow-25: #DFDFBF;
+}
+
+/* ---------- SIZES ----------- */
+
+:root {
+    --border-width: 1px;
+    --small-border-radius: 6px; /* smaller elements such as buttons */
+    --large-border-radius: 12px; /* larger elements such as panels */
+}
+
+/* ------ MISC PROPERTIES ------ */
+
+:root {
+    --line-height: 1.6;
+}

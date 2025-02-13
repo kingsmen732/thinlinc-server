@@ -1,0 +1,103 @@
+table.table-noborders,
+table.table-noborders th,
+table.table-noborders td {
+    border: none;
+    box-shadow: none;
+}
+
+.sphinxsidebar .caption {
+    font-size: 140%;
+    border-bottom: solid 1px lightgray;
+}
+
+.sphinxsidebar ul {
+    list-style: square !important;
+    margin-left: 20px !important;
+}
+
+.sphinxsidebar li.current > a {
+    color: #448;
+}
+
+.sphinxsidebar :not(.toctree-l1) > a.current {
+    font-weight: bold;
+}
+
+div.sphinxsidebarwrapper p.logo {
+    text-align: left;
+    margin-bottom: 14px;
+}
+
+/* Mozilla's suggested styling for <kbd> */
+kbd:not(.compound) {
+    background-color: #eee;
+    border-radius: 3px;
+    border: 1px solid #b4b4b4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .2), 0 2px 0 0 rgba(255, 255, 255, .7) inset;
+    color: #333;
+    display: inline-block;
+    font-size: .85em;
+    font-weight: 700;
+    line-height: 1;
+    padding: 2px 4px;
+    white-space: nowrap;
+}
+
+/*
+ * Alabaster style fix for object definitions
+ * https://github.com/bitprophet/alabaster/issues/184
+ */
+.sig {
+    font-size: 0.9em;
+}
+
+/*
+ * Basic style fix for object definitions
+ * https://github.com/sphinx-doc/sphinx/issues/9770
+ */
+dl:not(.simple) > dd:last-child > :last-child {
+    margin-bottom: 1em;
+}
+
+/* ------- FONTS -------- */
+
+body {
+    font-family: Mulish, sans-serif;
+}
+
+div.body h1,
+div.body h2,
+div.body h3,
+div.body h4,
+div.body h5,
+div.body h6,
+div.sphinxsidebar h1,
+div.sphinxsidebar h2,
+div.sphinxsidebar h3,
+div.sphinxsidebar h4,
+div.sphinxsidebar h5,
+div.sphinxsidebar h6 {
+    font-family: Poppins, sans-serif;
+    font-weight: 600;
+}
+
+div.related,
+div.footer,
+div.sphinxsidebarwrapper,
+div.sphinxsidebar input,
+div.admonition p.admonition-title,
+p.caption,
+figcaption,
+.guilabel,
+.menuselection {
+    font-family: Poppins, sans-serif;
+}
+
+.sig,
+.sig-inline.c-texpr,
+.sig-inline.cpp-texpr,
+.viewcode-back,
+tt {
+    font-family: "Space Mono", monospace;
+    font-variant-ligatures: none;
+}

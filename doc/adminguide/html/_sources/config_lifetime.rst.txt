@@ -1,0 +1,42 @@
+.. meta::
+   :description: Learn how to control and limit the lifetime of ThinLinc
+                 sessions using Xserver options such as
+                 MaxDisconnectionTime, MaxConnectionTime, and
+                 MaxIdleTime to manage session duration and idle
+                 behavior.
+
+.. _configuration_limiting_lifetime:
+
+Limiting lifetime of ThinLinc sessions
+--------------------------------------
+
+The Xserver has three options which control the maximum lifetime of
+ThinLinc sessions. These are described below, and can be added to the
+parameter :servconf:`/vsmagent/xserver_args`.
+
+.. option:: -MaxDisconnectionTime <s>
+
+   Terminate when no client has been connected for *s* seconds. Note:
+   Never use a value smaller than 60.
+
+.. option:: -MaxConnectionTime <s>
+
+   Terminate when a client has been connected for *s* seconds
+
+.. option:: -MaxIdleTime <s>
+
+   Terminate after *s* seconds of user inactivity. Note: Never use a
+   value smaller than 60.
+
+In addition to the options above which control the lifetime of the
+ThinLinc session, the option :option:`-IdleTimeout` can be used to
+configure how long an idle session should remain connected. The
+:option:`-IdleTimeout` option takes a number of seconds as an argument,
+and can be added to the parameter :servconf:`/vsmagent/xserver_args` as
+per the options described above.
+
+.. note::
+
+   Setting :option:`-IdleTimeout s` will simply disconnect the client
+   from the session after s seconds; it will not terminate the ThinLinc
+   session itself.

@@ -1,0 +1,302 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Instructions for configuring ThinLinc to use smart card public key authentication, leveraging enhanced security measures for user authentication." name="description" />
+
+    <title>Using smart card public key authentication &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using one-time passwords" href="authentication_otp.html" />
+    <link rel="prev" title="Using public key authentication" href="authentication_publickey.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="authentication_publickey.html" title="Previous document">Using public key authentication</a>
+        </li>
+        <li>
+          <a href="authentication_otp.html" title="Next document">Using one-time passwords</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="using-smart-card-public-key-authentication">
+<span id="scpublickey-authentication"></span><h1>Using smart card public key authentication<a class="headerlink" href="#using-smart-card-public-key-authentication" title="Permalink to this headline">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Smart card public key authentication is an advanced version of the
+method described in <a class="reference internal" href="authentication_publickey.html#publickey-authentication"><span class="std std-ref">Using public key authentication</span></a>. It uses the same
+basic principle but stores the private key on a smart card, where it can
+never be extracted. This section will describe how to configure ThinLinc
+to use it.</p>
+</section>
+<section id="general-requirements">
+<h2>General requirements<a class="headerlink" href="#general-requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Smart cards with an appropriate PKCS#11 library. The library included
+with ThinLinc requires PKCS#15 compliant smart cards and PC/SC
+libraries on the client system.</p></li>
+</ul>
+</section>
+<section id="key-generation">
+<h2>Key generation<a class="headerlink" href="#key-generation" title="Permalink to this headline">¶</a></h2>
+<p>The keys on the smart card are generated when the smart card is issued.
+How this is done is not covered by this guide.</p>
+</section>
+<section id="server-configuration">
+<h2>Server configuration<a class="headerlink" href="#server-configuration" title="Permalink to this headline">¶</a></h2>
+<p>To use a smart card with ThinLinc, the public key must be extracted off
+the card and associated with a user on the ThinLinc server. The method
+for doing this depends on your smart card and your SSH server.</p>
+<p>On Linux, with the OpenSSH server and an PKCS#15 compliant smart card,
+the tool <strong class="command">pkcs15-tool</strong> (part of the OpenSC suite) is able to
+extract the public key.</p>
+<p>The first step is identifying the certificate on the card:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pkcs15-tool --list-certificates
+<span class="go">X.509 Certificate [identification]</span>
+<span class="go">        Flags    : 0</span>
+<span class="go">        Authority: no</span>
+<span class="go">        Path     : 3f0050154331</span>
+<span class="go">        ID       : 45</span>
+</pre></div>
+</div>
+<p>The second step is to extract the key, based on the ID number:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pkcs15-tool --read-ssh-key <span class="m">45</span>
+<span class="go">1024 65537 918282501237151981353694684191630174855276113858858644490084487922635</span>
+<span class="go">27407657612671471887563630990149686313179737831148878256058532261207121307761545</span>
+<span class="go">37226554073750496652425001832055579758510787971892507619849564722087378266977930</span>
+<span class="go">9875752082163453335538210518946058646748977963861144645730357512544251473818679</span>
+<span class="go">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQCCxIx/xtVoDR2qwY4Pym7F6yKmdJsB26MUbbTiGT7o</span>
+<span class="go">6M6G4A2l5Go1kdQRNjOWDJE9HZWToaApSkVprNeiQLeOkbELz2yND2Te/Oyl3u44YeIUImT1v4t7q9jC</span>
+<span class="go">MTpfZ+TpxLf0sd3DAk2So8EBAtUkhib/ugKqfTCqB7WNoHf0Nw==</span>
+</pre></div>
+</div>
+<p>The second line, starting with <code class="docutils literal notranslate"><span class="pre">ssh-rsa</span></code>, is the one needed for SSH
+version 2 authentication. For instructions on how to associate this key
+with a user, see <a class="reference internal" href="authentication_publickey.html#publickey-authentication"><span class="std std-ref">Using public key authentication</span></a>.</p>
+</section>
+<section id="client-configuration">
+<h2>Client configuration<a class="headerlink" href="#client-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The ThinLinc client requires no special configuration to use the smart
+card.</p>
+</section>
+<section id="automatic-connection">
+<span id="smartcard-auto"></span><h2>Automatic connection<a class="headerlink" href="#automatic-connection" title="Permalink to this headline">¶</a></h2>
+<p>The client is able to automatically connect to the server when a smart
+card is inserted (see <a class="reference internal" href="client_options_security.html#client-security-tab"><span class="std std-ref">Security tab</span></a>). It does, however,
+require that the user is able to log in using the subject name on the
+card. As that is rarely a valid username, ThinLinc ships with a special
+NSS module, called <strong>nss-passwdaliases</strong>, that enables alternate names
+for users.</p>
+<p>The module is configured by editing the file <code class="file docutils literal notranslate"><span class="pre">/etc/passwdaliases</span></code>.
+The file is a colon-delimited table of alternate names and their
+corresponding user ids. Example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>givenname=John,sn=Doe,c=us:572
+</pre></div>
+</div>
+<p>To activate the nss-passwdaliases module, it must be added to the list
+of NSS modules for the <strong>passwd</strong> database. This is specified in the
+file <code class="file docutils literal notranslate"><span class="pre">/etc/nsswitch.conf</span></code>. For example, replace the following
+line:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>passwd: files ldap
+</pre></div>
+</div>
+<p>with this line:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>passwd: files ldap passwdaliases
+</pre></div>
+</div>
+</section>
+<section id="ldap-automatic-update-tl-ldap-certalias">
+<span id="certalias"></span><h2>LDAP automatic update (tl-ldap-certalias)<a class="headerlink" href="#ldap-automatic-update-tl-ldap-certalias" title="Permalink to this headline">¶</a></h2>
+<p>ThinLinc includes the tool <strong class="program">tl-ldap-certalias</strong> that can
+automatically update the local databases needed for smart card public
+key authentication, provided the system uses the OpenSSH server (or any
+SSH server that uses a compatible format and location for authorized
+public keys) and standards compliant LDAP servers where users and
+certificates are stored.</p>
+<p>For details about using this command, see the full documentation for
+<a class="reference internal" href="man/tl-ldap-certalias.8.html"><span class="doc">tl-ldap-certalias</span></a>.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="authentication_publickey.html" title="Previous document">Using public key authentication</a>
+        </li>
+        <li>
+          <a href="authentication_otp.html" title="Next document">Using one-time passwords</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="authentication_pam.html">Pluggable Authentication Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication_limitations.html">Limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication_publickey.html">Using public key authentication</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Using smart card public key authentication</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#general-requirements">General requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#key-generation">Key generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#server-configuration">Server configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#client-configuration">Client configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-connection">Automatic connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ldap-automatic-update-tl-ldap-certalias">LDAP automatic update (tl-ldap-certalias)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="authentication_otp.html">Using one-time passwords</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="authentication.html">Authentication in ThinLinc</a><ul>
+      <li>Previous: <a href="authentication_publickey.html" title="previous chapter">Using public key authentication</a></li>
+      <li>Next: <a href="authentication_otp.html" title="next chapter">Using one-time passwords</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/authentication_scpublickey.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

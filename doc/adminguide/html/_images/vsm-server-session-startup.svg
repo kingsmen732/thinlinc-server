@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="42cm" height="30cm" viewBox="205 -2 825 593" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="228.384" y="62" width="177.232" height="76"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="228.384" y="62" width="177.232" height="76"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="317" y="88.15">
+      <tspan x="317" y="88.15">ThinLinc client</tspan>
+      <tspan x="317" y="106.15">connects to</tspan>
+      <tspan x="317" y="124.15">VSM Server</tspan>
+    </text>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="315.849,187.999 420.214,264.249 315.849,340.5 211.484,264.249 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="315.849,187.999 420.214,264.249 315.849,340.5 211.484,264.249 "/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="315.849" y="252.399">
+      <tspan x="315.849" y="252.399">User has</tspan>
+      <tspan x="315.849" y="270.399">existing</tspan>
+      <tspan x="315.849" y="288.399">session?</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="787.176" y="376" width="241.648" height="76"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="787.176" y="376" width="241.648" height="76"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="908" y="402.15">
+      <tspan x="908" y="402.15">Run scripts </tspan>
+      <tspan x="908" y="420.15">in sessionreconnect.d</tspan>
+      <tspan x="908" y="438.15">on VSM Server</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="243.696" y="374" width="146.608" height="76"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="243.696" y="374" width="146.608" height="76"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="317" y="400.15">
+      <tspan x="317" y="400.15">Request new</tspan>
+      <tspan x="317" y="418.15">session from</tspan>
+      <tspan x="317" y="436.15">VSM Agent</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="206.736" y="514" width="220.528" height="76"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="206.736" y="514" width="220.528" height="76"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="317" y="540.15">
+      <tspan x="317" y="540.15">Run scripts</tspan>
+      <tspan x="317" y="558.15">in sessionstartup.d</tspan>
+      <tspan x="317" y="576.15">on VSM Server</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="819.384" y="514" width="177.232" height="76"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="819.384" y="514" width="177.232" height="76"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="908" y="540.15">
+      <tspan x="908" y="540.15">Return session</tspan>
+      <tspan x="908" y="558.15">data to </tspan>
+      <tspan x="908" y="576.15">ThinLinc client</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="317" y1="135" x2="315.945" y2="183.528"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="308.246,169.593 315.897,185.763 324.242,169.941 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="315.848" y1="340.5" x2="316.859" y2="372.53"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="308.429,359.025 316.929,374.765 324.421,358.521 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="317" y1="447" x2="317" y2="512.528"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="309,498.764 317,514.764 325,498.764 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="427.264" y1="552" x2="814.736" y2="552"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="800.972,560 816.972,552 800.972,544 "/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="747" y="276">
+    <tspan x="747" y="276"></tspan>
+  </text>
+  <text font-size="32" style="fill: #000000;text-anchor:middle;font-family:serif;font-style:normal;font-weight:normal" x="639.936" y="32.2124">
+    <tspan x="639.936" y="32.2124">ThinLinc session startup - on VSM Server</tspan>
+  </text>
+  <g>
+    <rect style="fill: #ffffff" x="539.108" y="235" width="168.256" height="58"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="539.108" y="235" width="168.256" height="58"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="623.236" y="261.15">
+      <tspan x="623.236" y="261.15">Verify session</tspan>
+      <tspan x="623.236" y="279.15">with VSM Agent</tspan>
+    </text>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="622.273,352.74 703.727,412.813 622.273,472.885 540.82,412.813 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="622.273,352.74 703.727,412.813 622.273,472.885 540.82,412.813 "/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="622.273" y="409.963">
+      <tspan x="622.273" y="409.963">Session</tspan>
+      <tspan x="622.273" y="427.963">is alive</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="420.214" y1="264.25" x2="534.46" y2="264.009"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="520.713,272.038 536.696,264.005 520.679,256.038 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="623.236" y1="291" x2="622.344" y2="348.268"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="614.559,334.382 622.309,350.504 630.557,334.631 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="540.82" y1="412.814" x2="394.952" y2="412.024"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="408.759,404.099 392.716,412.012 408.672,420.099 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="703.728" y1="412.814" x2="782.704" y2="413.936"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="768.828,421.74 784.94,413.968 769.055,405.742 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="908" y1="449" x2="908" y2="512.528"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="900,498.764 908,514.764 916,498.764 "/>
+  </g>
+  <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:serif;font-style:italic;font-weight:700" x="475.214" y="247.04">
+    <tspan x="475.214" y="247.04">YES</tspan>
+  </text>
+  <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:serif;font-style:italic;font-weight:700" x="739.214" y="401.04">
+    <tspan x="739.214" y="401.04">YES</tspan>
+  </text>
+  <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:serif;font-style:italic;font-weight:700" x="468.214" y="397.04">
+    <tspan x="468.214" y="397.04">NO</tspan>
+  </text>
+  <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:serif;font-style:italic;font-weight:700" x="349.914" y="361.04">
+    <tspan x="349.914" y="361.04">NO</tspan>
+  </text>
+</svg>

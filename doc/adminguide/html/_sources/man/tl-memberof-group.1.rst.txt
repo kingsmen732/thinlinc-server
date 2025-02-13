@@ -1,0 +1,47 @@
+.. meta::
+   :description: The tl-memberof-group command checks if the current
+                 user is a member of specified groups, returning exit
+                 statuses based on membership and group availability.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-memberof-group
+=================
+
+Synopsis
+--------
+
+**tl-memberof-group** <*groupname*> [*groupname*...]
+
+Description
+-----------
+
+:program:`tl-memberof-group` can be used to determine if the current
+user is a member of the specified groups.
+
+Exit status
+-----------
+
+0
+   The executing user is a member of any of the given groups.
+1
+   The executing user is not a member of any of the groups.
+2
+   One or more of the specified groups cannot be found.
+
+Examples
+--------
+
+Is the user a member of the root group?
+
+.. code:: console
+
+   $ tl-memberof-group root
+
+Is the user member of the sysadmin or techsupport groups?
+
+.. code:: console
+
+   $ tl-memberof-group sysadmin techsupport

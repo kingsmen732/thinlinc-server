@@ -1,0 +1,94 @@
+.. meta::
+   :description: Overview of key configuration parameters shared by the
+                 master and agent services, covering settings related to
+                 tunnel management, VNC communication, and master-agent
+                 interaction in ThinLinc.
+
+.. _configuration_vsm:
+
+.. server-config-folder:: /vsm
+
+Parameters in /vsm/
+~~~~~~~~~~~~~~~~~~~
+
+Parameters in the :servconf:`/vsm` folder are used by both the VSM agent
+and the VSM server. Neither of them need to be changed on a normal
+ThinLinc installation. These configuration parameters reside in
+:file:`/opt/thinlinc/etc/conf.d/vsm.hconf`.
+
+.. server-config:: /vsm/tunnel_bind_base
+
+   The tunnels set up by the client to access various resources (audio,
+   serial port, network resources, local printer) need one port number
+   each on the server running the VSM agent the client is connected to.
+   This parameter decides the lowest such port that is allocated by the
+   VSM agent. Each user has a port range defined by the formula:
+
+      :servconf:`/vsm/tunnel_bind_base` + *display* × 10 +
+      *service_slot*
+
+   where the *service_slot* depends on which service will use the
+   tunnel. This port range is however used only for sessions with
+   display numbers less than 100. See :ref:`tcp-ports` for an in-depth
+   explanation of port allocation.
+
+   .. note::
+
+      This parameter should normally not be changed.
+
+.. server-config:: /vsm/tunnelservices
+
+   There are several parameters under the
+   :servconf:`/vsm/tunnelservices` folder. Each one decides which ports
+   are used as server-side termination points for the tunnels used to
+   access client resources. See :ref:`tcp-ports` for an in-depth
+   explanation of port allocation.
+
+   .. note::
+
+      None of these parameters should normally be changed.
+
+.. server-config:: /vsm/tunnelslots_per_session
+
+   The number of ports to reserve for tunnel port endpoints on the
+   server. The number of ports actually used depends on the number of
+   services defined under :servconf:`/vsm/tunnelservices` . We recommend
+   letting this parameter have its default value (10), since that
+   provides a margin for future services. See :ref:`tcp-ports` for an
+   in-depth explanation of port allocation.
+
+   .. note::
+
+      This parameter should normally not be changed and must not be
+      changed whilst there are any running sessions.
+
+.. server-config:: /vsm/vnc_port_base
+
+   The port base for VNC communication. The VNC protocol runs on one
+   port per active user on the VSM agent host, and this is the base of
+   the numbers used. That is, for the first user, the port will be
+   :servconf:`/vsm/vnc_port_base` + 1, for the second user
+   :servconf:`/vsm/vnc_port_base` + 2 and so on. This algorithm is used
+   only for display numbers below 100. See :ref:`tcp-ports` for an
+   in-depth explanation of port allocation.
+
+   .. note::
+
+      This parameter should normally not be changed.
+
+.. server-config:: /vsm/vsm_agent_port
+
+   VSM agent communication. This is the port that the VSM server
+   connects to on VSM Agents. This traffic is not encrypted.
+
+   .. note::
+
+      This parameter should normally not be changed
+
+.. server-config:: /vsm/vsm_server_port
+
+   The port that the VSM server listens to.
+
+   .. note::
+
+      This parameter should normally not be changed

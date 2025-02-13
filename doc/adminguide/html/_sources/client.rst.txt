@@ -1,0 +1,27 @@
+.. meta::
+   :description: Detailed guide to the ThinLinc native client, covering
+                 installation, usage, configuration, and advanced topics
+                 such as command-line usage, local device export, and
+                 customizations.
+
+.. _client:
+
+The native client
+=================
+
+This chapter describes the native ThinLinc client and how it is
+installed, used, and configured.
+
+.. toctree::
+   :hidden:
+
+   clientplatforms
+   client_usage
+   client_cmdline
+   client_export_local_device
+   client_options
+   client_gestures
+   client_logfile_placement
+   client_customizer
+   client_web_integration
+   client_advanced_topics

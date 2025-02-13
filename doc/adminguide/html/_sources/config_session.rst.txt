@@ -1,0 +1,288 @@
+.. meta::
+   :description: Overview of ThinLinc session startup customization,
+                 including scripts, profiles, and environment settings.
+
+.. _configuration_customizing_user_session:
+
+Customizing the user's session
+------------------------------
+
+In this section, we will describe how the session startup in ThinLinc
+can be customized.
+
+.. _configuration_session-startup-bigpicture:
+
+Session startup --- the big picture
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The session setup is constructed to be easy to use and configure yet
+still easy to customize for advanced use cases.
+
+.. _configuration_vsm-server-session-setup:
+
+.. figure:: images/vsm-server-session-startup.svg
+
+   Session startup procedure --- on VSM Server
+
+In :numref:`configuration_vsm-server-session-setup`, shows a
+(simplified) description of what happens on the VSM Server when a client
+connects to log in:
+
+-  The VSM Server checks if the user has an existing session.
+
+-  If a session exists, VSM Server contacts the VSM Agent running on the
+   host where the session is running, and asks it to verify that the
+   session is still alive.
+
+-  If the session was alive, VSM Server runs any scripts placed in
+   :file:`/opt/thinlinc/etc/sessionreconnect.d`. When all such scripts
+   are completed, session information is returned to the client. The
+   client proceeds by contacting the agent on which the session is
+   running.
+
+-  If the existing session was not alive, or if there were no existing
+   sessions at all, VSM Server finds out which VSM Agent has the least
+   load, and contacts this agent to request a new session.
+
+-  When the agent responds that a new session has been created, VSM
+   Server runs any scripts placed in
+   :file:`/opt/thinlinc/etc/sessionstartup.d`. When all such scripts are
+   completed, session information is sent back to the client. The client
+   proceeds by contacting the agent on which the session was started.
+
+.. _configuration_scripts_startup_reconnect:
+
+Scripts run at session startup/reconnect
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Scripts in :file:`/opt/thinlinc/etc/sessionstartup.d` and
+:file:`/opt/thinlinc/etc/sessionreconnect.d` are run by the root user,
+on the VSM Server. Session information will not be sent back to the
+client until these scripts have completed. This makes it possible to
+ensure that commands have been run before the client connects to the VSM
+Agent.
+
+If background execution is desired, place the command to be run in the
+background and make sure all file descriptors are closed. Here's an
+example on how to execute a script in the background.
+
+.. code:: bash
+
+   /opt/thinlinc/sbin/tl-limit-printers < /dev/null > /dev/null 2>&1 &
+
+.. _configuration_session-startup-vsmagent:
+
+Session startup on VSM Agent
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. _configuration_session-startup-vsmagent-figure:
+
+.. figure:: images/session-startup.svg
+
+   Session startup procedure --- on VSM Agent
+
+:numref:`configuration_session-startup-vsmagent-figure` outlines what
+happens when an VSM Agent is contacted by VSM Server to request a new
+session. In detail, the following happens:
+
+1. The VSM agent on the machine where the session will reside executes
+   the script :file:`/opt/thinlinc/etc/xsession`.
+
+2. The file :file:`/opt/thinlinc/etc/xsession` is a shell script that
+   can be customized by advanced users. In its standard version, as
+   delivered with ThinLinc, it will check if there is a file named
+   :file:`~/.thinlinc/xstartup` in the user's home directory. If there
+   is such a file, it will be executed. If no such file exists, the file
+   :file:`/opt/thinlinc/etc/xstartup.default` is executed instead. See
+   :ref:`configuration_profiles-xstartup` for a description of the
+   standard behavior of this file.
+
+This system allows for experienced users to customize how their session
+startup should work by editing the file :file:`~/.thinlinc/xstartup`. On
+the other hand, at sites where users should not be able to customize
+their system startup, :file:`/opt/thinlinc/etc/xsession` can be modified
+so that it doesn't try to execute user-specific xstartup-files. The
+standard setup should however suit the needs of the majority of
+installations.
+
+.. _configuration_profiles-xstartup:
+
+Profiles and the standard xstartup.default file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ThinLinc allows for different "profiles" when starting up a user
+session. The users will be presented with a menu after logging in, where
+they can choose for example between a desktop suited for engineering
+users, a desktop suited for the marketing department or a Windows
+desktop. The example configuration files that are delivered with
+ThinLinc have several different alternatives, however only those
+sessions that are actually available on the system are displayed. This
+is just an example configuration, meant to be customized for each
+individual ThinLinc installation.
+
+.. _configuration_profile-setup-figure:
+
+.. figure:: images/profiles-xstartup.svg
+
+   The ThinLinc profiles and xstartup.default
+
+As described in :ref:`configuration_session-startup-bigpicture`,
+:file:`/opt/thinlinc/etc/xstartup.default` is executed if there is no
+:file:`~/.thinlinc/xstartup` for the user. This file, in its unmodified
+version as delivered with ThinLinc, executes three steps, as outlined in
+:numref:`configuration_profile-setup-figure`.
+
+1. All files in :file:`/opt/thinlinc/etc/xstartup.d/` are executed.
+   Files that have filenames ending with :file:`.sh` will be **sourced**
+   as shell scripts. Other files are executed normally. This way,
+   environment variables that persist down to the session command can be
+   set in :file:`*.sh` files.
+
+   If a specific execution order is needed for the scripts in the
+   :file:`xstartup.d/` directory, let the names of the scripts begin
+   with numbers, where a script with a lower number will be executed
+   before one with a higher number. For example :file:`10setuphomedir`
+   will be executed before :file:`20copyfiles`.
+
+   By default, the script
+   :file:`/opt/thinlinc/etc/xstartup.d/20-tl-select-profile.sh` will let
+   the user choose among the possible profiles. See
+   :ref:`configuration_config-profiles` for documentation on how to set
+   up profiles. If only one profile is available, it will be selected
+   without asking the user. The environment variable
+   :environ:`TLPROFILE` is set to the name of the selected profile.
+
+   Worth noting is that the environment variable :environ:`TLPROFILE` is
+   available when running the scripts in :file:`xstartup.d`, for
+   decisions based on what profile will be run.
+
+2. The command :program:`tl-run-profile` is run. This runs the commands
+   associated with the selected profile, for example :command:`startkde`
+   to start a KDE session.
+
+3. When the commands run by :program:`tl-run-profile` exits,
+   :file:`xstartup.default` runs scripts and commands located in the
+   directory :file:`/opt/thinlinc/etc/xlogout.d`. The same information
+   that applies to files in :file:`xstartup.d` (as documented in
+   step 1. above) applies to files in this directory.
+
+.. note::
+
+   Scripts in :file:`/opt/thinlinc/etc/xstartup.d` and
+   :file:`/opt/thinlinc/etc/xlogout.d` are run **on the agent**, with
+   the same rights as the user owning the session.
+
+.. _configuration_start_program:
+
+Session startup with a client supplied start program
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the client has requested that the session should be started with a
+command supplied by the client, VSM agent will set the environment
+variable :environ:`TLCOMMAND` to this command. In this case, the profile
+selection dialog will be disabled and :program:`tl-run-profile` will
+execute the command specified by the client, instead of a profile
+command. To disable client supplied start programs, create the file
+:file:`/opt/thinlinc/etc/xstartup.d/00-no-startprog.sh`, containing:
+
+.. code:: sh
+
+   unset TLCOMMAND
+
+.. _configuration_config-profiles:
+
+Configuring available profiles
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The available profiles are configured via Hiveconf, under the
+:servconf:`/profiles` path. The default configuration includes a number
+of examples.
+
+If the |default| parameter is present, it specifies the default profile.
+The profile chooser will have this entry selected when it starts, and it
+may also be used automatically for some error conditions.
+
+.. |default| replace::
+   :servconf:`default </profiles/default>`
+
+The |order| parameter selects which profiles should be available for
+selection, and the order in which they are displayed. This is a
+space-separated list.
+
+.. |order| replace::
+   :servconf:`order </profiles/order>`
+
+If the |show_intro| parameter is true, a configurable introduction text
+will be displayed and requires user input to proceed with the logon
+process. The |introduction| parameter is a text that will be displayed
+if introduction is shown. This text block also supports `Pango Markup`_
+format styling for a fancier text layout.
+
+.. |show_intro| replace::
+   :servconf:`show_intro </profiles/show_intro>`
+.. |introduction| replace::
+   :servconf:`introduction </profiles/introduction>`
+
+Each profile is defined under a section named
+:servconf:`/profiles/\<profile key\>`. For most desktop environments
+only the |xdg_session| parameter needs to be configured. For custom
+profiles more values need to be specified, mainly |cmdline|. Please see
+:ref:`configuration_profiles` for more details on the available options.
+
+.. |xdg_session| replace::
+   :servconf:`xdg_session </profiles/<profile key>/xdg_session>`
+.. |cmdline| replace::
+   :servconf:`cmdline </profiles/<profile key>/cmdline>`
+
+.. _Pango Markup: https://docs.gtk.org/Pango/pango_markup.html#pango-markup
+
+Configuring different Linux desktops based on the selected profile
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Please read :ref:`tldc` for documentation on how to configure different
+desktops with for example different menu and desktop icons depending on
+what profile is selected.
+
+Speeding up session startup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If a user has a complicated session startup with many time-consuming
+operations, it can take quite a while before the user's desktop
+environment (for example KDE or Gnome) begins to start. One example of
+when this happens is when mounting local drives.
+
+One way of speeding up this process is to execute some of the operations
+in the background. Most often, there is no need to mount the local
+drives before starting KDE because it takes longer time to start KDE
+than it takes to mount the local drives. The two operations can easily
+run in parallel. The same goes for the example of mounting shared
+directories.
+
+The easiest way to accomplish this is to add an & sign after commands
+run by scripts in :file:`/opt/thinlinc/etc/xstartup.d`.
+
+Make sure that commands that must be run before starting the window
+environment are run sequentially. For example, configuring desktops via
+TLDC must be done before starting KDE.
+
+Configuring the language environment on the server based on the client language
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ThinLinc client reports the language settings on the client side
+when requesting a session. This can be used to configure the language on
+the server side. The idea is that in an environment where several
+languages are in use, a user could automatically get their preferred
+language based on what their client computer is configured for.
+
+To activate this, a symlink needs to be created:
+
+.. code:: console
+
+   $ sudo ln -s /opt/thinlinc/libexec/tl-set-clientlang.sh \
+      /opt/thinlinc/etc/xstartup.d/00-tl-set-clientlang.sh
+
+Also, make sure no other parts of the startup environment are trying to
+set the :environ:`LANG` variable. For example, on Fedora, the files
+:file:`/etc/profile.d/lang.sh` and :file:`/etc/profile/lang.csh` will
+override the :environ:`LANG` variable set by
+:file:`tl-set-clientlang.sh`.

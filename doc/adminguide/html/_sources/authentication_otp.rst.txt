@@ -1,0 +1,139 @@
+.. meta::
+   :description: Guide to configuring ThinLinc for one-time password
+                 (OTP) authentication, including integration with
+                 external OTP servers for enhanced security.
+
+.. _otp_authentication:
+
+Using one-time passwords
+------------------------
+
+Introduction
+~~~~~~~~~~~~
+
+In this section, we will describe how to configure ThinLinc for
+authentication against one-time password (OTP) servers, such as the RSA
+SecurID. By using OTPs, you can increase the system security.
+
+General requirements
+~~~~~~~~~~~~~~~~~~~~
+
+-  An OTP server which accepts the OTP twice. This is due to the
+   ThinLinc architecture: The client first contacts the master machine,
+   and then the agent host. When using RSA SecurID, we recommend using
+   the Steel-Belted Radius server as a "Token Caching Server".
+
+-  An user database (directory server) that is supported both by the
+   operating system on the ThinLinc servers, and the OTP server. We
+   recommend using an LDAP directory server.
+
+-  The operating systems on the ThinLinc servers must support the OTP
+   servers authentication protocol. We recommend using the RADIUS
+   protocol, by using the **pam_radius_auth** PAM module from the
+   `FreeRADIUS project`_.
+
+-  The SSH server on the ThinLinc servers must accept
+   "keyboard-interactive" authentication. It's recommended to disable
+   "password" authentication.
+
+.. _FreeRADIUS project: https://freeradius.org
+
+.. _authentication_securid:
+
+Configuration for RSA SecurID
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This section describes how to deploy an OTP solution based on RSA
+SecurID with ThinLinc. When using this solution, the SecurID PASSCODEs
+are used instead of normal passwords. The PASSCODE should be entered in
+the ThinLinc client password input field. Please observe the following
+limitations:
+
+-  When SecurID requests additional information, in addition to the
+   PASSCODE initially entered, a popup dialog will be used. This
+   happens, for example, in Next Token or New PIN mode. After finishing
+   the dialog, the ThinLinc client will display a "Login failed!" error
+   message. This happens since the SBR server clears the token cache
+   when additional information is requested. When this happens, wait
+   until the token changes once more, and log in again.
+
+-  The ThinLinc Single Sign-On mechanism will store the string entered
+   in the client's password input field. When using SecurID, this is the
+   PASSCODE, which cannot be used for further logins. To use the Single
+   Sign-On mechanism, the user must be prompted for their real password.
+   This can be done with the program :program:`tl-sso-update-password`.
+   To configure ThinLinc so that this program is executed during login,
+   execute this command:
+
+   .. code:: console
+
+      $ sudo ln -s /opt/thinlinc/bin/tl-sso-update-password \
+        /opt/thinlinc/etc/xstartup.d/05-tl-sso-update-password
+
+The configuration example below assumes that you are using LDAP and
+RADIUS, and the Steel-Belted Radius (SBR) server. Step 8 through 11
+should be repeated on all ThinLinc servers.
+
+1.  Install and configure RSA Authentication Manager (ACE server). For
+    basic configuration tasks such as creating users and assigning
+    tokens, we refer to the RSA documentation.
+
+2.  Create a new Agent Host for the SBR server, with type :guilabel:`Net
+    OS Agent`. Select which users should be able to log in through
+    ThinLinc. To allow all users, check the :guilabel:`Open to All
+    Locally Known Users` checkbox.
+
+3.  Generate a configuration file for the SBR server, by selecting
+    :menuselection:`Agent --> Host --> Generate Configuration File`.
+    Copy this file to :file:`c:\\windows\\system32` on the machine
+    running SBR.
+
+4.  Open the SBR Administrator. Create clients for all ThinLinc servers,
+    using default settings. Make sure you enter a shared secret.
+
+5.  Use SBR Administrator to create a SecurID user. The user should
+    typically be of type :guilabel:`<ANY>`.
+
+6.  Modify the SBR Authentication Policy, so that the only active method
+    is :guilabel:`SecurID User`. Exit SBR Administrator.
+
+7.  Enable ACE authentication caching by editing the configuration file
+    :file:`c:\\radius\\service\\radius.ini` and set:
+
+    .. code:: ini
+
+       [SecurID]
+       CachePasscodes          = yes
+       SecondsToCachePasscodes = 60
+
+    Restart SBR after changing the configuration file. For more
+    information about ACE authentication caching, refer to the
+    Steel-Belted Radius Tech Note RD310.
+
+8.  Install **pam_radius_auth**. Some distributions, such as SUSE,
+    include this module.
+
+9.  Configure **pam_radius_auth**, by creating
+    :file:`/etc/raddb/server`. It should contain the SBR server name,
+    port, and a shared secret. Example::
+
+       myotpserver.example.com:1812 mysecret
+
+10. Configure the ThinLinc servers for RADIUS authentication by
+    modifying its PAM configuration. The exact procedure depends on the
+    system, but typically, this can be done by modifying
+    :file:`/etc/pam.d/system-auth`, by inserting the line
+
+    ::
+
+       auth        sufficient    /lib/security/pam_radius_auth.so use_first_pass
+
+    after the line containing ``pam_unix.so``.
+
+11. Restart the VSM and SSH server.
+
+12. Log in to the system with an SSH client, and verify that an OTP is
+    required and accepted.
+
+13. Log in to the system with a ThinLinc client, and verify that an OTP
+    is required and accepted.

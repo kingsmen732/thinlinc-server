@@ -1,0 +1,71 @@
+.. meta::
+   :description: Overview of how ThinLinc client configuration settings
+                 are stored and managed on Linux, macOS, and Windows
+                 systems, including file formats, directory locations,
+                 and registry usage.
+
+.. _clientconf:
+
+Configuration storage
+~~~~~~~~~~~~~~~~~~~~~
+
+The Linux and macOS clients uses a plain text format with key/value
+pairs to store the configuration while the Windows client stores the
+values in the Windows registry. For descriptions of all configuration
+parameters, see :ref:`clientconf_params`.
+
+Configuration file format
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Each parameter is written on one line, followed by an equal sign (``=``)
+and the value of the parameter, as in the following example::
+
+   SOUND_ENABLED = 0
+   SERVER_NAME = tl.example.com
+
+Alternative files
+^^^^^^^^^^^^^^^^^
+
+By using the command-line option :option:`-C`, additional configuration
+files can be specified. Any name is accepted, but the file extension
+:file:`.tlclient` is recommended. The Windows, Linux, and macOS packages
+configure the system to automatically recognize such files as
+configuration files for the ThinLinc client. Additionally, the Internet
+Media Type :mimetype:`application/vnd.cendio.thinlinc.clientconf` is
+linked to such configuration files.
+
+Linux client configuration files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Linux client first reads the file
+:file:`/opt/thinlinc/etc/tlclient.conf`, if it exists. It then reads the
+file :file:`.thinlinc/tlclient.conf` in the user's home directory, and
+the values there override the values from
+:file:`/opt/thinlinc/etc/tlclient.conf`. This way, a system
+administrator can set global defaults for client operations, while each
+user can still customize the client to wanted behavior.
+
+macOS client configuration files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The macOS client first reads the file
+:file:`/Library/Application Support/ThinLinc Client/tlclient.conf` if it
+exists. It then reads the :file:`.thinlinc/tlclient.conf` in the user's
+home directory, and the values there override the values from
+:file:`/Library/Application Support/ThinLinc Client/tlclient.conf`. This
+way, a system administrator can set global defaults for client
+operations, while each user can still customize the client to wanted
+behavior.
+
+Windows client configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+On Windows, the ThinLinc client reads its configuration from the
+registry. All ThinLinc client data is stored under
+``Software\Cendio\ThinLinc\tlclient`` in the HKLM and HKCU hives. The
+parameter names are the same as for the Linux client.
+
+The behavior of global and user-specific settings are identical to that
+of the Linux client, where settings in HKLM correspond to
+:file:`/opt/thinlinc/etc/tlclient.conf` and those in HKCU correspond to
+:file:`.thinlinc/tlclient.conf`.

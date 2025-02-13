@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="41cm" height="29cm" viewBox="110 149 817 575" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="228.408" y="150" width="261.184" height="58"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="228.408" y="150" width="261.184" height="58"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="359" y="176.15">
+      <tspan x="359" y="176.15">Login failure or</tspan>
+      <tspan x="359" y="194.15">session startup failure</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="268.32" y="242" width="177.76" height="58"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="268.32" y="242" width="177.76" height="58"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="357.2" y="268.15">
+      <tspan x="357.2" y="268.15">Inspect SSH log</tspan>
+      <tspan x="357.2" y="286.15">on VSM Server</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="202.64" y="398" width="336.16" height="58"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="202.64" y="398" width="336.16" height="58"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="370.72" y="424.15">
+      <tspan x="370.72" y="424.15">Inspect /var/log/vsmserver.log</tspan>
+      <tspan x="370.72" y="442.15">on VSM Server</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="541.44" y1="427" x2="635.608" y2="427"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="621.844,435 637.844,427 621.844,419 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="642.016" y="389" width="230.56" height="76"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="642.016" y="389" width="230.56" height="76"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="757.296" y="415.15">
+      <tspan x="757.296" y="415.15">Find which VSM Agent</tspan>
+      <tspan x="757.296" y="433.15">was selected for</tspan>
+      <tspan x="757.296" y="451.15">the session</tspan>
+    </text>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="580.154" y="218">
+    <tspan x="580.154" y="218">Did SSH allow</tspan>
+    <tspan x="580.154" y="236">access to the user?</tspan>
+  </text>
+  <g>
+    <rect style="fill: #ffffff" x="744.56" y="234" width="178.288" height="76"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="744.56" y="234" width="178.288" height="76"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="833.704" y="260.15">
+      <tspan x="833.704" y="260.15">Check that user</tspan>
+      <tspan x="833.704" y="278.15">is valid on </tspan>
+      <tspan x="833.704" y="296.15">VSM Server</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="359" y1="206" x2="357.412" y2="239.533"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="350.072,225.406 357.306,241.766 366.054,226.163 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="446.08" y1="271" x2="551.01" y2="271"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="537.246,279 553.246,271 537.246,263 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="609.926" y1="271" x2="740.088" y2="271.967"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="726.265,279.864 742.324,271.983 726.384,263.865 "/>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="582.704,298.222 582.704,349 370.72,349 370.72,395.528 "/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="362.72,381.764 370.72,397.764 378.72,381.764 "/>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="757.296,462 757.296,482 367.148,482 367.148,527.202 "/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="359.148,513.438 367.148,529.438 375.148,513.438 "/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="650" y="232">
+    <tspan x="650" y="232"></tspan>
+  </text>
+  <g>
+    <polygon style="fill: #ffffff" points="582.703,241.532 612.17,270.999 582.703,300.466 553.236,270.999 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="582.703,241.532 612.17,270.999 582.703,300.466 553.236,270.999 "/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="582.703" y="277.149">
+      <tspan x="582.703" y="277.149">?</tspan>
+    </text>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="651.704" y="299">
+    <tspan x="651.704" y="299">No</tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="606.704" y="326">
+    <tspan x="606.704" y="326">Yes</tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="645.994" y="506">
+    <tspan x="645.994" y="506">Is the reason for</tspan>
+    <tspan x="645.994" y="524">failure clear?</tspan>
+  </text>
+  <g>
+    <rect style="fill: #ffffff" x="204.348" y="529.674" width="325.6" height="58"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="204.348" y="529.674" width="325.6" height="58"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="367.148" y="555.824">
+      <tspan x="367.148" y="555.824">Inspect /var/log/vsmagent.log</tspan>
+      <tspan x="367.148" y="573.824">on selected VSM Agent</tspan>
+    </text>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="637.993,529.532 667.46,558.999 637.993,588.466 608.526,558.999 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="637.993,529.532 667.46,558.999 637.993,588.466 608.526,558.999 "/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="637.993" y="565.149">
+      <tspan x="637.993" y="565.149">?</tspan>
+    </text>
+  </g>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="665.216" y1="559" x2="745.09" y2="560"/>
+  <g>
+    <rect style="fill: #ffffff" x="746.586" y="540" width="178.816" height="40"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="746.586" y="540" width="178.816" height="40"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="835.994" y="566.15">
+      <tspan x="835.994" y="566.15">Correct problem</tspan>
+    </text>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="695.994" y="578">
+    <tspan x="695.994" y="578">Yes</tspan>
+  </text>
+  <g>
+    <rect style="fill: #ffffff" x="111.154" y="647" width="515.68" height="76"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="111.154" y="647" width="515.68" height="76"/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="368.994" y="673.15">
+      <tspan x="368.994" y="673.15">Inspect </tspan>
+      <tspan x="368.994" y="691.15">/var/opt/thinlinc/sessions/$USER/last/xinit.log</tspan>
+      <tspan x="368.994" y="709.15">on VSM Agent</tspan>
+    </text>
+  </g>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="532.5" y1="558.674" x2="610.772" y2="559"/>
+  <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="637.994,586.222 637.994,604 368.994,604 368.994,650 "/>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="654.994" y="603">
+    <tspan x="654.994" y="603">No</tspan>
+  </text>
+</svg>

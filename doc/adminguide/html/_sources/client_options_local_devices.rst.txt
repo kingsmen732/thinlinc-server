@@ -1,0 +1,123 @@
+.. meta::
+   :description: Guide to configuring local device export in the
+                 ThinLinc client, including settings for sound, serial
+                 ports, drives, printers, and smart card readers.
+
+.. _client_local_devices_tab:
+
+Local devices tab
+~~~~~~~~~~~~~~~~~
+
+The local devices tab contains options for which local devices should be
+exported to the server and in what manner.
+
+.. figure:: images/client-options-local-devices.png
+
+   Client settings local devices tab
+
+Description of local devices tab settings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Here follows a detailed description of the settings available in the
+local devices tab.
+
+:guilabel:`Export --- Sound`
+   When enabled, sound will be sent from the ThinLinc server to your
+   local client. A small local sound daemon will be started by the
+   client, which connects to a secure tunnel to the server. See
+   :ref:`sound-redirection` for more information about this
+   topic.
+
+   .. figure:: images/client-options-graphic-options-sound.png
+
+      Sound system selection interface
+
+   On Linux there is a :guilabel:`Details...` button next to the
+   :guilabel:`Sound` check box that will allow you to choose between
+   PulseAudio, ALSA and OSS for the local sound system. You can also let
+   the ThinLinc client select the correct system automatically.
+
+:guilabel:`Export --- Serial ports`
+   It is possible to forward two serial ports from the client to make it
+   available to programs you run on the server. To select which of your
+   local serial devices to export you can press the
+   :guilabel:`Details...` button next to the :guilabel:`Serial port`
+   check box. This will bring up a dialog where you can select which two
+   serial ports should be exported.
+
+   .. figure:: images/client-options-graphic-options-serial.png
+
+      Serial port selection interface
+
+   The :guilabel:`Device` should be a path to a Linux serial device
+   (such as :file:`/dev/ttyS0`) or a Windows COM port name (such as
+   ``COM1``). Enter the device to export in the text field or press the
+   :guilabel:`...` button to browse to the wanted device.
+
+:guilabel:`Export --- Drives`
+   This check box turns on export of local devices from your terminal
+   top the ThinLinc server. This makes your local drives available from
+   your ThinLinc session. To select which drives to export you press the
+   :guilabel:`Details...` button next to :guilabel:`Drives` check box.
+   That presents a dialog where you can build a list of drives to export
+   and set export permissions.
+
+   .. figure:: images/client-options-graphic-options-drives.png
+
+      Local drive export selection interface
+
+   The :guilabel:`Export local drives` window consists of two parts. At
+   the top there is a list containing exported paths, with two control
+   buttons below. The lower half contains settings fields for the
+   currently selected path. When you select a path listed in the upper
+   list you will see its corresponding settings in the drive options
+   field below. You can then change the selected path by changing the
+   values on the options field.
+
+   To add a new path to the list you press the :guilabel:`Add` button.
+   That creates a new empty land in the path list. The new path will be
+   automatically selected. You can then modify the settings in the lower
+   half. Set the path and export permission for the new export. To set
+   the export path you can either write it manually in the path text
+   field or press the :guilabel:`...` button to bring up a file
+   navigation window.
+
+   To remove a path you simply select a path and press the
+   :guilabel:`Remove` button.
+
+   The Windows client features a mechanism that makes it easy to export
+   the :file:`My Documents` folder. This feature is activated by
+   pressing the :guilabel:`My Documents` button. Regardless of the local
+   folder name, this folder will be mounted as :file:`MyDocuments` on
+   the server.
+
+   The export permissions can be one of the following three options,
+   :guilabel:`Not exported`, :guilabel:`Read only` and :guilabel:`Read
+   and write`. The :guilabel:`Not exported` option can be used to
+   temporarily turn off an export without having to delete it. The
+   :guilabel:`Read only` option means that you from the ThinLinc session
+   will be able to read from the export, but not write. The
+   :guilabel:`Read and write` option means that you from the ThinLinc
+   session will be able to both read and write.
+
+:guilabel:`Export --- Printer`
+   By checking this check box the client will export your local printer
+   to make it available from the ThinLinc session. For more information
+   about this feature, see :ref:`client_export_printer` and
+   :ref:`thinlocal`.
+
+   .. figure:: images/client-options-printer-options.png
+
+      Printer options dialogue
+
+   On Windows and macOS there is a :guilabel:`Details...` button next to
+   the :guilabel:`Printer` check box that will allow you to select if
+   the print job should be sent to the default printer or if the printer
+   selection dialog should be used on every print.
+
+:guilabel:`Export --- Smart card readers`
+   This check box makes all local smart card readers and smart cards
+   available to applications on the ThinLinc server. It is not necessary
+   to check this box to authenticate using smart cards, but it is needed
+   if you also wish to authenticate using smart cards to a Windows
+   Remote Desktop Server.

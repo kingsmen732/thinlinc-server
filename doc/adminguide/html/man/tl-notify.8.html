@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="The tl-notify command sends user-visible messages to ThinLinc sessions, with options to target specific users or all sessions." name="description" />
+
+    <title>tl-notify &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cendio.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tl-rsync-all" href="tl-rsync-all.8.html" />
+    <link rel="prev" title="tl-ldap-certalias" href="tl-ldap-certalias.8.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tl-ldap-certalias.8.html" title="Previous document">tl-ldap-certalias</a>
+        </li>
+        <li>
+          <a href="tl-rsync-all.8.html" title="Next document">tl-rsync-all</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="tl-notify">
+<h1>tl-notify<a class="headerlink" href="#tl-notify" title="Permalink to this headline">¶</a></h1>
+<section id="synopsis">
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p><strong>tl-notify</strong> [<em>options</em>] &lt;<em>message</em>&gt;</p>
+</section>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>This command sends a user-visible message to ThinLinc sessions on the
+server. The default is to send the message to all sessions, but the
+<code class="docutils literal notranslate"><span class="pre">-u</span></code> option can be used to send the message to a single
+recipient instead.</p>
+<p>To send messages to all users in a ThinLinc cluster, you can use this
+command in combination with the <strong class="program">tl-ssh-all</strong>(8) command.</p>
+</section>
+<section id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-h">
+<span id="cmdoption-help"></span><span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a short help text and exits.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-u">
+<span id="cmdoption-user"></span><span class="sig-name descname"><span class="pre">-u</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--user</span></span><span class="sig-prename descclassname"><span class="pre">=USER</span></span><a class="headerlink" href="#cmdoption-u" title="Permalink to this definition">¶</a></dt>
+<dd><p>User to send message to. The default is “all”.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-version">
+<span class="sig-name descname"><span class="pre">--version</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the ThinLinc version and exits.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tl-ldap-certalias.8.html" title="Previous document">tl-ldap-certalias</a>
+        </li>
+        <li>
+          <a href="tl-rsync-all.8.html" title="Next document">tl-rsync-all</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../commands.html">Commands on the ThinLinc server</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tl-config.1.html">tl-config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-desktop-restore.1.html">tl-desktop-restore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-disconnect.1.html">tl-disconnect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-env.1.html">tl-env</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-memberof-group.1.html">tl-memberof-group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-mount-localdrives.1.html">tl-mount-localdrives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-session-param.1.html">tl-session-param</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-single-app.1.html">tl-single-app</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-sso-password.1.html">tl-sso-password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-sso-token-passphrase.1.html">tl-sso-token-passphrase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-sso-update-password.1.html">tl-sso-update-password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-umount-localdrives.1.html">tl-umount-localdrives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-while-x11.1.html">tl-while-x11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tlctl.8.html">tlctl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tlctl-load.8.html">tlctl load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tlctl-session.8.html">tlctl session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-gen-auth.8.html">tl-gen-auth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-ldap-certalias.8.html">tl-ldap-certalias</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">tl-notify</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#options">Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tl-rsync-all.8.html">tl-rsync-all</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-setup.8.html">tl-setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-show-licenses.8.html">tl-show-licenses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-ssh-all.8.html">tl-ssh-all</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tl-support.8.html">tl-support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../commands.html">Commands on the ThinLinc server</a><ul>
+      <li>Previous: <a href="tl-ldap-certalias.8.html" title="previous chapter">tl-ldap-certalias</a></li>
+      <li>Next: <a href="tl-rsync-all.8.html" title="next chapter">tl-rsync-all</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/man/tl-notify.8.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

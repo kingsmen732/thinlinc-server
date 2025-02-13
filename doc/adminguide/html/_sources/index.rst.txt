@@ -1,0 +1,90 @@
+.. meta::
+   :description: Find all documentation about deploying, maintaining
+                 and administering a ThinLinc installation.
+
+==================================
+The ThinLinc Administrator's Guide
+==================================
+
+.. only:: html
+
+   Version |version|
+
+.. toctree::
+   :maxdepth: 3
+   :includehidden:
+   :caption: Introduction
+   :name: toc_introduction
+
+   introduction
+   architecture
+   obtaining
+
+.. toctree::
+   :maxdepth: 3
+   :includehidden:
+   :caption: Server installation
+   :name: toc_install
+
+   requirements_server
+   network
+   install_install
+
+.. toctree::
+   :maxdepth: 3
+   :includehidden:
+   :caption: Optional setup
+   :name: toc_optional
+
+   authentication
+
+   licensehandling
+
+   install_cluster
+   HA
+
+   printing
+   virtualgl
+
+   install_automatic
+   uninstalling
+
+.. toctree::
+   :maxdepth: 3
+   :includehidden:
+   :caption: Clients
+   :name: toc_clients
+
+   clientcomparison
+   client
+   tlwebaccess
+
+.. toctree::
+   :maxdepth: 3
+   :includehidden:
+   :caption: Administration
+   :name: toc_administration
+
+   redirection
+   configuration
+   install_upgrade
+   shadowing
+   hiveconf
+   cli
+   tlwebadm
+   tldc
+
+.. toctree::
+   :maxdepth: 3
+   :includehidden:
+   :caption: Appendixes
+   :name: toc_appendixes
+
+   commands
+   config_params
+   client_config_params
+   tcp-ports
+   troubleshoot
+   lockdown
+   gnutls-priorities
+   install_selinux

@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Explore Hiveconf, the configuration system used in ThinLinc, including its syntax, tree structure, and tools like hivetool and tl-config for managing server-side configurations." name="description" />
+
+    <title>Hiveconf &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Command line" href="cli.html" />
+    <link rel="prev" title="Shadowing" href="shadowing.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="shadowing.html" title="Previous document">Shadowing</a>
+        </li>
+        <li>
+          <a href="cli.html" title="Next document">Command line</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="hiveconf">
+<span id="id1"></span><h1>Hiveconf<a class="headerlink" href="#hiveconf" title="Permalink to this headline">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Hiveconf is the name of the configuration system used in ThinLinc. It is
+however not a ThinLinc-specific configuration system, but instead a
+generic configuration framework for storing key/value pairs in a
+human-readable way, although still in a format that’s easy to read and
+modify from a computer program.</p>
+<p>Hiveconf stores data using a “backend”, meaning configuration data can
+be stored in different ways. The default backend which is also used in
+ThinLinc is using a text file format similar to Windows
+<code class="file docutils literal notranslate"><span class="pre">.INI</span></code>-files, or the format used in <code class="file docutils literal notranslate"><span class="pre">smb.conf</span></code> from Samba.</p>
+<p>In ThinLinc, Hiveconf can only guarantee that files with encoding UTF-8
+are correctly read. The Hiveconf-files of ThinLinc ships in UTF-8, but
+the encoding of the files could change if the files are opened or
+manually modified on a non UTF-8 system.</p>
+<p>In this section, we will describe Hiveconf from a general point of view
+and also describe ThinLinc-specific details.</p>
+<section id="basic-syntax">
+<h3>Basic syntax<a class="headerlink" href="#basic-syntax" title="Permalink to this headline">¶</a></h3>
+<p>Basically, a Hiveconf file consists of key/value pairs with an equal
+sign (<code class="docutils literal notranslate"><span class="pre">=</span></code>) between them, as in the following example:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">vsm_server_port</span> <span class="o">=</span> <span class="s">9000</span>
+<span class="na">vnc_port_base</span> <span class="o">=</span> <span class="s">5900</span>
+</pre></div>
+</div>
+<p>The values after the equal sign can be of the following types:</p>
+<ul class="simple">
+<li><p>String</p></li>
+<li><p>Boolean</p></li>
+<li><p>Integer</p></li>
+<li><p>Float</p></li>
+<li><p>Binary data as hexadecimal ASCII</p></li>
+</ul>
+<p>Data can also be lists of the above types, these lists are
+space-separated.</p>
+</section>
+<section id="tree-structure">
+<span id="hiveconf-tree"></span><h3>Tree structure<a class="headerlink" href="#tree-structure" title="Permalink to this headline">¶</a></h3>
+<p>Parameters in Hiveconf all reside in folders. Folders are just like a
+directory or folder in a normal file system. By adding folder directives
+to Hiveconf files, the parameters will be split up in a tree structure,
+meaning each parameter will be addressed using a path. This way, two
+folders can have two parameters with the same name without collision.</p>
+<p>The benefits of this is that a software suite (for instance ThinLinc)
+can have one common configuration namespace, without having to name all
+configuration parameters uniquely, since every component in the suite
+can have its own namespace. In ThinLinc, the VSM server has its
+parameters in the <a class="reference internal" href="config_vsmserver.html#std-server-config-folder-vsmserver"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver</span></code></a> folder, the VSM agent has its
+parameters in the <a class="reference internal" href="config_vsmagent.html#std-server-config-folder-vsmagent"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent</span></code></a> folder and so on.</p>
+<p>Looking from a system global point of view, every software package has
+its own folder, meaning all configuration parameters of the system can
+be accessed using a common tool.</p>
+<p>Folders are put into the configuration files by adding a path inside
+square brackets to the file as in the following example:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># Hiveconf configuration file - VSM server</span>
+<span class="c1">#</span>
+<span class="k">[/vsmserver]</span>
+<span class="na">unbind_ports_at_login</span><span class="o">=</span><span class="s">true</span>
+
+<span class="c1"># Administrators email</span>
+<span class="na">admin_email</span> <span class="o">=</span> <span class="s">root@localhost</span>
+</pre></div>
+</div>
+<p>In this example, both parameters (<code class="docutils literal notranslate"><span class="pre">unbind_ports_at_login</span></code> and
+<code class="docutils literal notranslate"><span class="pre">admin_email</span></code>) reside in the <code class="docutils literal notranslate"><span class="pre">/vsmserver</span></code> folder. This means that
+they should be addressed as <code class="docutils literal notranslate"><span class="pre">/vsmserver/unbind_ports_at_login</span></code> ,
+<code class="docutils literal notranslate"><span class="pre">/vsmserver/admin_email</span></code> respectively if used from inside a program
+using the Hivetool libraries. This is of course not that important from
+the system administrator’s point of view, but it’s important to
+understand the principle.</p>
+</section>
+<section id="mounting-datasources">
+<h3>Mounting datasources<a class="headerlink" href="#mounting-datasources" title="Permalink to this headline">¶</a></h3>
+<p>One Hiveconf file can use another Hiveconf file by mounting the other
+file using a mount command as in the following example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%mount HA.hconf
+</pre></div>
+</div>
+<p>The mount should be compared to a mount on a Linux. That is, the mount
+adds the tree structure of the file mounted at exactly the place in the
+current tree structure where the mount command was found.</p>
+<p>Mounts can also use wildcards, as in the following example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%mount conf.d/*.hconf
+</pre></div>
+</div>
+<p>The above is exactly what you’ll find if you look into the file
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/thinlinc.hconf</span></code>. Hiveconf will mount all files
+in <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d</span></code> and add them to the current folder.
+This is a very convenient way to add all configuration files for a
+specific software suite to the Hiveconf namespace.</p>
+</section>
+<section id="host-wide-configuration">
+<h3>Host-wide configuration<a class="headerlink" href="#host-wide-configuration" title="Permalink to this headline">¶</a></h3>
+<p>As we hinted in <a class="reference internal" href="#hiveconf-tree"><span class="std std-ref">Tree structure</span></a>, Hiveconf lays the foundation for a
+host-wide configuration system where all applications on a host can be
+configured using a single system with a common API. This can be
+accomplished because each application will get its own subfolder in the
+host-wide configuration folder, so that two applications’ parameters won’t
+collide even if they have the same name. Using the mount command, every
+application can have its own configuration file, while still exporting
+its parameters to the host-wide folder system.</p>
+<p>There is a host-wide Hiveconf “root”, implemented by the file
+<code class="file docutils literal notranslate"><span class="pre">/etc/root.hconf</span></code>. This file mounts all files in
+<code class="file docutils literal notranslate"><span class="pre">/etc/hiveconf.d/</span></code> where an application can drop its own Hiveconf
+file at install-time, just like it can drop a file in for example
+<code class="file docutils literal notranslate"><span class="pre">/etc/logrotate.d</span></code> or <code class="file docutils literal notranslate"><span class="pre">/etc/profile.d</span></code>.</p>
+</section>
+<section id="hiveconf-tools">
+<span id="id2"></span><h3>Hiveconf tools<a class="headerlink" href="#hiveconf-tools" title="Permalink to this headline">¶</a></h3>
+<p>In addition to the system libraries used by applications to read and
+write configuration parameters that reside in Hiveconf files, there is a
+command line utility named <strong class="program">hivetool</strong> for inspecting and
+setting parameters from the command line. This can be very convenient,
+for example when scripting setup scripts that need to set some
+parameter.</p>
+<p><strong class="program">hivetool</strong> without parameters will do nothing. To see all
+parameters on the system, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>hivetool -Ra /
+</pre></div>
+</div>
+<p>This instructs <strong class="program">hivetool</strong> to print all parameters, beginning
+from the root (<code class="docutils literal notranslate"><span class="pre">/</span></code>) and recursing downwards. With a standard Hiveconf
+installation this will list Samba and KDE configuration parameters. If
+ThinLinc is installed, it will list ThinLinc parameters as well.</p>
+<p>To print a specific parameter, run <strong class="program">hivetool</strong> with the name of
+the parameter as parameter. For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>hivetool /thinlinc/vsmserver/admin_email
+<span class="go">root@localhost</span>
+</pre></div>
+</div>
+<p>Setting a parameter is equally easy. To set the <code class="docutils literal notranslate"><span class="pre">admin_email</span></code>
+parameter above, execute the following:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>hivetool /thinlinc/vsmserver/admin_email<span class="o">=</span>johndoe@example.com
+</pre></div>
+</div>
+</section>
+</section>
+<section id="hiveconf-and-thinlinc">
+<h2>Hiveconf and ThinLinc<a class="headerlink" href="#hiveconf-and-thinlinc" title="Permalink to this headline">¶</a></h2>
+<p>ThinLinc uses Hiveconf as its primary configuration system on the
+server-side. In this section, we will describe the convenience utility
+shipped with ThinLinc. For descriptions of the folders and parameters
+used by ThinLinc, please refer to <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">Server configuration</span></a></p>
+<section id="the-thinlinc-configuration-tool">
+<h3>The ThinLinc configuration tool<a class="headerlink" href="#the-thinlinc-configuration-tool" title="Permalink to this headline">¶</a></h3>
+<p>In order to access the ThinLinc part of the Hiveconf configuration
+namespace without having to address it using the host-wide path (i.e. to
+avoid having to add <code class="docutils literal notranslate"><span class="pre">/thinlinc/</span></code> to all parameters, a tool named
+<strong class="program">tl-config</strong> is shipped with ThinLinc).</p>
+<p><strong class="program">tl-config</strong> takes the same parameters as <strong class="program">hivetool</strong>
+and works the same way. Refer to <a class="reference internal" href="#hiveconf-tools"><span class="std std-ref">Hiveconf tools</span></a> for information
+about <strong class="program">hivetool</strong>. Try for example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tl-config -Ra /
+</pre></div>
+</div>
+<p>This command will print all ThinLinc-related parameters.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="shadowing.html" title="Previous document">Shadowing</a>
+        </li>
+        <li>
+          <a href="cli.html" title="Next document">Command line</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hiveconf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-syntax">Basic syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tree-structure">Tree structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mounting-datasources">Mounting datasources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#host-wide-configuration">Host-wide configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hiveconf-tools">Hiveconf tools</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hiveconf-and-thinlinc">Hiveconf and ThinLinc</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-thinlinc-configuration-tool">The ThinLinc configuration tool</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="shadowing.html" title="previous chapter">Shadowing</a></li>
+      <li>Next: <a href="cli.html" title="next chapter">Command line</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/hiveconf.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

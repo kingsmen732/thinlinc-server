@@ -1,0 +1,38 @@
+.. meta::
+   :description: Learn how to configure ThinLinc with High Availability
+                 (HA) to protect the master from single points of
+                 failure, ensuring continuous service and session
+                 database synchronization across multiple servers.
+
+.. _HA:
+
+High availability
+=================
+
+This chapter describes how to set up ThinLinc with High Availability
+(from now on referred to as "HA") for the VSM server. Since the VSM
+server service handles load-balancing and the session database, it can
+be problematic if the machine fails. ThinLinc HA provides protection for
+this service against the single point of failure that the hardware
+running the VSM server normally is.
+
+The basic principle behind this setup is to have two equal machines,
+both capable of running VSM server. If one of the machines goes down for
+some reason, the other machine will take over and serve VSM server
+requests with no or short interruption of service.
+
+.. note::
+
+   The HA functionality provided by ThinLinc provides synchronization of
+   the ThinLinc session database across two VSM servers. The software
+   used by these machines to implement failover is not part of ThinLinc,
+   and must be installed and configured according to your requirements.
+   The industry standard for doing so on Linux is provided by Pacemaker
+   and Corosync, see https://clusterlabs.org for more information.
+
+.. toctree::
+   :hidden:
+
+   HA-overview
+   HA-configuration
+   HA-recover

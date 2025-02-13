@@ -1,0 +1,47 @@
+.. meta::
+   :description: Overview of TCP ports required for ThinLinc's master
+                 server operation, including SSH, Web Access,
+                 administration, and communication between components.
+
+.. _tcp-ports_vsmserver:
+
+On a machine running VSM Server
+-------------------------------
+
+22: SSH Daemon
+   Port 22 is not used by ThinLinc *per se*, but since no ThinLinc
+   installation can work without a running SSH daemon, we list port 22
+   here. Port 22 is the normal SSH port, but basically any port can be
+   used --- the client has support for connecting to any port. Note
+   however that if the SSH daemon on the VSM server is listening on port
+   **x**, all VSM agents must also have their SSH daemons configured to
+   listen on port **x**.
+
+300: ThinLinc Web Access
+   By default, ThinLinc's Web Access service tlwebaccess is available on
+   TCP port 300. Traffic to this port is encrypted (TLS).
+
+   .. note::
+
+      The port on which tlwebaccess runs is configurable via the
+      parameter :servconf:`/webaccess/listen_port`. See
+      :ref:`configuration_tlwebaccess` for details.
+
+1010: ThinLinc Administration Interface (tlwebadm)
+   By default, ThinLinc's web-based administration interface is
+   available on TCP port 1010. In order to access this interface
+   remotely, port 1010 will need to be reachable. Traffic to this port
+   is encrypted (TLS).
+
+   .. note::
+
+      The port on which tlwebadm runs is configurable via the parameter
+      :servconf:`/tlwebadm/listen_port`. See
+      :ref:`configuration_tlwebadm` for details.
+
+9000: VSM server
+   The VSM server listens on port 9000. The traffic is not encrypted,
+   but sensitive information will only be shared with root or
+   connections originating from a port lower than 1024, from a list of
+   known IP addresses. The protocol used is XML-RPC through HTTP (using
+   a minimal internal HTTP server in the VSM server).

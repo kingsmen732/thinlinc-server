@@ -1,0 +1,74 @@
+RedirectMatch permanent "^(.*)/pt01.html$" "$1/index.html"
+RedirectMatch permanent "^(.*)/pt02.html$" "$1/index.html"
+RedirectMatch permanent "^(.*)/pt03.html$" "$1/index.html"
+RedirectMatch permanent "^(.*)/pt04.html$" "$1/index.html"
+
+RedirectMatch permanent "^(.*)/ch01s02.html$" "$1/introduction.html"
+
+RedirectMatch permanent "^(.*)/installation.html$" "$1/requirements_server.html"
+RedirectMatch permanent "^(.*)/ch03s04.html$" "$1/install_install.html"
+
+RedirectMatch permanent "^(.*)/licensekeys_logemail.html$" "$1/licensehandling.html"
+RedirectMatch permanent "^(.*)/ch04s02.html$" "$1/licensehandling.html"
+RedirectMatch permanent "^(.*)/ch04s03.html$" "$1/licensehandling.html"
+RedirectMatch permanent "^(.*)/ch04s05.html$" "$1/licensehandling.html"
+
+RedirectMatch permanent "^(.*)/ch06s02.html$" "$1/HA-configuration.html"
+
+RedirectMatch permanent "^(.*)/fileaccess.html$" "$1/lockdown.html"
+
+RedirectMatch permanent "^(.*)/ch07s04.html$" "$1/client_options.html"
+RedirectMatch permanent "^(.*)/clientconf.html$" "$1/client_config.html"
+RedirectMatch permanent "^(.*)/client_config_storage.html$" "$1/client_config.html"
+RedirectMatch permanent "^(.*)/clientcustomizer.html$" "$1/client_customizer.html"
+RedirectMatch permanent "^(.*)/clientplatforms_web_integration.html$" "$1/client_web_integration.html"
+RedirectMatch permanent "^(.*)/client_branding.html$" "$1/client_advanced_topics.html"
+RedirectMatch permanent "^(.*)/client_xdm_mode.html$" "$1/client_advanced_topics.html"
+
+RedirectMatch permanent "^(.*)/publickey_authentication.html$" "$1/authentication_publickey.html"
+RedirectMatch permanent "^(.*)/scpublickey_authentication.html$" "$1/authentication_scpublickey.html"
+RedirectMatch permanent "^(.*)/otp_authentication.html$" "$1/authentication_otp.html"
+
+RedirectMatch permanent "^(.*)/windowsclients.html$" "$1/client_windows.html"
+RedirectMatch permanent "^(.*)/macosclients.html$" "$1/client_macos.html"
+RedirectMatch permanent "^(.*)/linuxclients.html$" "$1/client_linux.html"
+RedirectMatch permanent "^(.*)/thinterminals.html$" "$1/client_terminals.html"
+RedirectMatch permanent "^(.*)/thinstation.html$" "$1/client_thinstation.html"
+
+RedirectMatch permanent ^(.*)/tlwebaccess_requirements.html$" "$1/tlwebaccess_usage.html"
+
+RedirectMatch permanent "^(.*)/client-resources.html$" "$1/redirection.html"
+RedirectMatch permanent "^(.*)/local-drives.html$" "$1/redir_drives.html"
+RedirectMatch permanent "^(.*)/serial-redirection.html$" "$1/redir_serial.html"
+RedirectMatch permanent "^(.*)/sound-redirection.html$" "$1/redir_sound.html"
+RedirectMatch permanent "^(.*)/scard-redirection.html$" "$1/redir_scard.html"
+
+RedirectMatch permanent "^(.*)/ch14s02.html$" "$1/config_params.html"
+RedirectMatch permanent "^(.*)/ch14s03.html$" "$1/config_logging.html"
+RedirectMatch permanent "^(.*)/configuration_cluster.html$" "$1/config_cluster.html"
+RedirectMatch permanent "^(.*)/configuration_params.html$" "$1/config_params.html"
+RedirectMatch permanent "^(.*)/configuration_logging.html$" "$1/config_logging.html"
+RedirectMatch permanent "^(.*)/configuration_customizing_user_session.html$" "$1/config_session.html"
+RedirectMatch permanent "^(.*)/configuration_limiting_lifetime.html$" "$1/config_lifetime.html"
+
+RedirectMatch permanent "^(.*)/shadowing-a-user-session.html$" "$1/shadowing.html"
+RedirectMatch permanent "^(.*)/shadowing-disable-feature.html$" "$1/shadowing.html"
+RedirectMatch permanent "^(.*)/shadowing-granting-access.html$" "$1/shadowing.html"
+RedirectMatch permanent "^(.*)/shadowing-indicating.html$" "$1/shadowing.html"
+
+RedirectMatch permanent "^(.*)/ch16s02.html$" "$1/hiveconf.html"
+
+RedirectMatch permanent "^(.*)/ch17s02.html$" "$1/tlwebadm.html"
+
+RedirectMatch permanent "^(.*)/ch18s04.html$" "$1/tldc_tips.html"
+
+RedirectMatch permanent "^(.*)/apas02.html$" "$1/tcp-ports_agent.html"
+
+RedirectMatch permanent "^(.*)/apbs02.html$" "$1/troubleshoot.html"
+
+RedirectMatch permanent "^(.*)/apcs02.html$" "$1/lockdown.html"
+RedirectMatch permanent "^(.*)/apcs03.html$" "$1/lockdown.html"
+RedirectMatch permanent "^(.*)/apcs04.html$" "$1/lockdown.html"
+RedirectMatch permanent "^(.*)/apcs05.html$" "$1/lockdown.html"
+
+RedirectMatch permanent "^(.*)/apds02.html$" "$1/gnutls-priorities-all.html"

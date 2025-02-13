@@ -1,0 +1,32 @@
+#!/bin/bash
+# -*- mode: shell-script; coding: utf-8 -*-
+#
+# Copyright 2021 Pierre Ossman for Cendio AB.
+# For more information, see http://www.cendio.com
+
+# Rename all environment variables that might cause issues
+# (will be restored later via sitecustomize)
+for var in $(compgen -e); do
+	if [[ "$var" == PYTHON* ]]; then
+		export "__TL_ORIG$var"="${!var}"
+		unset "$var"
+	fi
+done
+
+# Make sure ThinLinc finds its modules
+ROOTDIR=`cd "$(dirname "$0")"; cd ..; pwd`
+export PYTHONPATH="$ROOTDIR/modules"
+
+# We don't want any user modules to gunk things up
+export PYTHONNOUSERSITE=1
+
+# Enable extra checks for development builds
+if [[ `< "$ROOTDIR/etc/thinlinc-release"` == *post ]]; then
+	export PYTHONWARNINGS=default
+	export PYTHONDEVMODE=1
+	# Debug allocator broken, see Python Issue42540
+	export PYTHONMALLOC=pymalloc
+fi
+
+# Propagate argv[0] so that any re-execution includes the same wrapper(s)
+exec -a "$0" /usr/bin/python3 "$@"

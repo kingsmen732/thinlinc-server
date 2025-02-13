@@ -1,0 +1,121 @@
+/*
+ * Copyright 2022 Cendio AB.
+ * For more information, see http://www.cendio.com
+*/
+
+/* From: https://fonts.google.com/specimen/Poppins */
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    src: url('Poppins-Regular.ttf') format('truetype');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Poppins';
+    font-style: italic;
+    font-weight: 400;
+    src: url('Poppins-Italic.ttf') format('truetype');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    src: url('Poppins-SemiBold.ttf') format('truetype');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Poppins';
+    font-style: italic;
+    font-weight: 600;
+    src: url('Poppins-SemiBoldItalic.ttf') format('truetype');
+    font-display: swap;
+}
+
+/* From: https://fonts.google.com/specimen/Mulish */
+@font-face {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 200 1000;
+    src: url('Mulish-VariableFont_wght.ttf') format('truetype-variations');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Mulish';
+    font-style: italic;
+    font-weight: 200 1000;
+    src: url('Mulish-Italic-VariableFont_wght.ttf') format('truetype-variations');
+    font-display: swap;
+}
+
+/* From: https://fonts.google.com/specimen/Space+Mono */
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: url('SpaceMono-Regular.ttf') format('truetype');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Space Mono';
+    font-style: italic;
+    font-weight: 400;
+    src: url('SpaceMono-Italic.ttf') format('truetype');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700;
+    src: url('SpaceMono-Bold.ttf') format('truetype');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Space Mono';
+    font-style: italic;
+    font-weight: 700;
+    src: url('SpaceMono-BoldItalic.ttf') format('truetype');
+    font-display: swap;
+}
+
+:root {
+    font-family: Mulish, sans-serif;
+    font-size: 15px;
+    line-height: var(--line-height);
+    /* We want to notice if a font is missing */
+    font-synthesis: none;
+}
+input, select, textarea, button, input::file-selector-button {
+    /*
+     * Input elements have specific (built-in) styling, but we want CSS'
+     * normal inheritance.
+     */
+    font-family: inherit;
+    font-size: inherit;
+}
+
+h1, h2, h3, h4, h5, h6,
+input, .input, select, button, label,
+input::file-selector-button {
+    font-family: Poppins, sans-serif;
+    font-weight: 400;
+}
+textarea, .input_textarea {
+    font-family: Mulish, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+input[type=button],
+input[type=color],
+input[type=reset],
+input[type=submit],
+input::file-selector-button,
+button, select {
+    font-weight: 600;
+}
+
+pre, code, kbd, samp {
+    font-family: "Space Mono", monospace;
+    font-variant-ligatures: none;
+}

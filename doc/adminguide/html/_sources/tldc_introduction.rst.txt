@@ -1,0 +1,26 @@
+.. meta::
+   :description: ThinLinc desktop customizer allows administrators to
+                 control menu entries and desktop icons for users based
+                 on group memberships, username, and chosen ThinLinc
+                 profiles.
+
+.. _tldc_introduction:
+
+Introduction
+------------
+
+The ThinLinc desktop customizer is a combination of a web-based
+administration tool and a command that is run at session startup for all
+users. It enables the administrator to decide what menu entries should
+be presented for specific users, and what icons should be made available
+on the desktop. Which menu entries and/or desktop entries are given to a
+specific user is decided based on the Linux group memberships of the
+user, the username and what ThinLinc Profile was chosen (if any).
+
+.. note::
+
+   Since KDE4 uses a different desktop configuration mechanism compared
+   to older versions of KDE, icons added to the desktop using the
+   ThinLinc desktop customizer will not be shown in KDE4. This can be
+   solved by changing the :guilabel:`Desktop layout` setting of your
+   KDE4 desktop to :guilabel:`Folder view`.

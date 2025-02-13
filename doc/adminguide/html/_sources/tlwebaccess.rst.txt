@@ -1,0 +1,20 @@
+.. meta::
+   :description: Overview of ThinLinc Web Access, a browser-based client
+                 enabling access to ThinLinc servers or clusters without
+                 software installation. Ideal for easy and flexible
+                 remote access.
+
+.. _tlwebaccess:
+
+ThinLinc Web Access
+===================
+
+ThinLinc Web Access is a ThinLinc client that runs in modern browsers
+and allows access to a ThinLinc server or cluster without installing any
+extra software on a client device.
+
+.. toctree::
+   :hidden:
+
+   tlwebaccess_server
+   tlwebaccess_usage

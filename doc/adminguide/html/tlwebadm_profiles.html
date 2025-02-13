@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Manage profiles and introduction texts in the ThinLinc web administration interface, including creating, editing, and organizing user profiles and translations for the profile chooser." name="description" />
+
+    <title>The profiles module &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The locations module" href="tlwebadm_locations.html" />
+    <link rel="prev" title="The VSM module" href="tlwebadm_vsm.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tlwebadm_vsm.html" title="Previous document">The VSM module</a>
+        </li>
+        <li>
+          <a href="tlwebadm_locations.html" title="Next document">The locations module</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="the-profiles-module">
+<span id="tlwebadm-profiles"></span><h1>The profiles module<a class="headerlink" href="#the-profiles-module" title="Permalink to this headline">¶</a></h1>
+<p>On this page you can modify text shown in the profile chooser, and
+manage profiles. You can create or delete a profile and configure the
+profile order.</p>
+<ul class="simple">
+<li><p><span class="guilabel">Introduction texts</span> allows you to modify and manage
+translation of texts used in the profile chooser.</p></li>
+<li><p><span class="guilabel">Profile list</span> allows you to configure the available
+profiles and their order.</p></li>
+</ul>
+<section id="introduction-texts">
+<span id="tlwebadm-profiles-introductions-texts"></span><h2>Introduction texts<a class="headerlink" href="#introduction-texts" title="Permalink to this headline">¶</a></h2>
+<p><span class="guilabel">Introduction texts</span> contain translation tables for greetings
+and introduction texts. There is also a configuration option to enable
+or disable the use of introduction texts.</p>
+<ul class="simple">
+<li><p><span class="guilabel">Greeting text</span> is the text to show at the top of the
+profile chooser.</p></li>
+<li><p><span class="guilabel">Introduction text</span> is the text to show before presenting
+the list of profiles.</p></li>
+</ul>
+<p>To add a new translation, fill in the language code and the translated
+string. Click the <span class="guilabel">Save</span> button to save the new translation
+and add it to the translation table.</p>
+<p>To delete a translation select the row using the checkbox in
+<span class="guilabel">Delete</span> column of the translation table. Click the
+<span class="guilabel">Save</span> button to carry out the actual deletion of selected
+rows.</p>
+</section>
+<section id="profile-list">
+<span id="tlwebadm-profiles-profiles-list"></span><h2>Profile list<a class="headerlink" href="#profile-list" title="Permalink to this headline">¶</a></h2>
+<p>The <span class="guilabel">Profile list</span> module contains functionality to manage
+your profiles. You can change the default profile, create new or edit
+existing profiles, or change the order of profiles.</p>
+<ul class="simple">
+<li><p><span class="guilabel">Default profile</span> allows you to specify the default profile
+to be selected in the profile chooser.</p></li>
+<li><p><span class="guilabel">Active profiles</span> allows you to modify active profiles and
+their order, or create new profiles. These are presented to the user
+in the same order as in the list. Note that other criteria must also
+be satisfied for a profile to be available to a user.</p></li>
+<li><p><span class="guilabel">Inactive profiles</span> allows you to modify inactive
+profiles. These are not presented to the user.</p></li>
+</ul>
+<p>Create a new profile by clicking the <span class="guilabel">Add new profile</span> button.
+If you want to edit an existing profile, click the profile name in the
+table of available profiles.</p>
+<p>When creating a new or editing an existing profile a pop-up is displayed.
+This pop-up is shared between both modes and each field details are
+described below.</p>
+<ul>
+<li><p><span class="guilabel">Identification</span></p>
+<p>A unique string identifier for the profile which is used when
+referencing this profile.</p>
+</li>
+<li><p><span class="guilabel">Make profile available</span></p>
+<p>This will make the profile available to be selected and used. If
+disabled it will not be shown to the user in the profile chooser.</p>
+</li>
+<li><p><span class="guilabel">XDG session desktop</span></p>
+<p>The system desktop session configuration that this profile should be
+connected to.</p>
+</li>
+<li><p><span class="guilabel">Default name</span></p>
+<p>A name for the profile which is displayed in the profile chooser.</p>
+</li>
+<li><p><span class="guilabel">Take description from</span></p>
+<p>The description is shown in the profile chooser when a profile is
+selected. This field can be a static text which is defined in the
+input field <span class="guilabel">Default description</span>.</p>
+<ul class="simple">
+<li><p><span class="guilabel">Test command</span>: This will take and use the output of the
+defined <span class="guilabel">Test command</span> as the description for the
+profile.</p></li>
+<li><p><span class="guilabel">Manually defined text below</span>: This will use the text
+defined in the <span class="guilabel">Default description</span> field below.</p></li>
+</ul>
+</li>
+<li><p><span class="guilabel">Default description</span></p>
+<p>A text used as the description for the profile. This is text is used
+if <span class="guilabel">Take description from</span> above is selected to use the
+manually defined text.</p>
+</li>
+<li><p><span class="guilabel">Icon path</span></p>
+<p>A filename of the icon to use in the profile chooser.</p>
+</li>
+<li><p><span class="guilabel">Screenshot path</span></p>
+<p>A filename of the screenshot to use in the profile chooser.</p>
+</li>
+<li><p><span class="guilabel">Command line</span></p>
+<p>This command is used to start up a session. In most cases this is
+something simple like <code class="docutils literal notranslate"><span class="pre">xfce4-session</span></code>, but in some cases there
+might also be arguments like
+<code class="docutils literal notranslate"><span class="pre">gnome-session</span> <span class="pre">--session</span> <span class="pre">gnome-classic</span></code>.</p>
+</li>
+<li><p><span class="guilabel">Test command</span></p>
+<p>This command is evaluated and if it returns true, the profile is
+shown to the user. If the command evaluates as false, the profile
+will not be shown in the list of available profiles for the user.</p>
+<p>ThinLinc includes the tool <strong class="program">tl-memberof-group</strong> which may be
+used to test membership of groups. You can use this tool as a test
+command, such as <code class="docutils literal notranslate"><span class="pre">/opt/thinlinc/bin/tl-memberof-group</span>
+<span class="pre">my_profile_access_group</span></code>. This example will give members of group
+<code class="docutils literal notranslate"><span class="pre">my_profile_access_group</span></code> access to the profile.</p>
+<p>If you only want to give a specific user access to the profile you
+may specify <code class="docutils literal notranslate"><span class="pre">test</span> <span class="pre">${USER}</span> <span class="pre">=</span> <span class="pre">user</span></code>.</p>
+</li>
+</ul>
+<p>When you have finished editing the fields, click <span class="guilabel">Save</span> button
+at the bottom of the pop-up to save your changes into the configuration
+file.</p>
+<p>To delete a profile, click the profile name in the table of available
+profiles. Then click the checkbox at the bottom of the pop-up to verify
+your intention about deletion of the profile. Complete the deletion by
+clicking the <span class="guilabel">Delete</span> button.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tlwebadm_vsm.html" title="Previous document">The VSM module</a>
+        </li>
+        <li>
+          <a href="tlwebadm_locations.html" title="Next document">The locations module</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tlwebadm.html#introduction">Introduction</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tlwebadm.html#modules">Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_health.html">The system health module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_status.html">The status module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_vsm.html">The VSM module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">The profiles module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_locations.html">The locations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_tldc.html">The desktop customizer module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a><ul>
+      <li>Previous: <a href="tlwebadm_vsm.html" title="previous chapter">The VSM module</a></li>
+      <li>Next: <a href="tlwebadm_locations.html" title="next chapter">The locations module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/tlwebadm_profiles.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,23 @@
+.. meta::
+   :description: The tl-while-x11 command runs a specified command and
+                 automatically terminates it when the X11 server exits,
+                 passing any provided arguments to the command.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-while-x11
+============
+
+Synopsis
+--------
+
+**tl-while-x11** <*command*> [*args*]
+
+Description
+-----------
+
+The program :program:`tl-while-x11` runs the command specified by
+*command* and terminates it when the X11 server exits. The arguments
+specified by *args* become the arguments to *command*.

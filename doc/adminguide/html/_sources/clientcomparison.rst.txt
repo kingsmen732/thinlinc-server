@@ -1,0 +1,36 @@
+.. meta::
+   :description: Overview of the ThinLinc native client and Web Access
+                 client, comparing their features and platform support
+                 to help administrators and users select the appropriate
+                 client for connecting to ThinLinc servers.
+
+.. _clientcomparison:
+
+Choosing a client
+=================
+
+There are two separate clients that can be used to connect to your
+ThinLinc server or cluster: :ref:`client` and the web client
+:ref:`tlwebaccess`. In this chapter, we cover the differences between
+the two.
+
+.. note::
+
+   As an administrator, you have the option to let your users choose
+   which client to use, or only allow access to your ThinLinc server or
+   cluster using one of them.
+
+Compared to Web Access, the native ThinLinc client offers a wider range
+of features, including full-screen over multiple monitors, sound
+redirection, and access to client-side hardware such as printers and
+smart card readers. It is also capable of providing server-side access
+to your client-side file system. It supports authentication using
+passwords, public keys, smart cards, one-time passwords, and
+Kerberos. The native client is available on all major desktop and thin
+client operating systems. See :ref:`clientplatforms` for a list of all
+supported platforms.
+
+On the other hand, Web Access offers the flexibility of being available
+on all platforms with a modern web browser, including mobile devices. It
+supports authentication using passwords and one-time passwords.
+

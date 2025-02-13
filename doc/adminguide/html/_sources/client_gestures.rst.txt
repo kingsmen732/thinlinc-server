@@ -1,0 +1,72 @@
+.. meta::
+   :description: Overview of touch gestures supported by the ThinLinc
+                 client for touch-capable monitors, allowing users to
+                 simulate various mouse actions like clicks, drags, and
+                 zooms through gestures.
+
+.. _client_gestures:
+
+Client touch gestures
+---------------------
+
+The ThinLinc client has support for a number of touch gestures when used
+on a touch capable monitor. These gestures allow the user to simulate
+certain mouse operations that would otherwise not be possible.
+
+.. note::
+
+   Touch gestures are not available on macOS as it currently lacks
+   native support for touch capable monitors.
+
+.. list-table::
+   :widths: 20, 80
+   :class: table-noborders
+
+   * - .. figure:: images/gesture-tap.svg
+
+     - **Click**
+
+       Tap a single finger to simulate a click of the left mouse button.
+
+   * - .. figure:: images/gesture-drag.svg
+
+     - **Drag**
+
+       Press a single finger and drag it across the screen to simulate
+       pressing the left mouse button and moving the cursor.
+
+   * - .. figure:: images/gesture-press.svg
+
+     - **Right click**
+
+       Press and hold a single finger to simulate a press of the right
+       mouse button.
+
+   * - .. figure:: images/gesture-two-tap.svg
+
+     - **Right click, alternative**
+
+       Tap two fingers to simulate a press of the right mouse button.
+
+   * - .. figure:: images/gesture-three-tap.svg
+
+     - **Middle click** *(not available on Windows)*
+
+       Tap three fingers to simulate a press of the middle mouse button
+       (mouse wheel).
+
+   * - .. figure:: images/gesture-two-drag.svg
+
+     - **Pan / Scroll**
+
+       Press two fingers and drag them across the screen to simulate
+       rotating the vertical or horizontal mouse wheel.
+
+   * - .. figure:: images/gesture-pinch.svg
+
+     - **Zoom**
+
+       Press two fingers and move them closer or further away from each
+       other to simulate pressing the :kbd:`Control` key and rotating
+       the mouse wheel. Many applications interpret this combination as
+       a request to zoom the open document in or out.

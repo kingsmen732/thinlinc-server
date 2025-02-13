@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="This section provides an overview of license management in ThinLinc, including license counting, file handling, and monitoring." name="description" />
+
+    <title>License handling &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Cluster installation" href="install_cluster.html" />
+    <link rel="prev" title="Using one-time passwords" href="authentication_otp.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="authentication_otp.html" title="Previous document">Using one-time passwords</a>
+        </li>
+        <li>
+          <a href="install_cluster.html" title="Next document">Cluster installation</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="license-handling">
+<span id="licensehandling"></span><h1>License handling<a class="headerlink" href="#license-handling" title="Permalink to this headline">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>To run a session against a ThinLinc cluster, the server must be equipped
+with license files. The license files specify the number of concurrent
+users the cluster is allowed to run.</p>
+<p>If no license files are installed on the cluster, a maximum of ten
+concurrent users are allowed.</p>
+<p>Each cluster can have one or several license files. Each file contains
+licenses for a specific number of concurrent users. When the VSM Server
+starts up, it reads all license files and creates a sum of the number of
+concurrent users allowed based on the licenses from all files.</p>
+<p>License files have one soft and one hard limit. When the soft limit is
+reached, new sessions can still be started, but a license violation will
+be logged and sent to the administrator (see
+<a class="reference internal" href="#licensekeys-logemail"><span class="std std-ref">Log files and e-mail messages</span></a>). If however the hard limit has been
+reached, new sessions cannot be started. The purpose of this system is
+to allow growing organizations some time to adapt the number of licenses
+to a growing number of concurrent sessions, avoiding loss of production.</p>
+</section>
+<section id="license-counting">
+<h2>License counting<a class="headerlink" href="#license-counting" title="Permalink to this headline">¶</a></h2>
+<p>One license is required for each pair of (<strong>username</strong>,
+<strong>client hardware</strong>). This means that if a user runs several sessions
+from the same client, only one license is used. If the same user runs
+multiple concurrent sessions from different client hardware, multiple
+licenses are required by the user.</p>
+</section>
+<section id="location-and-format-of-license-files">
+<h2>Location and format of license files<a class="headerlink" href="#location-and-format-of-license-files" title="Permalink to this headline">¶</a></h2>
+<p>License files are delivered either in the form of text files (filename
+extension <code class="file docutils literal notranslate"><span class="pre">.license</span></code>) or ZIP files (filename extension
+<code class="file docutils literal notranslate"><span class="pre">.zip</span></code>). Transfer each file to your ThinLinc master server and
+place it in <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/licenses</span></code>. Make sure that the
+transfer of the files uses binary mode, or the license file might not be
+verifiable. We recommend transferring via SCP or SFTP.</p>
+<p>After adding new license files, either restart VSM Server by running
+<strong class="command">/bin/systemctl restart vsmserver</strong> or wait until the VSM Server
+automatically reads in the new licenses, something that happens once
+every 12 hours.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When running VSM Server in a high availability setup (see <a class="reference internal" href="HA.html#ha"><span class="std std-ref">High availability</span></a>),
+license files should be copied to <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/licenses</span></code>
+on both nodes.</p>
+</div>
+</section>
+<section id="log-files-and-e-mail-messages">
+<span id="licensekeys-logemail"></span><h2>Log files and e-mail messages<a class="headerlink" href="#log-files-and-e-mail-messages" title="Permalink to this headline">¶</a></h2>
+<p>ThinLinc logs user license violations to the file
+<code class="file docutils literal notranslate"><span class="pre">/var/log/thinlinc-user-licenses</span></code>. Other license-related messages
+are logged to <code class="file docutils literal notranslate"><span class="pre">/var/log/vsmserver.log</span></code>.</p>
+<p>If license violations occur, ThinLinc sends email to the person defined
+as system administrator in the parameter
+<a class="reference internal" href="config_vsmserver.html#server-config-vsmserver-admin_email"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/admin_email</span></code></a> in <code class="file docutils literal notranslate"><span class="pre">vsmserver.hconf</span></code>. E-mail
+messages warning about license violations are sent every 12 hours if any
+license violations have occurred.</p>
+</section>
+<section id="checking-the-number-of-valid-licenses">
+<h2>Checking the number of valid licenses<a class="headerlink" href="#checking-the-number-of-valid-licenses" title="Permalink to this headline">¶</a></h2>
+<p>You can use the program <strong class="program">/opt/thinlinc/sbin/tl-show-licenses</strong>
+to verify the number of valid user licenses. There is also a graph
+available in the administrative interface. See <a class="reference internal" href="tlwebadm_status.html#tlwebadm-status"><span class="std std-ref">The status module</span></a>
+for more information.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="authentication_otp.html" title="Previous document">Using one-time passwords</a>
+        </li>
+        <li>
+          <a href="install_cluster.html" title="Next document">Cluster installation</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">License handling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license-counting">License counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#location-and-format-of-license-files">Location and format of license files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#log-files-and-e-mail-messages">Log files and e-mail messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-the-number-of-valid-licenses">Checking the number of valid licenses</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="authentication_otp.html" title="previous chapter">Using one-time passwords</a></li>
+      <li>Next: <a href="install_cluster.html" title="next chapter">Cluster installation</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/licensehandling.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

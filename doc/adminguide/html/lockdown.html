@@ -1,0 +1,363 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="This section covers methods to restrict user access to ThinLinc servers, including disabling SSH access, shell access, and port forwarding, as well as controlling clipboard and drive access." name="description" />
+
+    <title>Restricting access to ThinLinc servers &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GnuTLS priority strings" href="gnutls-priorities.html" />
+    <link rel="prev" title="Troubleshooting ThinLinc" href="troubleshoot.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="troubleshoot.html" title="Previous document">Troubleshooting ThinLinc</a>
+        </li>
+        <li>
+          <a href="gnutls-priorities.html" title="Next document">GnuTLS priority strings</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="restricting-access-to-thinlinc-servers">
+<span id="lockdown"></span><h1>Restricting access to ThinLinc servers<a class="headerlink" href="#restricting-access-to-thinlinc-servers" title="Permalink to this headline">¶</a></h1>
+<p>In some cases it might be desirable or required to restrict the users’
+access to the ThinLinc servers and their ability to move data in and out
+of the system. This chapter describes some ways this can be achieved, as
+well as the consequences of such restrictions.</p>
+<section id="disabling-ssh-access">
+<h2>Disabling SSH access<a class="headerlink" href="#disabling-ssh-access" title="Permalink to this headline">¶</a></h2>
+<p>The system’s SSH server often includes a lot of functionality for
+accessing the system. Completely disabling this service is a quick way
+to restrict most of the external access to the system. However the
+native ThinLinc client requires SSH to function so users will be limited
+to only using the web client ThinLinc Web Access.</p>
+<p>Many SSH servers also support limiting access to just certain users.
+OpenSSH has settings such as <code class="docutils literal notranslate"><span class="pre">AllowGroups</span></code> and <code class="docutils literal notranslate"><span class="pre">Match</span></code> that can
+limit functionality without completely disabling the SSH server.</p>
+</section>
+<section id="disabling-shell-access">
+<h2>Disabling shell access<a class="headerlink" href="#disabling-shell-access" title="Permalink to this headline">¶</a></h2>
+<p>User sessions are normally started via the user’s configured shell, so
+restricting the shell is a good method to restrict what kind of sessions
+the user can start. Primarily, this is useful to prevent users from
+running custom commands via SSH.</p>
+<section id="changing-the-configured-shell">
+<h3>Changing the configured shell<a class="headerlink" href="#changing-the-configured-shell" title="Permalink to this headline">¶</a></h3>
+<p>Commonly the user’s shell is configured to <strong class="command">/bin/false</strong> in
+order to disable shell access. Unfortunately this also prevents access
+to ThinLinc as it needs to run the commands <strong class="program">thinlinc-login</strong>
+and <strong class="program">/opt/thinlinc/etc/xsession</strong> via the user’s shell. As an
+alternative it is possible to configure
+<strong class="program">/usr/bin/thinlinc-login</strong> as the shell. This will allow
+ThinLinc to function whilst preventing any other type of session.</p>
+<p>Note that this method prevents any terminals inside the session from
+functioning as well. In most cases it also does not prevent users from
+running custom scripts and shell commands as they can use a text editor
+to construct such scripts.</p>
+</section>
+<section id="using-forcecommand">
+<h3>Using ForceCommand<a class="headerlink" href="#using-forcecommand" title="Permalink to this headline">¶</a></h3>
+<p>OpenSSH has the ability to ignore the user’s configured shell and run a
+different command instead. This makes it possible to keep a normal shell
+for the user and only restrict access when connecting via SSH. However
+this prevents the native ThinLinc client from connecting as it needs to
+be able to run the command <strong class="program">thinlinc-login</strong> with specific
+arguments. The following script can be specified as <code class="docutils literal notranslate"><span class="pre">ForceCommand</span></code> to
+allow only ThinLinc access via SSH:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+thinlinc-login -c <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SSH_ORIGINAL_COMMAND</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>It is also possible to apply this restriction only to a subset of users
+by using the <code class="docutils literal notranslate"><span class="pre">Match</span></code> setting. Please see OpenSSH’s documentation for
+how to configure this mechanism.</p>
+</section>
+</section>
+<section id="disabling-port-forwarding">
+<h2>Disabling port forwarding<a class="headerlink" href="#disabling-port-forwarding" title="Permalink to this headline">¶</a></h2>
+<p>ThinLinc relies on SSH port forwarding in order to function. However it
+is possible to limit that port forwarding in order to avoid unwanted
+network access. ThinLinc only requires forwarding via the loopback
+interface, so the SSH server can always be configured to only allow this
+without limiting ThinLinc in any way. For OpenSSH this is configured by
+specifying the following in <code class="file docutils literal notranslate"><span class="pre">sshd_config</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>GatewayPorts no
+PermitOpen 127.0.0.1:*
+</pre></div>
+</div>
+<p>Note that it is also necessary to disable shell access in order to
+completely prevent users from forwarding ports as otherwise they could
+run their own forwarding software over the shell channel.</p>
+<section id="disabling-remote-port-forwarding">
+<h3>Disabling remote port forwarding<a class="headerlink" href="#disabling-remote-port-forwarding" title="Permalink to this headline">¶</a></h3>
+<p>It is possible to use ThinLinc with remote port forwarding completely
+disabled. However this will prevent local devices such as sound, drives
+and printers from functioning. In OpenSSH this is configured by adding
+the following to <code class="file docutils literal notranslate"><span class="pre">/etc/ssh/sshd_config</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>AllowTcpForwarding local
+</pre></div>
+</div>
+<p>It is also possible to apply this restriction only to a subset of users
+by using the <code class="docutils literal notranslate"><span class="pre">Match</span></code> setting. Please see OpenSSH’s documentation for
+how to configure this mechanism.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Local port forwarding cannot be disabled as it is required for even
+the basic ThinLinc functionality.</p>
+</div>
+</section>
+</section>
+<section id="disabling-clipboard">
+<h2>Disabling clipboard<a class="headerlink" href="#disabling-clipboard" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to disable clipboard transfers in either direction in
+order to avoid easily moving data to and from the server. The first step
+is adding <code class="docutils literal notranslate"><span class="pre">-noclipboard</span></code> to the ThinLinc setting
+<a class="reference internal" href="config_vsmagent.html#server-config-vsmagent-xserver_args"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent/xserver_args</span></code></a>. This prevents the user from later
+changing the clipboard settings. Next add <code class="docutils literal notranslate"><span class="pre">-AcceptCutText=0</span></code> to
+disable clipboard transfers going to the server, and
+<code class="docutils literal notranslate"><span class="pre">-SendCutText=0</span></code> to prevent transfers going from the server.</p>
+</section>
+<section id="disabling-local-drives">
+<h2>Disabling local drives<a class="headerlink" href="#disabling-local-drives" title="Permalink to this headline">¶</a></h2>
+<p>ThinLinc local drives redirection relies on being able to ask the kernel
+to mount a NFS share. This is a privileged operation that only root is
+permitted to perform, and as such this feature requires a setuid helper
+binary. This helper is called
+<strong class="program">/opt/thinlinc/libexec/tl-mount-personal</strong> and the setuid
+permission can be removed by running the follow:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo chmod u-s /opt/thinlinc/libexec/tl-mount-personal
+</pre></div>
+</div>
+<p>Note that this only disables the ability to use the kernel NFS client.
+If a user can start some other NFS client then they can still access the
+local drive redirection. The setuid permission is also restored each
+time ThinLinc is upgraded.</p>
+</section>
+<section id="restricting-write-access-to-users-home-directories">
+<span id="homecreatefilter"></span><h2>Restricting write access to users’ home directories<a class="headerlink" href="#restricting-write-access-to-users-home-directories" title="Permalink to this headline">¶</a></h2>
+<p>When accessing directories from CIFS and NCP servers, these are mounted
+in subdirectories of the users’ Linux home directory. It is not possible
+to place the Linux home directory on a CIFS or NCP server, since these
+typically do not support the necessary POSIX file system semantics (such
+as hard links). In a typical setup, applications such as Mozilla uses
+the Linux home directory for settings (<code class="file docutils literal notranslate"><span class="pre">~/.mozilla</span></code>), while the
+user saves documents in <code class="file docutils literal notranslate"><span class="pre">~/MyDocuments</span></code>. In this case, it might be
+desirable to restrict access to the Linux home directory: Forbid saving
+arbitrary files to it. This can be solved by using a feature of ThinLinc
+called <strong>homecreatefilter</strong>.</p>
+<p>To activate homecreatefilter, create a symbolic link in the
+<code class="file docutils literal notranslate"><span class="pre">xstartup.d</span></code> directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo ln -s /opt/thinlinc/libexec/tl-homecreatefilter.sh <span class="se">\</span>
+   /opt/thinlinc/etc/xstartup.d/06-tl-homecreatefilter.sh
+</pre></div>
+</div>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>The configuration file <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/homecreatefilter.conf</span></code>
+controls which files and directories are allowed. By default, all files
+starting with a dot are allowed, as well as the files necessary for KDE
+to start.</p>
+<p>The configuration file is line-based. A line not starting with a colon
+specifies a file object pattern that should be allowed. A line starting
+with a colon specifies a command line pattern. Processes matching this
+pattern will also be allowed write access, even if no file object
+pattern allows access.</p>
+</section>
+<section id="security-considerations-and-limitations">
+<h3>Security considerations and limitations<a class="headerlink" href="#security-considerations-and-limitations" title="Permalink to this headline">¶</a></h3>
+<p>The homecreatefilter feature is based on the <span class="sig sig-inline environ">LD_PRELOAD</span>
+mechanism, which means it does not support statically linked
+applications. Since environment variables can be modified by the user,
+the user can disable the filter at will. homecreatefilter should not be
+regarded as a security mechanism, but rather a mechanism that prevents
+the user from saving documents to the Linux home directory by mistake.</p>
+<p>In addition to the home directory, homecreatefilter restricts write
+access to the <code class="file docutils literal notranslate"><span class="pre">~/Desktop</span></code> directory.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="troubleshoot.html" title="Previous document">Troubleshooting ThinLinc</a>
+        </li>
+        <li>
+          <a href="gnutls-priorities.html" title="Next document">GnuTLS priority strings</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Restricting access to ThinLinc servers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#disabling-ssh-access">Disabling SSH access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#disabling-shell-access">Disabling shell access</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#changing-the-configured-shell">Changing the configured shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-forcecommand">Using ForceCommand</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#disabling-port-forwarding">Disabling port forwarding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#disabling-remote-port-forwarding">Disabling remote port forwarding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#disabling-clipboard">Disabling clipboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#disabling-local-drives">Disabling local drives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#restricting-write-access-to-users-home-directories">Restricting write access to users’ home directories</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#security-considerations-and-limitations">Security considerations and limitations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="troubleshoot.html" title="previous chapter">Troubleshooting ThinLinc</a></li>
+      <li>Next: <a href="gnutls-priorities.html" title="next chapter">GnuTLS priority strings</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/lockdown.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

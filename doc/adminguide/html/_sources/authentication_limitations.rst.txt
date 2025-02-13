@@ -1,0 +1,20 @@
+.. meta::
+   :description: Summary of authentication limitations in ThinLinc, with
+                 a focus on case sensitivity and configuration
+                 requirements for SSH servers.
+
+.. _authentication_limitations:
+
+Limitations
+-----------
+
+Some PAM modules and authentication mechanisms are case-sensitive, while
+others are not. Usernames in the ThinLinc client are case-sensitive by
+default, however this behavior can be changed. See
+:clientconf:`LOWERCASE_LOGIN_NAME` in :ref:`clientconf_params` for
+details.
+
+The SSH server should be configured to allow "keyboard-interactive"
+authentication for full functionality. The "password" authentication
+method does not allow multiple interactive prompts, which are required
+for things such as password changes during login.

@@ -1,0 +1,51 @@
+.. meta::
+   :description: The tl-env command runs user-provided commands in a
+                 ThinLinc session by restoring the session environment,
+                 even from outside the session.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-env
+======
+
+Synopsis
+--------
+
+**tl-env** [*options*] <*command*> [*args*]
+
+Description
+-----------
+
+**tl-env** can be used to run a user provided command in a ThinLinc
+session. This can even be done from outside the session itself. It does
+so by temporarily restoring the session environment before executing the
+command. It operates on the file :file:`xstartup.env` in the session
+directory.
+
+During restore, the option :option:`--skip-display` can be used to
+exclude the :environ:`DISPLAY` environment variable.
+
+By default, **tl-env** operates on the *last* session number for the
+invoking user. An alternative session number can be specified with the
+:option:`--session-number` option.
+
+Options
+-------
+
+.. option:: -d, --skip-display
+
+   Do not restore :environ:`DISPLAY`.
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+.. option:: -n nr, --session-number=nr
+
+   Use specified session number. The default is "last".
+
+.. option:: --version
+
+   Prints the ThinLinc version and exits.

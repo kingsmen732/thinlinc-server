@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="44cm" height="37cm" viewBox="72 11 869 735" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="149" y="87" width="292" height="102"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="149" y="87" width="292" height="102"/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:Palatino;font-style:italic;font-weight:normal" x="297" y="139">
+    <tspan x="297" y="139">vsmagent</tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="487" y="135">
+    <tspan x="487" y="135">vsmagent gets</tspan>
+    <tspan x="487" y="153">request for new session</tspan>
+  </text>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="295" y1="189" x2="294.086" y2="236.529"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="286.352,222.613 294.043,238.764 302.349,222.921 "/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="353" y="216">
+    <tspan x="353" y="216"></tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:Palatino;font-style:italic;font-weight:normal" x="292" y="301">
+    <tspan x="292" y="301">/opt/thinlinc/etc/xsession</tspan>
+  </text>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="136" y="240" width="316" height="115"/>
+  <g>
+    <polygon style="fill: #ffffff" points="291.944,391.098 509.999,484.015 291.944,576.933 73.8894,484.015 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="291.944,391.098 509.999,484.015 291.944,576.933 73.8894,484.015 "/>
+    <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:Palatino;font-style:italic;font-weight:normal" x="291.944" y="490.165">
+      <tspan x="291.944" y="490.165">~/.thinlinc/xstartup exists?</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="294" y1="355" x2="292.198" y2="386.633"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="284.994,372.437 292.071,388.866 300.968,373.346 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="574" y="452" width="366" height="83"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="574" y="452" width="366" height="83"/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:monospace;font-style:normal;font-weight:normal" x="605" y="492">
+    <tspan x="605" y="492"></tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="496" y="303">
+    <tspan x="496" y="303">vsmagent always executes</tspan>
+    <tspan x="496" y="321">/opt/thinlinc/etc/xsession</tspan>
+  </text>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="510" y1="484.016" x2="567.528" y2="484.001"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="553.766,492.005 569.764,484.001 553.762,476.005 "/>
+  </g>
+  <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:serif;font-style:italic;font-weight:700" x="534" y="472">
+    <tspan x="534" y="472">YES</tspan>
+  </text>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:Palatino;font-style:italic;font-weight:normal" x="748" y="481">
+    <tspan x="748" y="481">~/.thinlinc/xstartup</tspan>
+    <tspan x="748" y="499">is executed</tspan>
+  </text>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="298" y1="576" x2="298" y2="576"/>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="291.944" y1="576.934" x2="292.926" y2="636.528"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="284.701,622.898 292.963,638.764 300.698,622.635 "/>
+  </g>
+  <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:serif;font-style:italic;font-weight:700" x="313" y="608">
+    <tspan x="313" y="608">NO</tspan>
+  </text>
+  <g>
+    <rect style="fill: #ffffff" x="97" y="644" width="396" height="101"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="97" y="644" width="396" height="101"/>
+  </g>
+  <text font-size="14.4" style="fill: #000000;text-anchor:middle;font-family:Palatino;font-style:italic;font-weight:normal" x="287" y="693">
+    <tspan x="287" y="693">/opt/thinlinc/etc/xstartup.default</tspan>
+    <tspan x="287" y="711">is executed</tspan>
+  </text>
+  <text font-size="32" style="fill: #000000;text-anchor:middle;font-family:serif;font-style:normal;font-weight:normal" x="529" y="45">
+    <tspan x="529" y="45">ThinLinc session startup - on VSM Agent</tspan>
+  </text>
+</svg>

@@ -1,0 +1,26 @@
+.. meta::
+   :description: Comprehensive guide to installing, configuring, and
+                 running the ThinLinc client on various platforms,
+                 including Windows, macOS, Linux, dedicated thin
+                 terminals, and Thinstation.
+
+.. _clientplatforms:
+
+Installation
+============
+
+In this chapter we will document how to install, configure and run the
+ThinLinc client on all different platforms including dedicated thin
+terminals.
+
+For information on where to find the ThinLinc client software, see
+:ref:`obtaining_thinlinc`.
+
+.. toctree::
+   :hidden:
+
+   client_windows
+   client_macos
+   client_linux
+   client_terminals
+   client_thinstation

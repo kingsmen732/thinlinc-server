@@ -1,0 +1,20 @@
+.. meta::
+   :description: Detailed guide on the TCP ports required for ThinLinc's
+                 operation, including those needed for external and
+                 internal communication within the cluster.
+
+.. _tcp-ports:
+
+TCP ports used by ThinLinc
+==========================
+
+This appendix describes all the TCP ports that must be available for
+ThinLinc to function correctly. Note that only some ports must be
+available externally and most need only be available locally on the
+machine or to other machines that are part of the same ThinLinc cluster.
+
+.. toctree::
+   :hidden:
+
+   tcp-ports_server
+   tcp-ports_agent

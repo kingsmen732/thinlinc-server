@@ -1,0 +1,25 @@
+.. meta::
+   :description: The tl-gen-auth command generates password hashes for
+                 the ThinLinc web administration interface.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-gen-auth
+===========
+
+Synopsis
+--------
+
+**tl-gen-auth** [*password*]
+
+Description
+-----------
+
+The :program:`tl-gen-auth` command can be used to generate a password
+hash for ThinLinc Web Administration. The generated hash should be
+stored in the setting :servconf:`/tlwebadm/password`.
+
+:program:`tl-gen-auth` will prompt for a password if *password* is not
+specified on the command line.

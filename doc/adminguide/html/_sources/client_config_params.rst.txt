@@ -1,0 +1,465 @@
+.. meta::
+   :description: Detailed reference guide to the configuration
+                 parameters available in the ThinLinc client, covering
+                 various settings for authentication, display,
+                 networking, and user experience customization.
+
+.. _clientconf_params:
+
+Client configuration parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Windows, Linux, and macOS version of the ThinLinc client all use the
+same names for their configuration parameters, although the storage
+technique used is different. In this section we will list the parameters
+and explain their possible values. See :ref:`clientconf` for information
+about where client configuration is stored on different systems.
+
+.. client-config:: ALLOW_HOSTKEY_UPDATE
+
+   Set to ``1`` if SSH host key updates should be allowed. This parameter
+   cannot be changed from the GUI. The result of setting
+   :clientconf:`ALLOW_HOSTKEY_UPDATE` to ``0`` is that the client cannot
+   connect to the server if the host key is wrong. This enhances
+   security if there is a risk for a man in the middle attack.
+
+.. client-config:: AUTHENTICATION_METHOD
+
+   This parameter can be set to ``password``, ``publickey``,
+   ``scpublickey`` or ``kerberos`` to select the authentication mode
+   used by the client.
+
+.. client-config:: AUTOLOGIN
+
+   If this parameter is set to ``1``, the client will automatically log
+   in at startup, using the server name, username and password specified
+   in the configuration.
+
+.. client-config:: CERTIFICATE
+
+   Specifies the smart card certificate to use when authenticating.
+
+.. client-config:: CERTIFICATE_NAMING
+
+   Controls how the client presents a certificate to the user. The
+   parameter consists of a comma separated list of naming tokens that
+   represent bits of information from each card or certificate. Possible
+   tokens:
+
+   ``card_label``
+      The label specified on the smart card.
+
+   ``pin_label``
+      The label associated with the PIN protecting this certificate.
+
+   ``subject_*``
+      A field from the subject in the certificate. Can for example be
+      the common name by specifying ``subject_cn`` or
+      ``subject_commonName``. Any registered object identifier descriptor
+      can be used (see `IANA`_ for a full list).
+
+   ``issuer_*``
+      A field from the issuer in the certificate, in the same manner as
+      for ``subject_*``.
+
+   The client will use as many of the tokens as necessary to give each
+   certificate a unique name. That means that certificates on two
+   different cards can be presented with a different number of tokens
+   depending on how much the information between the certificates
+   overlap. An index number will be added to the name if the names are
+   still not unique when all tokens are used.
+
+.. _IANA: https://www.iana.org/assignments/ldap-parameters/ldap-parameters.xhtml
+
+.. client-config:: CUSTOM_COMPRESSION
+
+   Set to ``1`` if a custom compression method is selected.
+
+.. client-config:: CUSTOM_COMPRESSION_LEVEL
+
+   The selected compression level. An integer between 1 and 9.
+
+.. client-config:: DISPLAY_MODE
+
+   The display mode. It can be set to values ``SIMPLE`` and
+   ``ADVANCED``, or be left empty. In the latter case, the default
+   behavior is to use simple mode if a server name is given as a
+   parameter and advanced mode otherwise.
+
+.. client-config:: EMULATE_MIDDLE_BUTTON
+
+   Set to ``1`` if the client should emulate middle mouse button when
+   pressing left and right mouse buttons simultaneously.
+
+.. client-config:: FULL_SCREEN_MODE
+
+   Set to ``1`` if the client should run in full-screen mode.
+
+.. client-config:: FULL_SCREEN_MONITOR_MODE
+
+   This parameter selects which monitors the client should be used when
+   in full-screen mode and can be set to one of the following:
+
+   ``current``
+      Use the monitor the client window is currently displayed on.
+
+   ``all``
+      Use all available monitors.
+
+   ``selected``
+      Use the monitors specified in
+      :clientconf:`FULL_SCREEN_SELECTED_MONITORS`.
+
+.. client-config:: FULL_SCREEN_SELECTED_MONITORS
+
+   This parameter specifies a comma separated list of monitor numbers
+   that should be used in full-screen mode when
+   :clientconf:`FULL_SCREEN_MONITOR_MODE` is set to ``selected``.
+   Monitors are numbered from left to right, based on their top-left
+   corner, starting from one. If two monitors are perfectly aligned
+   vertically then the top-most monitor is considered first.
+
+.. client-config:: HOST_ALIASES
+
+   This parameter specifies a list of hostname and port translations.
+   This translation list is consulted whenever the client is about to
+   initiate a network connection. This includes the SSH connection to
+   the ThinLinc agent machine. The syntax for this parameter is::
+
+      [fromhost][:fromport]=[tohost][:toport] ...
+
+   If ``fromhost`` is omitted, the translation will apply to all hosts.
+   The same principle is used for ports. If ``tohost`` or ``toport`` is
+   omitted, the original host or port will be used. Multiple
+   translations are separated with whitespace. The translation stops as
+   soon as one match is found.
+
+.. client-config:: JPEG_COMPRESSION
+
+   Set to ``1`` if JPEG compression is wanted.
+
+.. client-config:: JPEG_COMPRESSION_LEVEL
+
+   The wanted compression level.
+
+.. client-config:: KILL_EXISTING_SESSIONS
+
+   Set to ``1`` if existing sessions should be ended.
+
+   .. note::
+
+      It makes little sense to change this value. The client never saves
+      this setting.
+
+.. client-config:: LOGIN_NAME
+
+   The username.
+
+.. client-config:: LOWERCASE_LOGIN_NAME
+
+   Set to ``1`` if the client should convert the entered username to
+   lowercase before logging into the server. This affects both the login
+   username and the name of the user to shadow (if applicable).
+
+.. client-config:: NEW_PASSWORD_REGEXP
+
+   This parameter specifies a regular expression. If an interactive SSH
+   prompt matches this expression, the response is taken as a new
+   password. The new password will be used for the SSH connection to the
+   agent machine. It will also be sent to the server to enable Single
+   Sign-On.
+
+.. client-config:: NFS_EXPORTS
+
+   A list of local drive paths and permissions. The syntax for this
+   parameter is::
+
+      [path1],[permissions1],[path2],[permissions2] ...
+
+   As seen above, each path should be followed by the desired
+   permissions ``disabled`` (not exported), ``ro`` (read only) or
+   ``rw`` (read and write). See :ref:`client_advanced_tab` for
+   their meaning. This list specifies local drives to be exported.
+
+.. client-config:: NFS_ROOT_WARNING
+
+   Set to ``1`` to enable a warning if running as root and exporting
+   local drives.
+
+.. client-config:: NFS_SERVER_ENABLED
+
+   Set to ``1`` if local drives should be exported.
+
+.. client-config:: OPTIONS_POPUP_KEY
+
+   Key code for key to activate option pop-up menu.
+
+.. client-config:: PASSWORD
+
+   This parameter allows you to specify a password in the configuration
+   file. It must be specified using a hexadecimal ASCII notation, which
+   means that every character is specified by its hexadecimal value.
+
+   .. warning::
+
+      The password value is not encrypted. It should be treated as a
+      clear text password. Avoid storing configuration files with a
+      :clientconf:`PASSWORD` parameter on disk or transmit such files
+      over networks without encryption.
+
+.. client-config:: PKCS11_MODULE
+
+   Specifies the PKCS#11 module that will be used to communicate with
+   the smart card. The path can be relative to the base prefix of the
+   ThinLinc client or an absolute path.
+
+.. client-config:: PRINTER_ENABLED
+
+   Set to ``1`` if local printers should be enabled.
+
+.. client-config:: PRINTER_SELECTION
+
+   Set to ``1`` if the local printer selection dialog should be
+   displayed on every print on Windows and macOS clients. Otherwise
+   printing jobs will be sent to the default local printer.
+
+.. client-config:: PRIVATE_KEY
+
+   This parameter specifies the path to the private key to be used to
+   authenticate the user.
+
+.. client-config:: RECONNECT_POLICY
+
+   This parameter can be set to ``single-disconnected`` or ``ask`` to
+   control the client's reconnect policy. See
+   :ref:`client_advanced_tab` for their meaning.
+
+.. client-config:: REMOVE_CONFIGURATION
+
+   If ``1``, the user configuration file (or the file specified by
+   :option:`-C`) will be removed after the client has started. Settings
+   changed in the GUI will not be stored to disk. If the client fails to
+   remove the file, it will try to truncate it instead.
+
+.. client-config:: SEND_SYSKEYS
+
+   Set to ``1`` if the client should send system keys (like
+   :kbd:`Alt+Tab`) to the remote system when in full-screen mode.
+
+.. client-config:: SERIAL1_DAEMON_DEVICE
+
+   The path to the first local serial port device to be exported.
+
+.. client-config:: SERIAL1_PORT_ENABLED
+
+   Set to ``1`` if the first local serial port should be exported.
+
+.. client-config:: SERIAL2_DAEMON_DEVICE
+
+   The path to the second local serial port device to be exported.
+
+.. client-config:: SERIAL2_PORT_ENABLED
+
+   Set to ``1`` if the second local serial port should be exported.
+
+.. client-config:: SERIAL_PORTS_ENABLED
+
+   Set to ``1`` if local serial ports should be exported.
+
+.. client-config:: SERVER_NAME
+
+   The hostname or IP of the ThinLinc server. When using ThinLinc in a
+   cluster setup this should be the hostname or IP of the master server
+   machine.
+
+.. client-config:: SHADOWING_ENABLED
+
+   Set to ``1`` if shadowing should be enabled.
+
+.. client-config:: SHADOW_NAME
+
+   The username of the user whose session should be shadowed.
+
+.. client-config:: SMARTCARD_AUTOCONNECT
+
+   Set to ``1`` if the client should automatically attempt a connection
+   when a smart card with a suitable certificate is found, this will
+   only work if :clientconf:`SMARTCARD_SUBJECT_AS_NAME` also is set to
+   ``1``.
+
+.. client-config:: SMARTCARD_DISCONNECT
+
+   Set to ``1`` if the client should disconnect automatically when the smart
+   card used for authentication is removed.
+
+.. client-config:: SMARTCARD_EXPORT_ENABLED
+
+   Set to ``1`` if local smart card readers should be exported.
+
+.. client-config:: SMARTCARD_FILTER_n
+
+   This is a list of certificate filters. Replace ``n`` with a sequence
+   number that defines the order of the filter in the list.
+
+   The filter string consists of three fields where each field is
+   separated using a ``|`` (pipe), the defined three fields are: *name*,
+   *attributes* and *key usage* which are documented below. Here follows
+   an example of a filter string showing its format::
+
+      SMARTCARD_FILTER_1=Telia|o=TeliaSonera|5
+
+   *name*
+
+      The name of the filter which will be displayed in the list of
+      filters defined in the user interface.
+
+   *attributes*
+
+      This field holds a comma separated list of certificate attributes
+      that is used when matching against available certificates, for
+      example ``O=TeliaSonera``.
+
+   *key usage*
+
+      This field is a bit mask value used to match against a
+      certificate's key usage flags. It indicates the intended usage of
+      the certificate, such as identification, signing etc.
+
+      Use this to match certificates that are intended to be used for
+      logon. For example, identification certificates will be matched
+      using a value of 5:
+
+         digital signature + key encipherment = 5
+
+      The values are described in the following table:
+
+      === ===================
+      1   digital signature
+      2   non-repudiation
+      4   key encipherment
+      8   data enciperment
+      16  key agreement
+      32  certificate signing
+      64  CRL signing
+      128 enchiper only
+      256 decipher only
+      === ===================
+
+.. client-config:: SMARTCARD_PASSPHRASE_SSO
+
+   Set to ``1`` if the client should transmit the smart card passphrase
+   to the ThinLinc server to enable smart card single sign-on. See
+   :ref:`client_security_tab` for security implications.
+
+.. client-config:: SMARTCARD_SUBJECT_AS_NAME
+
+   Set to ``1`` if the certificate subject should be used as logon name,
+   this will hide the name field from login window.
+
+.. client-config:: SOUND_ENABLED
+
+   Set to ``1`` if sound redirection should be enabled.
+
+.. client-config:: SOUND_SYSTEM
+
+   Which local sound system to use. Only used on platforms that have
+   multiple sound systems to choose from. Possible values:
+
+   ``AUTO``
+      Automatically choose the most appropriate sound system of those
+      available.
+
+   ``PULSE``
+      Use the local PulseAudio server as determined by X11 properties or
+      environment variables.
+
+   ``ALSA``
+      Use the default ALSA device.
+
+   ``OSS``
+      Use the default OSS device.
+
+.. client-config:: SSH_ARBITRARY
+
+   Custom port number for ThinLinc connection.
+
+.. client-config:: SSH_COMPRESSION
+
+   Set to ``1`` to use the compression built into SSH.
+
+.. client-config:: SSH_PORT_SELECTION
+
+   Port selection for ThinLinc connection. Possible values:
+
+   -  ``0`` for port 22 (standard ssh port).
+
+   -  ``1`` for port 80.
+
+   -  ``2`` for custom port set in the :clientconf:`SSH_ARBITRARY`
+      parameter.
+
+..
+  There is a reason the SSH_PORT_SELECTION doesn't store the port
+  number directly. See comments for bug 346 in Bugzilla.
+
+.. client-config:: START_PROGRAM_COMMAND
+
+   Specifies the command to use when starting the session, if
+   :clientconf:`START_PROGRAM_ENABLED` is active.
+
+.. client-config:: START_PROGRAM_ENABLED
+
+   Specifies if the client should request that the server starts the
+   session with the command supplied by the client.
+
+.. client-config:: UPDATE_ENABLED
+
+   Set to ``1`` to enable periodic checks for new versions.
+
+.. client-config:: UPDATE_INTERVAL
+
+   This parameter specifies the time interval, in seconds, between
+   client update checks.
+
+.. client-config:: UPDATE_LASTCHECK
+
+   This parameter specifies the time that the last update check was
+   performed.
+
+.. client-config:: UPDATE_MANDATORY
+
+   If set to ``1``, updating to new client versions is mandatory.
+
+.. client-config:: UPDATE_URL
+
+   The HTTP URL to client update configuration file.
+
+.. client-config:: VNC_AUTOSELECT
+
+   Set to ``1`` to dymanically autoselect the compression algorithm
+   during the session.
+
+.. client-config:: VNC_COLOR_LEVEL
+
+   The color level used for the session.
+
+.. client-config:: VNC_ENCODING_SELECTION
+
+   The encoding to use for VNC. Possible values:
+
+   -  ``0`` for Raw
+
+   -  ``5`` for Hextile
+
+   -  ``7`` for Tight
+
+   -  ``16`` for ZRLE
+
+.. client-config:: YESNO_PROMPT_REGEXP
+
+   This parameter specifies a regular expression. If an interactive SSH
+   prompt matches this expression, a graphical yes/no dialog will be
+   presented, instead of a dialog for text input. Additionally, if the
+   prompt is known to the client, an alternate text will be used. The
+   dialog buttons :guilabel:`Yes` and :guilabel:`No` will send ``yes``
+   and ``no`` to the server, respectively.

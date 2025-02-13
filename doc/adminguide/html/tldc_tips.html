@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Explore tips and tricks for using the ThinLinc desktop customizer (TLDC) with KDE, including solving unwanted icons, file associations, and fixing the home icon." name="description" />
+
+    <title>Tips &amp; tricks with TLDC &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Commands on the ThinLinc server" href="commands.html" />
+    <link rel="prev" title="Enabling the custom desktops for users" href="tldc_enabling.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tldc_enabling.html" title="Previous document">Enabling the custom desktops for users</a>
+        </li>
+        <li>
+          <a href="commands.html" title="Next document">Commands on the ThinLinc server</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="tips-tricks-with-tldc">
+<h1>Tips &amp; tricks with TLDC<a class="headerlink" href="#tips-tricks-with-tldc" title="Permalink to this headline">¶</a></h1>
+<section id="unwanted-icons-on-the-desktop-with-kde">
+<span id="tldc-unwanted-icons"></span><h2>Unwanted icons on the desktop with KDE<a class="headerlink" href="#unwanted-icons-on-the-desktop-with-kde" title="Permalink to this headline">¶</a></h2>
+<p>At first login for each user, KDE copies files from
+<code class="file docutils literal notranslate"><span class="pre">/usr/share/apps/kdesktop/DesktopLinks</span></code> to the <code class="file docutils literal notranslate"><span class="pre">Desktop</span></code>
+directory of the user. This means that if there is a <code class="file docutils literal notranslate"><span class="pre">Home</span> <span class="pre">Icon</span></code>
+in <code class="file docutils literal notranslate"><span class="pre">DesktopLinks</span></code> and you add a <code class="file docutils literal notranslate"><span class="pre">Home</span> <span class="pre">Icon</span></code> via TLDC, there
+will be two <code class="file docutils literal notranslate"><span class="pre">Home</span> <span class="pre">Icon</span></code>.</p>
+<p>Remove the contents of <code class="file docutils literal notranslate"><span class="pre">/usr/share/apps/kdesktop/DesktopLinks</span></code> to
+solve the problem, and let TLDC be the sole provider of icons on the
+desktop.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If your KDE is based somewhere else than under <code class="file docutils literal notranslate"><span class="pre">/usr</span></code>, the
+<code class="file docutils literal notranslate"><span class="pre">DesktopLinks</span></code> directory will be situated elsewhere. For
+example, on SUSE, KDE is based at <code class="file docutils literal notranslate"><span class="pre">/opt/kde3</span></code>.</p>
+</div>
+</section>
+<section id="file-associations-in-kde-for-applications-not-in-the-menu">
+<span id="tldc-file-associations"></span><h2>File associations in KDE for applications not in the menu<a class="headerlink" href="#file-associations-in-kde-for-applications-not-in-the-menu" title="Permalink to this headline">¶</a></h2>
+<p>When KDE tries to determine what application to use for opening a
+specific file, it is only looking for applications that are available in
+the menu. There are cases where not all applications that may be used
+for opening files are meant to be available in the menu.</p>
+<p>In this case, create a hidden menu by setting <span class="guilabel">Hide this menu</span>
+to <span class="guilabel">Yes</span> in the menu structure editor, and then create an
+application group that adds the applications that should be available
+for file associations in to this menu.</p>
+</section>
+<section id="home-icon-not-working-in-kde">
+<span id="tldc-kde-home-icon"></span><h2>Home icon not working in KDE<a class="headerlink" href="#home-icon-not-working-in-kde" title="Permalink to this headline">¶</a></h2>
+<p>This is a case of the problem above where file associations are not
+working. Create an application group that includes the Konqueror
+(“kde-kfmclient_dir”) application in a hidden menu, and make sure this
+application group is added for all relevant users, and the home icon
+will work again.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A menu named <strong>Hidden Menu</strong> is created by the application group
+<strong>Hidden</strong> which is by default activated for the Profile <strong>kde</strong>.
+This menu contains <strong>kde-kcmclient_dir</strong> to make sure the home icon
+is working. Make sure this application group is activated for all
+users with a desktop based on KDE.</p>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tldc_enabling.html" title="Previous document">Enabling the custom desktops for users</a>
+        </li>
+        <li>
+          <a href="commands.html" title="Next document">Commands on the ThinLinc server</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tldc_introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tldc_tldesktopcustomizer.html">Using the ThinLinc desktop customizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tldc_enabling.html">Enabling the custom desktops for users</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tips &amp; tricks with TLDC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#unwanted-icons-on-the-desktop-with-kde">Unwanted icons on the desktop with KDE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#file-associations-in-kde-for-applications-not-in-the-menu">File associations in KDE for applications not in the menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#home-icon-not-working-in-kde">Home icon not working in KDE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a><ul>
+      <li>Previous: <a href="tldc_enabling.html" title="previous chapter">Enabling the custom desktops for users</a></li>
+      <li>Next: <a href="commands.html" title="next chapter">Commands on the ThinLinc server</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/tldc_tips.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

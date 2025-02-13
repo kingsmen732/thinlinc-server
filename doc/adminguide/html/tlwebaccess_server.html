@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Guide to configuring ThinLinc Web Access server and TLS certificates, including cluster setup, port management, and security practices. Critical for ensuring secure and functional ThinLinc deployments." name="description" />
+
+    <title>Server configuration &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="tlwebaccess_usage.html" />
+    <link rel="prev" title="ThinLinc Web Access" href="tlwebaccess.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tlwebaccess.html" title="Previous document">ThinLinc Web Access</a>
+        </li>
+        <li>
+          <a href="tlwebaccess_usage.html" title="Next document">Usage</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="server-configuration">
+<span id="tlwebaccess-server"></span><h1>Server configuration<a class="headerlink" href="#server-configuration" title="Permalink to this headline">¶</a></h1>
+<p>ThinLinc Web Access is served by the service <code class="docutils literal notranslate"><span class="pre">tlwebaccess</span></code>. The
+default TCP port number for this HTTP service is 300. It can be changed
+to some other port such as 443, assuming this port is free. The
+configured port must be allowed in any firewalls.</p>
+<p>In a cluster setup, the <code class="docutils literal notranslate"><span class="pre">tlwebaccess</span></code> service must run on all
+machines. The same service port should be used, and all machines must be
+accessible from the clients.</p>
+<p>The setting <a class="reference internal" href="config_webaccess.html#server-config-webaccess-login_page"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/webaccess/login_page</span></code></a> will also need to be
+configured in a cluster setup. The client first authenticates with the
+master. Once the master server has chosen an agent server for the
+session, the client will authenticate with that agent server. The
+browser will thus present pages from two different servers. First a page
+from the master, and then from the agent, unless the agent is on the
+same server of course. This parameter is a means for the agent to know
+the public hostname of the master server. Thus when it’s properly set,
+the user can, when the session has ended, click a button to return from
+the agent to the master to log in again. The default value, which is
+<code class="docutils literal notranslate"><span class="pre">/</span></code>, will not redirect to another server and is only usable if you are
+running a standalone ThinLinc server, i.e. not a cluster. If you have
+more than one server or are using Network Address Translation (NAT), you
+must set this parameter to an address that all clients can connect to.
+Example:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">login_page</span> <span class="o">=</span> <span class="s">https://thinlinc-master.example.com:300/</span>
+</pre></div>
+</div>
+<p>Please see <a class="reference internal" href="config_webaccess.html#configuration-tlwebaccess"><span class="std std-ref">Parameters in /webaccess/</span></a> for details on all possible
+settings for ThinLinc Web Access.</p>
+<section id="certificates">
+<span id="tlwebaccess-certificates"></span><h2>Certificates<a class="headerlink" href="#certificates" title="Permalink to this headline">¶</a></h2>
+<p>For best security and user experience, we strongly recommend that you
+use valid TLS certificates. The certificates should match the server
+host names. For correct behavior, you should set the parameter
+<a class="reference internal" href="config_vsmagent.html#server-config-vsmagent-agent_hostname"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent/agent_hostname</span></code></a> on each of the agents in the
+ThinLinc cluster.</p>
+<p>If you can’t obtain a valid TLS certificate but still want to test
+ThinLinc Web Access you can use a self-signed certificate. Such a
+certificate, created for <code class="docutils literal notranslate"><span class="pre">localhost</span></code>, is bundled with Web Access. Any
+use of self-signed certificates is insecure and most browsers will
+display warnings when they are used. Self-signed certificates must be
+manually approved.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In Safari, the certificates <strong>must</strong> match the server hostname, while
+other browsers might be content with a warning. Firstly, this means
+that you cannot connect through an IP address. Secondly, you cannot
+use the bundled self-signed certificate. You can create a new
+self-signed certificate using our shipped helper script
+<strong class="program">make-dummy-cert</strong>. OpenSSL is required to be installed for
+this script. Use it like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo /opt/thinlinc/etc/tlwebaccess/make-dummy-cert <span class="sb">`</span>hostname --fqdn<span class="sb">`</span>
+</pre></div>
+</div>
+<p>Manually approving the self-signed certificate requires some
+additional steps in Safari compared to other browsers. On macOS the
+user must expand the browser dialog that complains about the
+certificate and choose to always accept that certificate. If the user
+already dismissed that dialog, then Safari has to be restarted. A
+self-signed certificate must be manually approved for all machines in
+a cluster.</p>
+<p>If you must test a browser on iOS with a self-signed certificate you
+have to add the certificate as a trusted certificate authority on the
+iOS device. Download the certificate on the device and install it in
+<span class="menuselection">Settings ‣ General ‣ Profile</span>. Then you also have
+to enable the full trust of that root certificate in the
+<span class="guilabel">Certificate Trust Settings</span> which can be found at the
+bottom of the <span class="menuselection">Settings ‣ General ‣ About</span> page.
+See Apple’s instructions <a class="reference external" href="https://support.apple.com/HT204477">here</a>. After using Safari to install
+the certificate, you can use Web Access in any browser on iOS.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The above steps for iOS are very insecure and are not recommended
+for production systems. iOS does not have a mechanism for ignoring
+bad certificates for a single site. This means that following the
+method above will result in that your device considers the
+certificate as a generally trusted authority. This can in turn
+allow whoever has access to that certificate’s private key to
+generate a certificate that falsely appears valid for any site.
+For example, an evil website could appear to have a valid
+certificate for your bank.</p>
+</div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tlwebaccess.html" title="Previous document">ThinLinc Web Access</a>
+        </li>
+        <li>
+          <a href="tlwebaccess_usage.html" title="Next document">Usage</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Server configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#certificates">Certificates</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tlwebaccess_usage.html">Usage</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="tlwebaccess.html">ThinLinc Web Access</a><ul>
+      <li>Previous: <a href="tlwebaccess.html" title="previous chapter">ThinLinc Web Access</a></li>
+      <li>Next: <a href="tlwebaccess_usage.html" title="next chapter">Usage</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/tlwebaccess_server.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

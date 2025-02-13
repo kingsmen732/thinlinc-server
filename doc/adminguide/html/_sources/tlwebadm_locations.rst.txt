@@ -1,0 +1,153 @@
+.. meta::
+   :description: Guide to managing terminal and printer locations in the
+                 ThinLinc web administration interface, including
+                 adding, editing, and assigning devices to locations.
+
+.. _tlwebadm_locations:
+
+The locations module
+~~~~~~~~~~~~~~~~~~~~
+
+Locations contains information about locations where terminals and
+printers reside. A location can be a room, a floor, a house or some
+other type of geographical delimitation.
+
+Every terminal should be assigned as a member of a location. In addition
+to terminals, printers may also be assigned to locations.
+
+Locations
+^^^^^^^^^
+
+To edit a location, click on its name in the list. To add a new location
+to the list you press the :guilabel:`Add new location` button. This will
+bring up an empty location edit pop-up. See
+:numref:`tlwebadm_location_new` for an example.
+
+.. _tlwebadm_location_new:
+
+.. figure:: images/tlwebadm-location-new.svg
+
+   New location pop-up
+
+Fill the :guilabel:`Name` and :guilabel:`Description` fields with
+relevant information. Enable the switch if this location is to be used
+as a default location for unknown terminals when using the printer
+access control feature (see :ref:`printeraccesscontrol` for details).
+
+To save changes, press the :guilabel:`Save` button. When you have
+pressed the :guilabel:`Save` button you will see that the
+:guilabel:`Name` field will change from being an editable field to
+become a static text label. To assure data integrity between the modules
+you aren't allowed to change the name of an item after it's added.
+
+The :guilabel:`Delete` button deletes the currently viewed location, but
+only if the confirmation checkbox is also checked. The :guilabel:`Add
+printer` button will add a new field to the pop-up, a drop-down menu with
+all possible printers. An example of this can be seen in
+:numref:`tlwebadm_location_addprinter`.
+
+.. _tlwebadm_location_addprinter:
+
+.. figure:: images/tlwebadm-location-addprinter.svg
+
+   Location details with printer
+
+The :guilabel:`Printer` field above has the printer :guilabel:`MX-2700N`
+selected. Remember to save the changes if you change printer! You can
+assign more printers to this location by clicking :guilabel:`Add
+printer` again to bring up another printer line. To remove a printer
+you select the :guilabel:`Delete` checkbox corresponding to the
+printer(s) you want to delete, and click :guilabel:`Save` to apply the
+changes. The printer(s) will disappear.
+
+.. note::
+
+   Printers contains entries for all available printers. These entries
+   are just shadows of the real CUPS (Common Unix Printing System)
+   printer system entries. This means that you first need the printers
+   to be installed in the CUPS printer system and then added to this
+   list.
+
+Terminals
+^^^^^^^^^
+
+Terminals contains necessary information about all terminals. The most
+important information here is every terminal's interface hardware (MAC)
+address.
+
+Each terminal should be entered as described in this section. Enter the
+terminals module by clicking on the menu item. You will be presented
+with a list of currently entered terminals. This could be something like
+the example in :numref:`tlwebadm_terminal_list`.
+
+.. _tlwebadm_terminal_list:
+
+.. figure:: images/tlwebadm-terminal-list.svg
+
+   Terminals
+
+:numref:`tlwebadm_terminal_list` shows a system with a total of two
+terminals.
+
+To edit a terminal, click on its name in the list. To add a new terminal
+to the list you press the :guilabel:`Add new terminal` button. This will
+bring up an empty terminal edit pop-up. See
+:numref:`tlwebadm_terminal_new` for an example.
+
+.. _tlwebadm_terminal_new:
+
+.. figure:: images/tlwebadm-terminal-new.svg
+
+   New terminal pop-up
+
+There are three editable fields in this view, :guilabel:`Terminal name`,
+:guilabel:`Hardware (MAC) address` and :guilabel:`Location`. They are
+described in :ref:`tlwebadm_terminal_properties` below.
+
+To save changes, press the :guilabel:`Save` button. When you have
+pressed the :guilabel:`Save` button you will see that the Hardware (MAC)
+address field will change from being an editable field to become a
+static text label. To assure data integrity between the modules you
+aren't allowed to change this field after it's added.
+
+When a new terminal is requested or when clicking an existing one in the
+terminals list, there will be three buttons in the pop-up. The
+:guilabel:`Save` button is used to save changes made to the terminal.
+The :guilabel:`Delete` button deletes the currently viewed terminal.
+The :guilabel:`Add printer` button will add a new printer field to the
+pop-up.
+
+.. _tlwebadm_terminal_properties:
+
+.. table:: Terminal properties
+
+   +------------------------+--------------------------------------------+
+   | Name                   | Description                                |
+   +========================+============================================+
+   | Terminal name          | Name of the terminal. For example          |
+   |                        | the terminal's DNS name or a name          |
+   |                        | following a naming scheme that identifies  |
+   |                        | the terminal.                              |
+   +------------------------+--------------------------------------------+
+   | Hardware (MAC) address | Hardware (MAC) address of the main         |
+   |                        | interface of the terminal. This field is   |
+   |                        | important! Without a correct value the     |
+   |                        | *nearest* printer won't work!              |
+   +------------------------+--------------------------------------------+
+   | Location               | Which of the locations, entered in the     |
+   |                        | Locations module, this terminal belongs    |
+   |                        | to.                                        |
+   +------------------------+--------------------------------------------+
+
+It is also possible to add a printer to a terminal in the terminal
+module. This can be used if a terminal has its own printer or is closer
+to another printer than the ones assigned to this terminal's location.
+You should use this feature moderately since it may cause more
+administration.
+
+To add a printer you do exactly as in the :guilabel:`Locations` menu.
+Click the :guilabel:`Add printer` button, select the printer in the
+drop-down menu and then press :guilabel:`Save` to make sure that the
+settings are stored. To delete it, check the relevant :guilabel:`Delete`
+checkbox(es) for the printer(s) you wish to remove, and click
+:guilabel:`Save`.

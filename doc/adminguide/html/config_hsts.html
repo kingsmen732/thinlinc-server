@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Learn how to configure HTTP Strict Transport Security (HSTS) in ThinLinc to enforce HTTPS connections. Includes options for subdomains and browser preload settings." name="description" />
+
+    <title>Configuring HSTS headers &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Upgrading ThinLinc" href="install_upgrade.html" />
+    <link rel="prev" title="Limiting lifetime of ThinLinc sessions" href="config_lifetime.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_lifetime.html" title="Previous document">Limiting lifetime of ThinLinc sessions</a>
+        </li>
+        <li>
+          <a href="install_upgrade.html" title="Next document">Upgrading ThinLinc</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="configuring-hsts-headers">
+<span id="configuring-hsts-header"></span><h1>Configuring HSTS headers<a class="headerlink" href="#configuring-hsts-headers" title="Permalink to this headline">¶</a></h1>
+<p>HTTP Strict Transport Security (HSTS) is a security mechanism that
+forces users to connect to a website over a secure HTTPS connection
+instead of insecure HTTP. This is done by the server sending an HTTP
+header, Strict-Transport-Security (RFC 6797). This header informs the
+browser that a site should only be accessed using HTTPS, and that any
+future attempts to access the site using HTTP will automatically be
+converted to HTTPS. By preventing data from being transmitted
+unprotected, this header can help protect websites and users from
+certain types of attacks, such as man-in-the-middle attacks.</p>
+<section id="warnings-and-limitations">
+<h2>Warnings and limitations<a class="headerlink" href="#warnings-and-limitations" title="Permalink to this headline">¶</a></h2>
+<p>Important: Do not modify the HSTS settings unless you fully understand
+the potential risks, as these settings should be regarded as permanent.
+Incorrect configuration can lead to unintended consequences, including
+blocking access to other services on your domain. Below are some key
+warnings and limitations to consider before enabling HSTS:</p>
+<ul class="simple">
+<li><p>If HSTS is enabled, the browser enforces HTTPS strictly for the entire
+domain, converting all HTTP requests to HTTPS. This setting does not
+only affect ThinLinc. This causes issues if some resources are not
+accessible over HTTPS.</p></li>
+<li><p>A service may not have a valid, trusted SSL/TLS certificate and might
+instead use a self-signed certificate. If HSTS is enabled, browsers
+will block access to such services.</p></li>
+<li><p>If HSTS is configured to also include subdomains, all subdomains must
+also use HTTPS and have valid certificates. It is safer to enable HSTS
+on subdomains separately, since it reduces the risk of blocking access
+to any subdomains not fully supporting HTTPS.</p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The HSTS configuration has three options which control details on how it
+works. These options, which can be added to the
+<a class="reference internal" href="config_tlwebadm.html#std-server-config-folder-tlwebadm-hsts"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/tlwebadm/hsts</span></code></a> or <a class="reference internal" href="config_webaccess.html#std-server-config-folder-webaccess-hsts"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/webaccess/hsts</span></code></a> parameters,
+are explained more in detail in subsequent sections and in
+<a class="reference internal" href="config_tlwebadm.html#configuration-tlwebadm"><span class="std std-ref">Parameters in /tlwebadm/</span></a> and <a class="reference internal" href="config_webaccess.html#configuration-tlwebaccess"><span class="std std-ref">Parameters in /webaccess/</span></a>.</p>
+</section>
+<section id="enable-hsts-headers">
+<h2>Enable HSTS headers<a class="headerlink" href="#enable-hsts-headers" title="Permalink to this headline">¶</a></h2>
+<p>After being turned on, the HSTS policy is enabled for the domain after
+the first visit to ThinLinc Web Access or Web Administration. This means
+the browser starts using the policy from the second visit for a set
+duration time. As long as the domain is revisited continuously, it will
+keep enforcing the usage of HTTPS. When first enabling, it is
+recommended to choose “testing”, please see
+<a class="reference internal" href="config_tlwebadm.html#configuration-tlwebadm"><span class="std std-ref">Parameters in /tlwebadm/</span></a> or <a class="reference internal" href="config_webaccess.html#configuration-tlwebaccess"><span class="std std-ref">Parameters in /webaccess/</span></a>.
+Remember to restart the service after changing the configuration.</p>
+</section>
+<section id="include-subdomains-in-the-hsts-policy">
+<h2>Include subdomains in the HSTS policy<a class="headerlink" href="#include-subdomains-in-the-hsts-policy" title="Permalink to this headline">¶</a></h2>
+<p>When including subdomains in the HSTS policy, the browser will also
+enforce HTTPS usage for the subdomains of the ThinLinc host. Note the
+warnings above. The parameters are explained more in detail in
+<a class="reference internal" href="config_tlwebadm.html#server-config-tlwebadm-hsts-subdomains_included"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/tlwebadm/hsts/subdomains_included</span></code></a> and
+<a class="reference internal" href="config_webaccess.html#server-config-webaccess-hsts-subdomains_included"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/webaccess/hsts/subdomains_included</span></code></a>.</p>
+</section>
+<section id="allow-browser-hsts-preloading">
+<h2>Allow browser HSTS preloading<a class="headerlink" href="#allow-browser-hsts-preloading" title="Permalink to this headline">¶</a></h2>
+<p>Major browsers have a preload list of domains with the HSTS policy
+enabled, which for many is based on Chromium’s list. A request can be
+made to be added to Chromium’s preload list, when all requirements are
+met. The reason for preloading is to enable the HSTS policy at the first
+visit to the domain or subdomain. The results should be considered
+permanent once enabled and are difficult to reverse.</p>
+<p>ThinLinc has options for this, which indicates, when enabled, that the
+intention is to add the domain, and subdomains, to the browsers’ lists.
+The parameters are explained more in detail in
+<a class="reference internal" href="config_tlwebadm.html#server-config-tlwebadm-hsts-allow_browser_preload"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/tlwebadm/hsts/allow_browser_preload</span></code></a> and
+<a class="reference internal" href="config_webaccess.html#server-config-webaccess-hsts-allow_browser_preload"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/webaccess/hsts/allow_browser_preload</span></code></a>.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_lifetime.html" title="Previous document">Limiting lifetime of ThinLinc sessions</a>
+        </li>
+        <li>
+          <a href="install_upgrade.html" title="Next document">Upgrading ThinLinc</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="configuration.html">Server configuration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config_cluster.html">Cluster configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_logging.html">Configuring logging on ThinLinc servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_session.html">Customizing the user’s session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_lifetime.html">Limiting lifetime of ThinLinc sessions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Configuring HSTS headers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#warnings-and-limitations">Warnings and limitations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-hsts-headers">Enable HSTS headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include-subdomains-in-the-hsts-policy">Include subdomains in the HSTS policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#allow-browser-hsts-preloading">Allow browser HSTS preloading</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="configuration.html">Server configuration</a><ul>
+      <li>Previous: <a href="config_lifetime.html" title="previous chapter">Limiting lifetime of ThinLinc sessions</a></li>
+      <li>Next: <a href="install_upgrade.html" title="next chapter">Upgrading ThinLinc</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/config_hsts.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

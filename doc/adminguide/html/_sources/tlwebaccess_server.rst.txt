@@ -1,0 +1,106 @@
+.. meta::
+   :description: Guide to configuring ThinLinc Web Access server and TLS
+                 certificates, including cluster setup, port management,
+                 and security practices. Critical for ensuring secure
+                 and functional ThinLinc deployments.
+
+.. _tlwebaccess_server:
+
+Server configuration
+--------------------
+
+ThinLinc Web Access is served by the service ``tlwebaccess``. The
+default TCP port number for this HTTP service is 300. It can be changed
+to some other port such as 443, assuming this port is free. The
+configured port must be allowed in any firewalls.
+
+In a cluster setup, the ``tlwebaccess`` service must run on all
+machines. The same service port should be used, and all machines must be
+accessible from the clients.
+
+The setting :servconf:`/webaccess/login_page` will also need to be
+configured in a cluster setup. The client first authenticates with the
+master. Once the master server has chosen an agent server for the
+session, the client will authenticate with that agent server. The
+browser will thus present pages from two different servers. First a page
+from the master, and then from the agent, unless the agent is on the
+same server of course. This parameter is a means for the agent to know
+the public hostname of the master server. Thus when it's properly set,
+the user can, when the session has ended, click a button to return from
+the agent to the master to log in again. The default value, which is
+``/``, will not redirect to another server and is only usable if you are
+running a standalone ThinLinc server, i.e. not a cluster. If you have
+more than one server or are using Network Address Translation (NAT), you
+must set this parameter to an address that all clients can connect to.
+Example:
+
+.. code:: ini
+
+   login_page = https://thinlinc-master.example.com:300/
+
+Please see :ref:`configuration_tlwebaccess` for details on all possible
+settings for ThinLinc Web Access.
+
+.. _tlwebaccess_certificates:
+
+Certificates
+~~~~~~~~~~~~
+
+For best security and user experience, we strongly recommend that you
+use valid TLS certificates. The certificates should match the server
+host names. For correct behavior, you should set the parameter
+:servconf:`/vsmagent/agent_hostname` on each of the agents in the
+ThinLinc cluster.
+
+If you can't obtain a valid TLS certificate but still want to test
+ThinLinc Web Access you can use a self-signed certificate. Such a
+certificate, created for ``localhost``, is bundled with Web Access. Any
+use of self-signed certificates is insecure and most browsers will
+display warnings when they are used. Self-signed certificates must be
+manually approved.
+
+.. note::
+
+   In Safari, the certificates **must** match the server hostname, while
+   other browsers might be content with a warning. Firstly, this means
+   that you cannot connect through an IP address. Secondly, you cannot
+   use the bundled self-signed certificate. You can create a new
+   self-signed certificate using our shipped helper script
+   :program:`make-dummy-cert`. OpenSSL is required to be installed for
+   this script. Use it like this:
+
+   .. code:: console
+
+          $ sudo /opt/thinlinc/etc/tlwebaccess/make-dummy-cert `hostname --fqdn`
+
+   Manually approving the self-signed certificate requires some
+   additional steps in Safari compared to other browsers. On macOS the
+   user must expand the browser dialog that complains about the
+   certificate and choose to always accept that certificate. If the user
+   already dismissed that dialog, then Safari has to be restarted. A
+   self-signed certificate must be manually approved for all machines in
+   a cluster.
+
+   If you must test a browser on iOS with a self-signed certificate you
+   have to add the certificate as a trusted certificate authority on the
+   iOS device. Download the certificate on the device and install it in
+   :menuselection:`Settings --> General --> Profile`. Then you also have
+   to enable the full trust of that root certificate in the
+   :guilabel:`Certificate Trust Settings` which can be found at the
+   bottom of the :menuselection:`Settings --> General --> About` page.
+   See Apple's instructions `here`_. After using Safari to install
+   the certificate, you can use Web Access in any browser on iOS.
+
+   .. warning::
+
+      The above steps for iOS are very insecure and are not recommended
+      for production systems. iOS does not have a mechanism for ignoring
+      bad certificates for a single site. This means that following the
+      method above will result in that your device considers the
+      certificate as a generally trusted authority. This can in turn
+      allow whoever has access to that certificate's private key to
+      generate a certificate that falsely appears valid for any site.
+      For example, an evil website could appear to have a valid
+      certificate for your bank.
+
+.. _here: https://support.apple.com/HT204477

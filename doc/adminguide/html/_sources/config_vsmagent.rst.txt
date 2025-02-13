@@ -1,0 +1,143 @@
+.. meta::
+   :description: Overview of the configuration parameters for the
+                 ThinLinc agent service, including settings for session
+                 management, network configuration, and environment
+                 customization.
+
+.. _configuration_vsmagent:
+
+.. server-config-folder:: /vsmagent
+
+Parameters in /vsmagent/
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this section, we will describe all the parameters currently used by
+the VSM agent. These configuration parameters reside in
+:file:`/opt/thinlinc/etc/conf.d/vsmagent.hconf`.
+
+.. server-config:: /vsmagent/agent_hostname
+
+   Public hostname; the hostname that clients are redirected to. If not
+   defined, the agent will use the computer's IP address. This is the
+   default configuration, and means that ThinLinc does not require DNS
+   to work properly. However, if you are using Network Address
+   Translation (NAT), you must set this parameter to an IP address or
+   DNS name that all clients can connect to. For example:
+
+   .. code:: ini
+
+      agent_hostname = thinlinc.example.com
+
+.. server-config:: /vsmagent/allowed_clients
+
+   This is the space-separated list of VSM servers that should be
+   allowed to connect to this VSM agent and create new sessions.
+   ``localhost`` is always allowed, as well as the IP of the hostname
+   the VSM agent runs on and the host specified in the
+   :servconf:`/vsmagent/master_hostname` parameter.
+
+.. server-config:: /vsmagent/default_environment
+
+   This subfolder of :servconf:`/vsmagent` contains environment
+   variables that should be set in each user's session. Example:
+
+   .. code:: ini
+
+      [/vsmagent/default_environment]
+      TOWN=Springfield
+      LC_CTYPE=sv_SE.UTF-8
+      FOOBAR=foobar
+
+   This will set the :environ:`TOWN` environment variable to
+   ``Springfield`` , the :environ:`LC_CTYPE` variable to ``sv_SE.UTF-8``
+   and the :environ:`FOOBAR` variable to ``foobar`` in each user's
+   session.
+
+   .. note::
+
+      :program:`xsession` is executed via a login shell, which may
+      modify the environment and override values in
+      :servconf:`/vsmagent/default_environment`.
+
+.. server-config:: /vsmagent/default_geometry
+
+   The default session size, to be used when clients are not requesting
+   any specific session size.
+
+.. server-config:: /vsmagent/display_max
+
+   The maximum display number to be used for ThinLinc sessions on each
+   specific VSM agent host. Default value is ``2000``.
+
+   The maximum ThinLinc sessions allowed on a specific VSM Agent host is
+   :servconf:`/vsmagent/display_max` -
+   :servconf:`/vsmagent/display_min`.
+
+.. server-config:: /vsmagent/display_min
+
+   The lowest display numbers to use for clients. The default is ``10``,
+   and unless there are other processes needing display numbers, the
+   recommendation is not to change this number. See :ref:`tcp-ports` for
+   an in-depth explanation of port allocation.
+
+.. server-config:: /vsmagent/listen_port
+
+   The TCP port VSM Agent listen to for incoming requests. This should
+   normally be set to the same value as :servconf:`/vsm/vsm_agent_port`.
+
+.. server-config:: /vsmagent/lowest_user_port
+
+   The lowest port to be used by normal user processes. This may *never*
+   be lower than :servconf:`/vsmagent/max_session_port`. See
+   :ref:`tcp-ports` for an in-depth explanation of port allocation.
+
+.. server-config:: /vsmagent/make_homedir
+
+   If this parameter is true, the user's home directory will be
+   automatically created if it doesn't exist.
+
+.. server-config:: /vsmagent/make_homedir_mode
+
+   When a home directory is created (see parameter
+   :servconf:`/vsmagent/make_homedir` above), the mode for the newly
+   created directory will be determined by this parameter.
+
+.. server-config:: /vsmagent/master_hostname
+
+   This parameter specifies the hostname of the master machine, i.e. the
+   machine that runs the VSM server. In a HA setup, this should be the
+   hostname of the IP address that is on the machine that is currently
+   the active node, to ensure that services on the agents that need to
+   access the VSM Server always connects to the machine that is up and
+   running.
+
+.. server-config:: /vsmagent/max_session_port
+
+   The highest port to use for VNC and tunnel ports on the VSM Agent.
+   See :ref:`tcp-ports` for an in-depth explanation of port allocation.
+
+.. server-config:: /vsmagent/single_signon
+
+   This parameter decides whether the passwords of the users should be
+   saved in order to support Single Sign-On when connecting to servers
+   from the ThinLinc session, for example when running a Windows
+   session.
+
+.. server-config:: /vsmagent/xserver_args
+
+   Extra arguments to pass on to the X server Xvnc. One common case is
+   to use :option:`-localhost` , which makes Xvnc require connections to
+   originate from localhost, thus forcing applications to either be
+   local or use a tunnel (which often also means that the traffic is
+   encrypted). Other examples include :option:`-IdleTimeout` and
+   :option:`-MaxIdleTime`. For more information, see
+   :ref:`configuration_limiting_lifetime`.
+
+.. server-config:: /vsmagent/xauthority_location
+
+   This parameter controls the location of the :file:`Xauthority` file.
+   Currently, two values are supported: With ``homedir``, the file will
+   be placed in the user's home directory. With ``sessiondir``, the file
+   will be placed in the session directory below
+   :file:`/var/opt/thinlinc/sessions`. The :environ:`XAUTHORITY`
+   environment variable is set accordingly by the VSM agent.

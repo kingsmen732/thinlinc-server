@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Detailed guide on upgrading ThinLinc servers and clusters, including considerations for configuration migration, license updates, and a step-by-step process for upgrading both master and agent servers in a ThinLinc environment." name="description" />
+
+    <title>Upgrading ThinLinc &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Shadowing" href="shadowing.html" />
+    <link rel="prev" title="Configuring HSTS headers" href="config_hsts.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_hsts.html" title="Previous document">Configuring HSTS headers</a>
+        </li>
+        <li>
+          <a href="shadowing.html" title="Next document">Shadowing</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="upgrading-thinlinc">
+<span id="install-upgrade"></span><h1>Upgrading ThinLinc<a class="headerlink" href="#upgrading-thinlinc" title="Permalink to this headline">¶</a></h1>
+<p>This chapter will detail the process of upgrading ThinLinc servers and
+clusters. There are several important items that have to be considered
+regarding ThinLinc upgrades:</p>
+<ul class="simple">
+<li><p>It is required that all servers (including HA nodes) in a cluster are
+running the same ThinLinc version.</p></li>
+<li><p>All ThinLinc services will automatically be stopped during the entire
+upgrade. They will be started again once ThinLinc setup finishes.</p></li>
+<li><p>Users will not be able to reconnect to running sessions when the
+master service is stopped or when the agent service is stopped on the
+agent server running the session.</p></li>
+<li><p>Users will not be able to create new sessions when the master service
+is stopped or when no agent servers are available.</p></li>
+<li><p>Running sessions will be unaffected by a upgrade. This means that
+users can continue working. This also means that running sessions
+will not be getting the benefits from the new version.</p></li>
+</ul>
+<section id="upgrading-a-cluster">
+<span id="upgrade-cluster"></span><h2>Upgrading a cluster<a class="headerlink" href="#upgrading-a-cluster" title="Permalink to this headline">¶</a></h2>
+<p>The recommended workflow for upgrading a ThinLinc cluster is as follows:</p>
+<ol class="arabic simple">
+<li><p>Review configuration changes in the release notes for the new
+release. More information regarding configuration migration can be
+found in <a class="reference internal" href="#upgrade-migration"><span class="std std-ref">Configuration migration</span></a>.</p></li>
+<li><p>Check licenses and install new ones if needed. For details see
+<a class="reference internal" href="#upgrade-licenses"><span class="std std-ref">New licenses</span></a>.</p></li>
+<li><p>Schedule the upgrade and if necessary prepare the users on that
+reconnections or creation will be unavailable during the upgrade
+process. The command <strong class="program">tl-notify</strong> can be used to send
+messages to users in running sessions. Documentation for this command
+can be found in <a class="reference internal" href="commands.html#commands"><span class="std std-ref">Commands on the ThinLinc server</span></a>.</p></li>
+<li><p>Stop the agent services on all agent servers. The command
+<strong class="program">tl-ssh-all</strong> can be used to run commands on all agent
+servers in the cluster. Documentation for this command can be found
+in <a class="reference internal" href="commands.html#commands"><span class="std std-ref">Commands on the ThinLinc server</span></a>. This step will prevent reconnections and the
+creation of new sessions.</p></li>
+<li><p>Remove all agent servers from the cluster by clearing the
+configuration parameter
+<a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-agents"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/subclusters/&lt;name&gt;/agents</span></code></a> on the master.
+Details on this parameter can be found in
+<a class="reference internal" href="config_subclusters.html#configuration-subcluster-params"><span class="std std-ref">Parameters in /vsmserver/subclusters/</span></a>. Restart the master service to
+take the change into effect. If HA is used, do this on both master
+servers.</p></li>
+<li><p>Upgrade the master server. Details for installing an upgrade can be
+found in <a class="reference internal" href="#upgrade-packages"><span class="std std-ref">Upgrading the package</span></a> and <a class="reference internal" href="#upgrade-migration"><span class="std std-ref">Configuration migration</span></a>. If HA
+is used, stop the master service on both master servers and then
+upgrade both servers.</p></li>
+<li><p>Upgrade each agent server and manually add them back into the
+upgraded cluster. Upgrading agents works the same way as upgrading a
+master server. Add each upgraded agent to the configuration parameter
+<a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-agents"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/subclusters/&lt;name&gt;/agents</span></code></a> on the master.
+Restart the master service afterward. If HA is used, do this on both
+master servers. Once at least one agent is added users will again be
+able to create new sessions.</p></li>
+</ol>
+<p>Once all agent servers are upgraded and added back into the cluster all
+users will be able to reconnect to existing sessions and the upgrade is
+complete.</p>
+</section>
+<section id="new-licenses">
+<span id="upgrade-licenses"></span><h2>New licenses<a class="headerlink" href="#new-licenses" title="Permalink to this headline">¶</a></h2>
+<p>Before performing an upgrade the first step is to find out if new
+license files are required to run the new version. ThinLinc license
+files delivered with version <strong>x.y.z</strong> will still work for versions with
+the same <strong>x</strong> and <strong>y</strong> but higher <strong>z</strong>, but not for increased
+<strong>x</strong> or <strong>y</strong>. For example, license files for ThinLinc 3.1.0 will still
+work for ThinLinc 3.1.1, but not for ThinLinc 3.2.0 or ThinLinc 4.0.0.</p>
+<p>As the new licenses will work with the old (current) version, it’s a
+good idea to install them as the first step in the upgrade process.</p>
+</section>
+<section id="upgrading-the-package">
+<span id="upgrade-packages"></span><h2>Upgrading the package<a class="headerlink" href="#upgrading-the-package" title="Permalink to this headline">¶</a></h2>
+<p>The same installation program that you used to install ThinLinc is also
+used to upgrade it. It is located in the root directory of the server
+bundle. Extract the bundle and start the installation program as
+follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sh ./install-server
+</pre></div>
+</div>
+<p>and answer the questions. If you prefer, you can also upgrade the
+ThinLinc package by hand. This package is located in the subdirectory
+<code class="file docutils literal notranslate"><span class="pre">packages</span></code> in the server bundle.</p>
+<p>If <strong class="program">install-server</strong> was used, it will ask if ThinLinc setup
+should be started at the end of the package upgrade. If ThinLinc setup
+wasn’t started automatically, it should be started manually after the
+package upgrade by running <strong class="program">/opt/thinlinc/sbin/tl-setup</strong>.</p>
+</section>
+<section id="configuration-migration">
+<span id="upgrade-migration"></span><h2>Configuration migration<a class="headerlink" href="#configuration-migration" title="Permalink to this headline">¶</a></h2>
+<p>Once the package has been upgraded, a decision will sometimes be
+required regarding how to migrate the configuration. When a conflict
+between the saved configuration and the configuration in the new release
+arises, a choice has to be made.</p>
+<p>ThinLinc setup will present choices regarding migration of Hiveconf
+files. Conflicting files that aren’t Hiveconf files are not affected by
+ThinLinc setup. In these cases the package upgrade will have kept your
+configuration in place and saved the new default values from the new
+ThinLinc version as <code class="file docutils literal notranslate"><span class="pre">.rpmnew</span></code> or <code class="file docutils literal notranslate"><span class="pre">.dpkg-dist</span></code> versions of
+the conflicting files. Potential migration of non-Hiveconf files has to
+be done manually.</p>
+<p>The three options that are presented in ThinLinc setup are as follows:</p>
+<ul>
+<li><p>Use the new Hiveconf files and migrate the parameters and values from
+the old files.</p>
+<p>With this option, all configuration changes done in the earlier
+version are preserved. The configuration will be based on the new
+files. Values of parameters that have been moved or renamed in the
+new release will be migrated to the new parameters. Parameters that
+have been removed will be deleted. Comments will not be migrated. The
+file structure and file names may also be different. All parameters
+and values from the listed Hiveconf files are copied over. This means
+that unchanged parameters in these files will use the default values
+from the earlier release.</p>
+<p>Note that a certain parameter will be defined if it is defined either
+in the new or old Hiveconf files. This means that if you have removed
+some parameters, for example one of the example profiles, those
+parameters will again exist after the migration. For profiles,
+however, this will not affect the user session, since profiles are
+only visible if they are also listed in the “order” parameter.</p>
+<p>Parameters will be removed from the new Hiveconf files if they are
+defined elsewhere. For example,
+if <a class="reference internal" href="config_vsmagent.html#server-config-vsmagent-agent_hostname"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent/agent_hostname</span></code></a> has been moved from
+<code class="file docutils literal notranslate"><span class="pre">vsmagent.hconf</span></code> to <code class="file docutils literal notranslate"><span class="pre">local.hconf</span></code>, this change
+will be preserved.</p>
+</li>
+<li><p>Use all old Hiveconf files.</p>
+<p>With this option, all the old files are used. Custom comments and the
+file structure are preserved, but no new parameters or comments from
+the new release are introduced. Please note that configuration files
+which are identical in the old and new release are not listed or
+processed. This means that new default values in such files are
+introduced even with this option.</p>
+</li>
+<li><p>Ignore old Hiveconf files and use the new files.</p>
+<p>With this option, the listed configuration files are ignored and the
+new files are used instead. Please note that configuration files
+which are identical in the old and new release are not listed or
+processed. This means that configuration changes to such files are
+preserved even with this option.</p>
+</li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_hsts.html" title="Previous document">Configuring HSTS headers</a>
+        </li>
+        <li>
+          <a href="shadowing.html" title="Next document">Shadowing</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Upgrading ThinLinc</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-a-cluster">Upgrading a cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#new-licenses">New licenses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-the-package">Upgrading the package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-migration">Configuration migration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="config_hsts.html" title="previous chapter">Configuring HSTS headers</a></li>
+      <li>Next: <a href="shadowing.html" title="next chapter">Shadowing</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/install_upgrade.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

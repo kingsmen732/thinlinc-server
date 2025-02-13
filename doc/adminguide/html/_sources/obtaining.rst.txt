@@ -1,0 +1,27 @@
+.. meta::
+   :description: Instructions for obtaining and verifying ThinLinc
+                 software packages, including download sources and
+                 methods to verify package signatures for RPM-based
+                 systems.
+
+.. _obtaining_thinlinc:
+
+Obtaining ThinLinc
+==================
+
+The ThinLinc client and server software is available for download, free
+of charge, from https://www.cendio.com. The software may also be
+downloaded from various third-party sources.
+
+.. _verifying_thinlinc:
+
+Verifying the software packages
+-------------------------------
+
+For RPM-based systems, the software packages have been signed by Cendio.
+This signature can be verified using the public key available from
+https://www.cendio.com/thinlinc/download.
+
+The key is also available from https://keys.openpgp.org and
+https://keyserver.ubuntu.com, by searching for the fingerprint provided
+on the downloads page.

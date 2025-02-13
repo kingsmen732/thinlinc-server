@@ -1,0 +1,182 @@
+.. meta::
+   :description: Guide to configuring security and authentication
+                 settings in the ThinLinc client, including options for
+                 SSH ports, password, public key, smart card, and
+                 Kerberos authentication.
+
+.. _client_security_tab:
+
+Security tab
+~~~~~~~~~~~~
+
+The :guilabel:`Security` tab controls how the client authenticates
+against the ThinLinc server. The main interface of the client will be
+different depending on the choices made here.
+
+.. figure:: images/client-options-security.png
+
+   Client settings security tab
+
+Description of security tab settings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Here follows a detailed description of the settings available in the
+security tab.
+
+:guilabel:`SSH port`
+          
+   This option selects the TCP/IP port to use when the client tries to
+   establish an SSH connection with the ThinLinc server. The normal SSH
+   port is 22, which also is the default selection for this option.
+   There can be reasons to use another port on some occasions. If you
+   for example need to use ThinLinc over the Internet, from a location
+   where port 22 is blocked by a firewall. Then you can select a port
+   that is open. To be able to use a port other than 22 you need to make
+   sure that the SSH daemon (sshd), which runs on the ThinLinc server,
+   listens to the port you want to use. The SSH daemon can be told to
+   listen to any wanted ports. In the client interface you can select
+   between the default port 22, port 80 and an arbitrary port number
+   which you can enter by yourself.
+
+   .. note::
+
+      If the SSH host key on the server changes, e.g. due to an upgrade
+      of the OS or SSH server software, the client will note this fact.
+      It will then, at the next login, open a dialog and let the user
+      confirm that the new host key is valid. If the user clicks OK,
+      then the host key on the client for this particular server is
+      updated on disk.
+
+      The administrator can disallow this by manually setting the
+      parameter :clientconf:`ALLOW_HOSTKEY_UPDATE` to ``0``. See
+      :ref:`clientconf_params` for more information.
+
+:guilabel:`Password`
+   This option makes the client try to authenticate using a regular
+   password.
+
+:guilabel:`Public key`
+   This option makes the client try to authenticate using public key
+   encryption. The user will be asked to provide a private encryption
+   key instead of a text password.
+
+:guilabel:`Smart card`
+   This option makes the client try to authenticate using public key
+   encryption, but with the private key securely stored on a smart card.
+   The user will be asked to select a certificate on the smart card and
+   to provide the passphrase for it.
+
+   .. note::
+
+      Smart card authentication requires that the smart card is readable
+      by your PKCS#11 library. The library included by default supports
+      PKCS#15 compliant smart cards and relies on the PC/SC interface.
+      This is always present on Windows systems and is usually installed
+      by default on Linux systems.
+
+   The :guilabel:`Details...` button lets you change the options for
+   smart card usage and managing the certificate filters which are used
+   to match accepted certificates for authentication.
+
+   .. _smart_card_options_dialog:
+
+   .. figure:: images/client-options-security-smart-card-options.png
+
+      Smart card authentication settings
+
+   :guilabel:`Use certificate subject as login name`
+      Enable this options if you want to enable automatic login. This
+      will also hide the :guilabel:`Username` field.
+
+   :guilabel:`Connect when smart card is inserted`
+      This option will try to automatically connect on card
+      insertion. It is dependent on certificate filters, automatic
+      connect will only occur if only one certificate is available after
+      the filtration.
+
+      Read more about automatic connection below where certificate
+      filters are discussed.
+
+      See :ref:`smartcard_auto` for information on how to
+      configure the server for automatic smart card connection.
+
+   :guilabel:`Disconnect when smart card is removed`
+      Enabling this options makes the client automatically disconnect
+      when the smart card used to authenticate is removed.
+
+   :guilabel:`Send smart card passphrase (PIN) to server`
+      This option makes the client transmit the smart card passphrase,
+      as entered by the user, over to the ThinLinc server. It is
+      required to enable smart card single sign-on.
+
+      .. warning::
+
+         Enabling this option reduces the security of the smart card as
+         the passphrase would otherwise never leave the client system.
+         The option should be left disabled if smart card single sign-on
+         is not used.
+
+   :guilabel:`Smart card --- certificate filter`
+      A certificate filter is used to present only allowed certificates
+      for authentication. Certificates that do not match any filter will
+      be hidden from the user.
+
+      When no certificate filters are configured, all available
+      certificates on the smart card will be available for
+      authentication and therefore the auto-connect feature will not
+      work.
+
+      If the resulting filtered list of certificates contains only one
+      certificate for authentication and the auto-connect feature is
+      enabled, that certificate will be used for authentication.
+
+      When the login dialog is displayed and the key shortcut
+      :kbd:`Control+Shift+F8` is pressed, the certificate filtering
+      functionality is bypassed and gives you access to all certificates
+      available on the smart card for authentication.
+
+      To add a new filter, press the :guilabel:`Add` button as shown in
+      dialog :numref:`smart_card_options_dialog`. You can also select an
+      available filter item in the list and press :guilabel:`Edit` to
+      change the settings for that specific filter. Either way, the
+      certificate filter settings dialog
+      :numref:`smart_card_certificate_filter_settings_dialog` will be
+      shown where you can modify the settings of the filter.
+
+      .. _smart_card_certificate_filter_settings_dialog:
+
+      .. figure:: images/client-options-security-smart-card-options-certificate-filter.png
+
+         Certificate filter settings
+
+      :guilabel:`Filter name`
+         Name that will be displayed in the filter list.
+
+      :guilabel:`Issuer`
+         The certificate issuer field consists of a comma separated list
+         of attribute-value pairs that all must be present in the
+         certificate issuer field. Commonly the "common name" of the
+         issuer is used, e.g. ``cn=My CA``. It is also possible to allow
+         any issuer who is part of the same organization, e.g. ``o=My
+         Company Ltd.``. Any registered object identifier descriptor can
+         be used as an attribute name (see `IANA`_ for a full list).
+
+      :guilabel:`Key usage`
+         The certificate must have all the key usage bits selected in
+         this window. Having more bits than those selected does not
+         exclude a certificate.
+
+.. _IANA: https://www.iana.org/assignments/ldap-parameters/ldap-parameters.xhtml
+
+:guilabel:`Kerberos ticket`
+   This option makes the client try to authenticate using an existing
+   Kerberos ticket.
+
+   .. note::
+
+      This requires that a valid Kerberos ticket is available on the
+      client, and that the SSH daemon on the ThinLinc server is
+      configured to accept this ticket during authentication. For
+      information about how to configure Kerberos authentication on your
+      particular platform(s), please see the relevant vendor
+      documentation.

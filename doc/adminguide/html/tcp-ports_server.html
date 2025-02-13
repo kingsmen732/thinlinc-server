@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Overview of TCP ports required for ThinLinc's master server operation, including SSH, Web Access, administration, and communication between components." name="description" />
+
+    <title>On a machine running VSM Server &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="On a machine running VSM Agent" href="tcp-ports_agent.html" />
+    <link rel="prev" title="TCP ports used by ThinLinc" href="tcp-ports.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tcp-ports.html" title="Previous document">TCP ports used by ThinLinc</a>
+        </li>
+        <li>
+          <a href="tcp-ports_agent.html" title="Next document">On a machine running VSM Agent</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="on-a-machine-running-vsm-server">
+<span id="tcp-ports-vsmserver"></span><h1>On a machine running VSM Server<a class="headerlink" href="#on-a-machine-running-vsm-server" title="Permalink to this headline">¶</a></h1>
+<dl>
+<dt>22: SSH Daemon</dt><dd><p>Port 22 is not used by ThinLinc <em>per se</em>, but since no ThinLinc
+installation can work without a running SSH daemon, we list port 22
+here. Port 22 is the normal SSH port, but basically any port can be
+used — the client has support for connecting to any port. Note
+however that if the SSH daemon on the VSM server is listening on port
+<strong>x</strong>, all VSM agents must also have their SSH daemons configured to
+listen on port <strong>x</strong>.</p>
+</dd>
+<dt>300: ThinLinc Web Access</dt><dd><p>By default, ThinLinc’s Web Access service tlwebaccess is available on
+TCP port 300. Traffic to this port is encrypted (TLS).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The port on which tlwebaccess runs is configurable via the
+parameter <a class="reference internal" href="config_webaccess.html#server-config-webaccess-listen_port"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/webaccess/listen_port</span></code></a>. See
+<a class="reference internal" href="config_webaccess.html#configuration-tlwebaccess"><span class="std std-ref">Parameters in /webaccess/</span></a> for details.</p>
+</div>
+</dd>
+<dt>1010: ThinLinc Administration Interface (tlwebadm)</dt><dd><p>By default, ThinLinc’s web-based administration interface is
+available on TCP port 1010. In order to access this interface
+remotely, port 1010 will need to be reachable. Traffic to this port
+is encrypted (TLS).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The port on which tlwebadm runs is configurable via the parameter
+<a class="reference internal" href="config_tlwebadm.html#server-config-tlwebadm-listen_port"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/tlwebadm/listen_port</span></code></a>. See
+<a class="reference internal" href="config_tlwebadm.html#configuration-tlwebadm"><span class="std std-ref">Parameters in /tlwebadm/</span></a> for details.</p>
+</div>
+</dd>
+<dt>9000: VSM server</dt><dd><p>The VSM server listens on port 9000. The traffic is not encrypted,
+but sensitive information will only be shared with root or
+connections originating from a port lower than 1024, from a list of
+known IP addresses. The protocol used is XML-RPC through HTTP (using
+a minimal internal HTTP server in the VSM server).</p>
+</dd>
+</dl>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tcp-ports.html" title="Previous document">TCP ports used by ThinLinc</a>
+        </li>
+        <li>
+          <a href="tcp-ports_agent.html" title="Next document">On a machine running VSM Agent</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">On a machine running VSM Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tcp-ports_agent.html">On a machine running VSM Agent</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="tcp-ports.html">TCP ports used by ThinLinc</a><ul>
+      <li>Previous: <a href="tcp-ports.html" title="previous chapter">TCP ports used by ThinLinc</a></li>
+      <li>Next: <a href="tcp-ports_agent.html" title="next chapter">On a machine running VSM Agent</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/tcp-ports_server.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

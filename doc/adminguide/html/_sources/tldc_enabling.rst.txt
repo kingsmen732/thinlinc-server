@@ -1,0 +1,28 @@
+.. meta::
+   :description: Enable custom desktops in ThinLinc by creating a
+                 symbolic link to activate the ThinLinc desktop
+                 customizer (TLDC) during session startup, allowing
+                 tailored desktop environments for users.
+
+.. _tldc_enabling:
+
+Enabling the custom desktops for users
+--------------------------------------
+
+Enabling the Custom Desktops for users is easy. Simply create a symbolic
+link in :file:`/opt/thinlinc/etc/xstartup.d`:
+
+.. code:: console
+
+   $ sudo ln -s /opt/thinlinc/bin/tl-desktop-activate.sh
+      /opt/thinlinc/etc/xstartup.d/35-tl-desktop-activate.sh
+
+The ThinLinc session startup will read this file and write a
+:file:`~/.config/menus/applications.menu` (and possibly create symbolic
+links under :file:`~/.kde/share/apps/kdesktop/Desktop` if you're using
+KDE).
+
+.. note::
+
+   The TLDC activation script only runs TLDC for non-root users. Test
+   your TLDC configuration using a normal user.

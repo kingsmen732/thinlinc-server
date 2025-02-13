@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Guide to using the ThinLinc client customizer for creating customized Windows client installations, including setting default configurations, adding custom branding, and enhancing security with pre-configured SSH host keys." name="description" />
+
+    <title>Client customizer &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Launching the client from a web page" href="client_web_integration.html" />
+    <link rel="prev" title="Log file placement" href="client_logfile_placement.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_logfile_placement.html" title="Previous document">Log file placement</a>
+        </li>
+        <li>
+          <a href="client_web_integration.html" title="Next document">Launching the client from a web page</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="client-customizer">
+<span id="clientcustomizer"></span><h1>Client customizer<a class="headerlink" href="#client-customizer" title="Permalink to this headline">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This software lets you create customized ThinLinc client installation
+programs. This means that when users install the customized version,
+they will automatically get the default settings you have configured.</p>
+<p>One advantage with this is that you can provide, for example, a default
+server name. A custom client can also be used to enhance security: You
+can distribute SSH host keys with the client itself, so that users don’t
+need to be concerned with SSH host key fingerprint verification.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The client customizer only works for the Windows client.</p>
+</div>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Before you can start, you have to install the build environment. This is
+done by running the command
+<strong class="program">tl-x.y.z-client-customizer.exe</strong> located in the client
+bundle. This will also create a shortcut to the build directory in the
+Start menu.</p>
+</section>
+<section id="building-a-customized-client">
+<h2>Building a customized client<a class="headerlink" href="#building-a-customized-client" title="Permalink to this headline">¶</a></h2>
+<p>To create a customized client, do the following:</p>
+<ol class="arabic simple">
+<li><p>Edit <code class="file docutils literal notranslate"><span class="pre">settings.reg</span></code>. This file contains all the parameter names
+and default values that are used in <strong class="program">tlclient</strong>. To customize
+the client, edit any of these values, and they will be installed in
+the registry when you install the customized client itself. You can
+also add your server’s SSH host keys (see below).</p></li>
+<li><p>Custom branding can be added to the client by simply dropping a file
+called <code class="file docutils literal notranslate"><span class="pre">branding.png</span></code> in the root directory of the client
+customizer. See <a class="reference internal" href="client_advanced_topics.html#client-branding"><span class="std std-ref">Adding custom branding to the login window</span></a> for more details.</p></li>
+<li><p>Run <code class="file docutils literal notranslate"><span class="pre">build.bat</span></code> in the same directory. The file
+<code class="file docutils literal notranslate"><span class="pre">setup.exe</span></code> will now be created. This is the installation
+program for the customized client.</p></li>
+</ol>
+</section>
+<section id="adding-ssh-host-keys">
+<h2>Adding SSH host keys<a class="headerlink" href="#adding-ssh-host-keys" title="Permalink to this headline">¶</a></h2>
+<p>To add your server’s SSH host key to <code class="file docutils literal notranslate"><span class="pre">settings.reg</span></code>, do the
+following:</p>
+<ol class="arabic simple">
+<li><p>Use <strong class="program">tlclient</strong> to connect to your server, if you haven’t
+already done so. Confirm the server’s host key, if necessary.</p></li>
+<li><p>Run the registry editor, and select
+<code class="docutils literal notranslate"><span class="pre">HKEY_CURRENT_USER\Software\Cendio\ThinLinc\tlclient\KnownHosts</span></code></p></li>
+<li><p>Export this key to an external text file.</p></li>
+<li><p>Open the text file from the previous step in an editor.</p></li>
+<li><p>Copy the line corresponding to your ThinLinc server. Paste this line
+into <code class="file docutils literal notranslate"><span class="pre">settings.reg</span></code>, section
+<code class="docutils literal notranslate"><span class="pre">HKEY_LOCAL_MACHINE\Software\Cendio\ThinLinc\tlclient\KnownHosts</span></code></p></li>
+<li><p>Save <code class="file docutils literal notranslate"><span class="pre">settings.reg</span></code>, and proceed to create the customized
+client as described above.</p></li>
+</ol>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_logfile_placement.html" title="Previous document">Log file placement</a>
+        </li>
+        <li>
+          <a href="client_web_integration.html" title="Next document">Launching the client from a web page</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="client.html">The native client</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="clientplatforms.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_usage.html">Client usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_cmdline.html">Client command line usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_export_local_device.html">Local device export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_options.html">Client configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_gestures.html">Client touch gestures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_logfile_placement.html">Log file placement</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Client customizer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-a-customized-client">Building a customized client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-ssh-host-keys">Adding SSH host keys</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="client_web_integration.html">Launching the client from a web page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_advanced_topics.html">Advanced topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="client.html">The native client</a><ul>
+      <li>Previous: <a href="client_logfile_placement.html" title="previous chapter">Log file placement</a></li>
+      <li>Next: <a href="client_web_integration.html" title="next chapter">Launching the client from a web page</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/client_customizer.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

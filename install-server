@@ -1,0 +1,28 @@
+#!/bin/sh
+# -*- mode: shell-script; coding: utf-8 -*-
+#
+#
+#
+#      ThinLinc server installation script
+#
+#      To install the ThinLinc server software double click on the
+#      "Click to install" icon. If that does not work, or if you wish
+#      to start the installer from a terminal, then enter the following
+#      on the command line:
+#
+#          sh ./install-server
+#
+#
+#
+# Copyright 2002-2024 Cendio AB.
+# For more information, see http://www.cendio.com
+#
+
+[ -h "$0" ] && ORIGIN=`ls -l "$0" | sed "s/.*-> //g"` || ORIGIN="$0"
+ORIGIN=`(cd "\`dirname \"$ORIGIN\"\`"; pwd -P 2>/dev/null || pwd)`
+
+# Check basic system requirements
+. "${ORIGIN}/libs/libexec/syscheck.sh"
+
+# Can't put a relative path in the hashbang
+exec "${ORIGIN}/libs/libexec/python3" "${ORIGIN}/libs/tlinstaller" "$@"

@@ -1,0 +1,207 @@
+.. meta::
+   :description: Explore Hiveconf, the configuration system used in
+                 ThinLinc, including its syntax, tree structure, and
+                 tools like hivetool and tl-config for managing
+                 server-side configurations.
+
+.. _hiveconf:
+
+Hiveconf
+========
+
+Overview
+--------
+
+Hiveconf is the name of the configuration system used in ThinLinc. It is
+however not a ThinLinc-specific configuration system, but instead a
+generic configuration framework for storing key/value pairs in a
+human-readable way, although still in a format that's easy to read and
+modify from a computer program.
+
+Hiveconf stores data using a "backend", meaning configuration data can
+be stored in different ways. The default backend which is also used in
+ThinLinc is using a text file format similar to Windows
+:file:`.INI`-files, or the format used in :file:`smb.conf` from Samba.
+
+In ThinLinc, Hiveconf can only guarantee that files with encoding UTF-8
+are correctly read. The Hiveconf-files of ThinLinc ships in UTF-8, but
+the encoding of the files could change if the files are opened or
+manually modified on a non UTF-8 system.
+
+In this section, we will describe Hiveconf from a general point of view
+and also describe ThinLinc-specific details.
+
+Basic syntax
+~~~~~~~~~~~~
+
+Basically, a Hiveconf file consists of key/value pairs with an equal
+sign (``=``) between them, as in the following example:
+
+.. code:: ini
+
+   vsm_server_port = 9000
+   vnc_port_base = 5900
+
+The values after the equal sign can be of the following types:
+
+-  String
+
+-  Boolean
+
+-  Integer
+
+-  Float
+
+-  Binary data as hexadecimal ASCII
+
+Data can also be lists of the above types, these lists are
+space-separated.
+
+.. _hiveconf_tree:
+
+Tree structure
+~~~~~~~~~~~~~~
+
+Parameters in Hiveconf all reside in folders. Folders are just like a
+directory or folder in a normal file system. By adding folder directives
+to Hiveconf files, the parameters will be split up in a tree structure,
+meaning each parameter will be addressed using a path. This way, two
+folders can have two parameters with the same name without collision.
+
+The benefits of this is that a software suite (for instance ThinLinc)
+can have one common configuration namespace, without having to name all
+configuration parameters uniquely, since every component in the suite
+can have its own namespace. In ThinLinc, the VSM server has its
+parameters in the :servconf:`/vsmserver` folder, the VSM agent has its
+parameters in the :servconf:`/vsmagent` folder and so on.
+
+Looking from a system global point of view, every software package has
+its own folder, meaning all configuration parameters of the system can
+be accessed using a common tool.
+
+Folders are put into the configuration files by adding a path inside
+square brackets to the file as in the following example:
+
+.. code:: ini
+
+   #
+   # Hiveconf configuration file - VSM server
+   #
+   [/vsmserver]
+   unbind_ports_at_login=true
+
+   # Administrators email
+   admin_email = root@localhost
+
+In this example, both parameters (``unbind_ports_at_login`` and
+``admin_email``) reside in the ``/vsmserver`` folder. This means that
+they should be addressed as ``/vsmserver/unbind_ports_at_login`` ,
+``/vsmserver/admin_email`` respectively if used from inside a program
+using the Hivetool libraries. This is of course not that important from
+the system administrator's point of view, but it's important to
+understand the principle.
+
+Mounting datasources
+~~~~~~~~~~~~~~~~~~~~
+
+One Hiveconf file can use another Hiveconf file by mounting the other
+file using a mount command as in the following example::
+
+   %mount HA.hconf
+
+The mount should be compared to a mount on a Linux. That is, the mount
+adds the tree structure of the file mounted at exactly the place in the
+current tree structure where the mount command was found.
+
+Mounts can also use wildcards, as in the following example::
+
+   %mount conf.d/*.hconf
+
+The above is exactly what you'll find if you look into the file
+:file:`/opt/thinlinc/etc/thinlinc.hconf`. Hiveconf will mount all files
+in :file:`/opt/thinlinc/etc/conf.d` and add them to the current folder.
+This is a very convenient way to add all configuration files for a
+specific software suite to the Hiveconf namespace.
+
+Host-wide configuration
+~~~~~~~~~~~~~~~~~~~~~~~
+
+As we hinted in :ref:`hiveconf_tree`, Hiveconf lays the foundation for a
+host-wide configuration system where all applications on a host can be
+configured using a single system with a common API. This can be
+accomplished because each application will get its own subfolder in the
+host-wide configuration folder, so that two applications' parameters won't
+collide even if they have the same name. Using the mount command, every
+application can have its own configuration file, while still exporting
+its parameters to the host-wide folder system.
+
+There is a host-wide Hiveconf "root", implemented by the file
+:file:`/etc/root.hconf`. This file mounts all files in
+:file:`/etc/hiveconf.d/` where an application can drop its own Hiveconf
+file at install-time, just like it can drop a file in for example
+:file:`/etc/logrotate.d` or :file:`/etc/profile.d`.
+
+.. _hiveconf_tools:
+
+Hiveconf tools
+~~~~~~~~~~~~~~
+
+In addition to the system libraries used by applications to read and
+write configuration parameters that reside in Hiveconf files, there is a
+command line utility named :program:`hivetool` for inspecting and
+setting parameters from the command line. This can be very convenient,
+for example when scripting setup scripts that need to set some
+parameter.
+
+:program:`hivetool` without parameters will do nothing. To see all
+parameters on the system, run:
+
+.. code:: console
+
+   $ hivetool -Ra /
+
+This instructs :program:`hivetool` to print all parameters, beginning
+from the root (``/``) and recursing downwards. With a standard Hiveconf
+installation this will list Samba and KDE configuration parameters. If
+ThinLinc is installed, it will list ThinLinc parameters as well.
+
+To print a specific parameter, run :program:`hivetool` with the name of
+the parameter as parameter. For example:
+
+.. code:: console
+
+   $ hivetool /thinlinc/vsmserver/admin_email
+   root@localhost
+
+Setting a parameter is equally easy. To set the ``admin_email``
+parameter above, execute the following:
+
+.. code:: console
+
+   $ hivetool /thinlinc/vsmserver/admin_email=johndoe@example.com
+
+Hiveconf and ThinLinc
+---------------------
+
+ThinLinc uses Hiveconf as its primary configuration system on the
+server-side. In this section, we will describe the convenience utility
+shipped with ThinLinc. For descriptions of the folders and parameters
+used by ThinLinc, please refer to :ref:`configuration`
+
+The ThinLinc configuration tool
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to access the ThinLinc part of the Hiveconf configuration
+namespace without having to address it using the host-wide path (i.e. to
+avoid having to add ``/thinlinc/`` to all parameters, a tool named
+:program:`tl-config` is shipped with ThinLinc).
+
+:program:`tl-config` takes the same parameters as :program:`hivetool`
+and works the same way. Refer to :ref:`hiveconf_tools` for information
+about :program:`hivetool`. Try for example:
+
+.. code:: console
+
+   $ tl-config -Ra /
+
+This command will print all ThinLinc-related parameters.

@@ -1,0 +1,57 @@
+.. meta::
+   :description: Guide to using VirtualGL for server-side 3D
+                 acceleration in ThinLinc, with references to
+                 installation and configuration documentation for
+                 integrating OpenGL applications on Linux.
+
+.. _virtualgl:
+
+3D acceleration
+---------------
+
+.. _virtualgl_overview:
+
+Overview
+~~~~~~~~
+
+VirtualGL is used to provide server-side hardware 3D acceleration to
+applications displayed on a remote client. VirtualGL can be used with
+ThinLinc to provide accelerated graphics for OpenGL applications running
+in a Linux environment.
+
+Although ThinLinc is designed to work in combination with VirtualGL,
+VirtualGL is not developed or maintained directly by Cendio AB, and as
+such is not shipped as a part of the ThinLinc product.
+
+.. _virtualgl_installation:
+
+Installation and configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Full documentation regarding the installation and configuration of
+VirtualGL can be found online at
+https://virtualgl.org/Documentation/Documentation.
+
+.. note::
+
+   The following section numbers references the VirtualGL 2.3.3
+   documentation. Documentation for past or future VirtualGL releases
+   may have different section numbers.
+
+For the general case, it should be sufficient to consult the following
+sections:
+
+-  5.1 --- Installing VirtualGL on Linux
+
+-  6.1 --- Granting Access to the 3D X Server
+
+And see also:
+
+-  9.1 --- Using VirtualGL with an X Proxy on the Same Server
+
+For more advanced configuration, such as using a remote application
+server with VGL Transport, see the following sections:
+
+-  6.3 --- SSH Server Configuration
+
+-  8 --- Using VirtualGL with the VGL Transport

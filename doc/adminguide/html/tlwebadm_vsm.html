@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Guide to managing subclusters, master, and agent services in the VSM module of ThinLinc's web administration interface, including configuration and service management." name="description" />
+
+    <title>The VSM module &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The profiles module" href="tlwebadm_profiles.html" />
+    <link rel="prev" title="The status module" href="tlwebadm_status.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tlwebadm_status.html" title="Previous document">The status module</a>
+        </li>
+        <li>
+          <a href="tlwebadm_profiles.html" title="Next document">The profiles module</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="the-vsm-module">
+<span id="tlwebadm-vsm"></span><h1>The VSM module<a class="headerlink" href="#the-vsm-module" title="Permalink to this headline">¶</a></h1>
+<p>VSM contains information about subclusters and master and agent
+services. This module also allows managing of subclusters and
+configuration of master and agent.</p>
+<ul class="simple">
+<li><p><span class="guilabel">Subclusters</span> allows viewing, adding, modifying or deleting
+subclusters.</p></li>
+<li><p><span class="guilabel">Master</span> allows starting or stopping the <strong>vsmserver</strong>
+service, and modifying a subset of the configuration options.</p></li>
+<li><p><span class="guilabel">Agent</span> allows starting or stopping the <strong>vsmagent</strong>
+service, and modifying a subset of the configuration options.</p></li>
+</ul>
+<section id="subclusters">
+<span id="tlwebadm-vsm-subclusters"></span><h2>Subclusters<a class="headerlink" href="#subclusters" title="Permalink to this headline">¶</a></h2>
+<p>On this page, the configured subclusters of the ThinLinc master can be
+found. Subclusters are groups of agents that can be associated with
+users or groups. Adding, modifying or deleting existing subclusters is
+possible. A restart of the <strong>vsmserver</strong> service is required after
+changes to subcluster configuration in order for the changes to take
+effect. The <strong>vsmserver</strong> service can be restarted from the
+<span class="guilabel">Master</span> page described in <a class="reference internal" href="#tlwebadm-vsm-master"><span class="std std-ref">Master</span></a>.</p>
+<p>The page will present a list of currently configured subclusters. This
+should be something like the example in
+<a class="reference internal" href="#tlwebadm-subcluster-list"><span class="std std-numref">Fig. 26</span></a>. To edit a subcluster, click on its
+name in the list.</p>
+<figure class="align-default" id="id1">
+<span id="tlwebadm-subcluster-list"></span><img alt="_images/tlwebadm-subcluster-list.svg" src="_images/tlwebadm-subcluster-list.svg" /><figcaption>
+<p><span class="caption-number">Fig. 26 </span><span class="caption-text">Subclusters</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p><a class="reference internal" href="#tlwebadm-subcluster-list"><span class="std std-numref">Fig. 26</span></a> shows a system with a total of two
+subclusters. The subcluster called <span class="guilabel">default</span> is configured
+with two agent servers and <span class="guilabel">US_cluster</span> is configured with one
+agent.</p>
+<p>To add a new subcluster to the list, press the <span class="guilabel">Add new
+subcluster</span> button. This will bring up an empty subcluster edit pop-up.
+See figure <a class="reference internal" href="#tlwebadm-subcluster-new"><span class="std std-numref">Fig. 27</span></a> for an example.</p>
+<figure class="align-default" id="id2">
+<span id="tlwebadm-subcluster-new"></span><img alt="_images/tlwebadm-subcluster-new.svg" src="_images/tlwebadm-subcluster-new.svg" /><figcaption>
+<p><span class="caption-number">Fig. 27 </span><span class="caption-text">New subcluster pop-up</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>There are five editable fields in this view: <span class="guilabel">Subcluster</span>,
+<span class="guilabel">Agents</span>, <span class="guilabel">Users</span>, <span class="guilabel">Groups</span> and
+<span class="guilabel">Limit sessions</span>. The first field controls the name of the
+subcluster. The rest are described in
+<a class="reference internal" href="config_subclusters.html#configuration-subcluster-params"><span class="std std-ref">Parameters in /vsmserver/subclusters/</span></a>. To save changes, press the
+<span class="guilabel">Save</span> button. Remember to restart the <strong>vsmserver</strong> service
+afterward.</p>
+</section>
+<section id="master">
+<span id="tlwebadm-vsm-master"></span><h2>Master<a class="headerlink" href="#master" title="Permalink to this headline">¶</a></h2>
+<p>On this page you can start or stop the master service. There are also a
+subset of configuration options available for configuration of the
+service.</p>
+<ul>
+<li><p><span class="guilabel">Service status</span> gives you the ability to start or stop the
+master service.</p></li>
+<li><p><span class="guilabel">Sessions per user</span> allows you to configure how many
+sessions are allowed per user.</p>
+<p>A value of zero means no limit and will give unlimited sessions per
+user.</p>
+</li>
+<li><p><span class="guilabel">Allowed groups</span> allows you to configure which groups
+should be given access to connect to ThinLinc.</p>
+<p>If no groups are specified, all users will have access to connect to
+ThinLinc</p>
+</li>
+<li><p><span class="guilabel">Allowed shadowers</span> allows you to configure which users
+should be able to shadow other ThinLinc sessions.</p></li>
+</ul>
+<p>Click the <span class="guilabel">Save</span> button when you want to save your changes to
+the configuration files.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You need to restart the service to apply your changes.</p>
+</div>
+</section>
+<section id="agent">
+<span id="tlwebadm-vsm-agent"></span><h2>Agent<a class="headerlink" href="#agent" title="Permalink to this headline">¶</a></h2>
+<p>On this page you can start or stop the agent service. There are also a
+subset of configuration options available for configuration of the
+service.</p>
+<ul>
+<li><p><span class="guilabel">Service status</span> gives you the ability to start or stop the
+agent service.</p></li>
+<li><p><span class="guilabel">Externally reachable address to use</span> allows you to
+configure the hostname that clients are redirected to.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This configuration is needed if running ThinLinc in a NAT
+environment. See <a class="reference internal" href="network.html#network-nat"><span class="std std-ref">ThinLinc in a NAT/split-DNS environment</span></a> for more information.</p>
+</div>
+</li>
+<li><p><span class="guilabel">Extra arguments to X server</span> allows you to configure
+additional arguments to the X server (<strong class="program">Xvnc</strong>) for new
+sessions that are started.</p></li>
+</ul>
+<p>Click the <span class="guilabel">Save</span> button when you want to save your changes to
+the configuration files.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You need to restart the service to apply your changes.</p>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tlwebadm_status.html" title="Previous document">The status module</a>
+        </li>
+        <li>
+          <a href="tlwebadm_profiles.html" title="Next document">The profiles module</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tlwebadm.html#introduction">Introduction</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tlwebadm.html#modules">Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_health.html">The system health module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_status.html">The status module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">The VSM module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_profiles.html">The profiles module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_locations.html">The locations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_tldc.html">The desktop customizer module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a><ul>
+      <li>Previous: <a href="tlwebadm_status.html" title="previous chapter">The status module</a></li>
+      <li>Next: <a href="tlwebadm_profiles.html" title="next chapter">The profiles module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/tlwebadm_vsm.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

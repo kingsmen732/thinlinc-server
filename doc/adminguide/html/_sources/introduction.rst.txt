@@ -1,0 +1,62 @@
+.. meta::
+   :description: Introduction to ThinLinc, a remote desktop terminal
+                 server solution for Linux. This guide provides an
+                 overview of ThinLinc's architecture, installation,
+                 administration, and available clients, along with
+                 additional resources for further information.
+
+Introduction
+============
+
+ThinLinc is a software that provides remote Linux desktop access by
+combining proprietary code with open-source projects like TigerVNC,
+noVNC and OpenSSH. The core purpose of the software is to securely grant
+graphical access to Linux machines. The ThinLinc software also works
+closely with the existing Linux system to utilize it's already well
+established ecosystem.
+
+Our hope is that ThinLinc will help make Linux more accessible for
+people in their everyday lives.
+
+About the documentation
+-----------------------
+
+This document is meant to serve as a guide when installing or
+administrating ThinLinc, as well as give an overview of the features
+available.
+
+The documentation is separated into multiple parts:
+
+:ref:`toc_introduction`
+     Gives an overview of this document, along with information about
+     the general architecture of the software.
+
+:ref:`toc_install`
+     Contains information about ThinLinc's requirements and how to do a
+     minimal ThinLinc installation.
+
+:ref:`toc_optional`
+     Describes the next steps that can be taken after completing a
+     minimal ThinLinc installation.
+
+:ref:`toc_clients`
+     Describes the available ThinLinc clients, their differences, and
+     how to install and use them.
+
+:ref:`toc_administration`
+     Discusses the administration of ThinLinc after it is installed.
+
+:ref:`toc_appendixes`
+     Extra information, e.g. configuration syntax or more niche setup
+     options.
+
+Finding more information
+------------------------
+
+Additional information about ThinLinc can be found on the Cendio website
+at https://www.cendio.com. Some starting points can be `release notes
+<https://www.cendio.com/thinlinc/docs/relnotes>`_, or `platform specific
+notes <https://www.cendio.com/thinlinc/docs/platforms/>`_.
+
+For community-based support, discussion, and best practice guides, visit
+the `ThinLinc Community Forum <https://community.thinlinc.com>`_.

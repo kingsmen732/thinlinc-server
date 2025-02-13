@@ -1,0 +1,31 @@
+.. meta::
+   :description: The tl-ssh-all command executes shell commands on all
+                 agent servers in a ThinLinc cluster using SSH,
+                 supporting standard SSH options for efficient
+                 cluster-wide management.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-ssh-all
+==========
+
+Synopsis
+--------
+
+**tl-ssh-all** [*options*] [*command*]
+
+Description
+-----------
+
+The :program:`tl-ssh-all` command is used to perform shell commands on
+all agents in a ThinLinc cluster. It works by running the
+:command:`ssh`\ (1) command against all agent servers in the cluster.
+
+*options* can be any :command:`ssh`\ (1) option.
+
+See also
+--------
+
+:command:`ssh`\ (1), :program:`tl-rsync-all`\ (8)

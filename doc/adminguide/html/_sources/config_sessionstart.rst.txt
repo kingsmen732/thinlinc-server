@@ -1,0 +1,42 @@
+.. meta::
+   :description: Configuration parameters for ThinLinc session startup,
+                 including background settings and keyboard layout.
+
+.. _configuration_sessionstart:
+
+.. server-config-folder:: /sessionstart
+
+Parameters in /sessionstart/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this section, we will describe all the parameters currently used by
+the session startup scripts. These configuration parameters reside in
+:file:`/opt/thinlinc/etc/conf.d/sessionstart.hconf`.
+
+.. server-config:: /sessionstart/background_color
+
+   The initial color of the background that is set early during session
+   startup. The default color is white.
+
+.. server-config:: /sessionstart/background_image
+
+   A PNG used as the initial background. The image will always be zoomed
+   to fit each individual monitor. The default is a ThinLinc- branded
+   image.
+
+   An empty value will disable the background image. If no image is
+   set, or if the image contains transparency then the color set by
+   :servconf:`/sessionstart/background_color` will shine through.
+
+.. server-config:: /sessionstart/keyboard_layout
+
+   The default virtual keyboard layout used by Xvnc. The protocol is not
+   dependent on this being configured, but some applications can
+   misbehave if a different virtual layout is configured compared to the
+   real keyboard layout on the client device.
+
+   A list of possible keyboard layouts is given by this command:
+
+   .. code:: console
+
+      $ man /opt/thinlinc/share/man/man7/xkeyboard-config.7

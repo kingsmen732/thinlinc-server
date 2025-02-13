@@ -1,0 +1,113 @@
+.. meta::
+   :description: Overview of configuration parameters for the ThinLinc
+                 Web Access client, including TLS encryption settings,
+                 login page redirection, and logging configuration.
+
+.. _configuration_tlwebaccess:
+
+.. server-config-folder:: /webaccess
+
+Parameters in /webaccess/
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this section, we will describe all the parameters currently used by
+the ThinLinc Web Access client. These configuration parameters reside
+in :file:`/opt/thinlinc/etc/conf.d/webaccess.hconf`.
+
+.. server-config:: /webaccess/cert
+
+   The path to the certificate file to be used for TLS encryption.
+
+   .. note::
+
+      This certificate may be downloaded by connecting clients to be
+      installed in their browsers. Make sure that this file does not
+      contain a private key.
+
+.. server-config:: /webaccess/certkey
+
+   The path to the certificate private key file used for TLS encryption.
+
+.. server-config:: /webaccess/login_page
+
+   The URL which is used to redirect back to the Web Access login page
+   on the master server. The default value is ``/``, which redirects to
+   the current server. This parameter needs to be changed when ThinLinc
+   Web Access is used in a cluster setup.
+
+.. server-config:: /webaccess/listen_port
+
+   The local port for this service to listen on. The default port used
+   is ``300``.
+
+.. server-config:: /webaccess/gnutls_priority
+
+   The GnuTLS priority string is used to select the order and
+   availability of TLS versions, ciphers, key exchange, MAC,
+   compression, signature and elliptic curve algorithms for TLS
+   sessions. See :ref:`gnutls-priorities` for possible values.
+
+.. server-config:: /webaccess/server_tokens
+
+   If set to ``true``, Web Access includes the ThinLinc version,
+   as well as Python version information in the "Server" response header
+   field. If set to ``false``, the "Server" response header will not
+   include any version information. The default value is ``true``.
+
+   .. note::
+
+      Disabling server_tokens might make it easier to work with some
+      security scanners that raise alerts when this type of version
+      information is included. But note that hiding version information
+      does nothing to make your server more secure.
+
+.. server-config-folder:: /webaccess/hsts
+
+.. server-config:: /webaccess/hsts/policy
+
+   Note the warnings about enabling HSTS policy, see
+   :ref:`configuring_hsts_header`. The results should be considered
+   permanent once enabled and are difficult to reverse. The only way to
+   disable the HSTS policy is to wait for the specified duration, as
+   described below, to pass until visiting the domain again.
+
+   - ``Off``: The default value. The HSTS header will not be sent.
+   - ``Testing``: Before setting the policy to permanent, it is
+     recommended to test if the policy works for the intended domains to
+     verify they support HTTPS. This value indicates to the browser that
+     it should only remember this domain for 10 minutes.
+   - ``Permanent``: This value indicates that browsers will remember
+     this domain for 2 years. This duration is refreshed every time a
+     domain is revisited, which is why it should be viewed as permanent.
+
+.. server-config:: /webaccess/hsts/subdomains_included
+
+   The HSTS policy will be applied to the included subdomains of the
+   ThinLinc host if enabled.
+
+   .. note::
+
+      It is recommended to verify that all subdomains support HTTPS
+      before enabling this. In order to verify, set ``policy=testing``,
+      restart the service and  then visit Web Access in the browser to
+      enable the HSTS policy.
+
+.. server-config:: /webaccess/hsts/allow_browser_preload
+
+   *Requirements:* ``policy=permanent`` and ``subdomains_included=true``
+
+   With ``allow_browser_preload`` enabled, it is indicated to the
+   browser that the intention is to add the domain, and subdomains, to
+   the browsers’ lists. This would result in the HSTS policy being
+   enabled at the first visit to the domain or subdomain.
+
+   .. note::
+
+      Only use this option if you are sure to support HTTPS for domains
+      and subdomains. It may be difficult to remove domains and
+      subdomains from the preload list.
+
+.. server-config:: /webaccess/logging/logfile
+
+   The file to use for logging tlwebaccess messages. By default, this is
+   :file:`/var/log/tlwebaccess.log`.

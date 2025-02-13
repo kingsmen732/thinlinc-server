@@ -1,0 +1,71 @@
+.. meta::
+   :description: Explore the configuration parameters for ThinLinc
+                 servers, covering profiles, session startup, shadowing,
+                 web access, master, agent, subclusters, and various
+                 utilities.
+
+Server configuration parameters
+-------------------------------
+
+The ThinLinc server is configured using a number of configuration
+parameters stored in Hiveconf. For information about how to access and
+set the parameters, please refer to :ref:`hiveconf`. In this chapter, we
+will describe the different parameters and their meaning.
+
+The parameters used in ThinLinc are divided into a number of folders,
+each having zero or more subfolders. The following folders exist:
+
+-  :servconf:`/profiles` contains parameters for configuring the
+   different session profiles. This folder normally resides in
+   :file:`/opt/thinlinc/etc/conf.d/profiles.hconf`.
+
+-  :servconf:`/sessionstart` contains some parameters used during
+   session startup. This folder normally resides in
+   :file:`/opt/thinlinc/etc/conf.d/sessionstart.hconf`.
+
+-  :servconf:`/shadowing` contains parameters used to control access to
+   the shadowing feature. This folder normally resides in
+   :file:`/opt/thinlinc/etc/conf.d/shadowing.hconf`.
+
+-  :servconf:`/tlwebadm` contains parameters for the tlwebadm web
+   configuration interface. This folder normally resides in
+   :file:`/opt/thinlinc/etc/conf.d/tlwebadm.hconf`.
+
+-  :servconf:`/utils` contains parameters used by miscellaneous
+   ThinLinc utilities. Each utility has its own configuration file, but
+   all parameters are then merged in under :servconf:`/utils` when read
+   by the Hiveconf framework.
+
+-  :servconf:`/vsm` contains parameters common to both the VSM agent
+   and the VSM server. This folder normally resides in
+   :file:`/opt/thinlinc/etc/conf.d/vsm.hconf`.
+
+-  :servconf:`/vsmagent` contains parameters specific to the VSM agent.
+   This folder normally resides in
+   :file:`/opt/thinlinc/etc/conf.d/vsmagent.hconf`.
+
+-  :servconf:`/vsmserver` contains parameters specific to the VSM
+   server. This folder normally resides in
+   :file:`/opt/thinlinc/etc/conf.d/vsmserver.hconf`.
+
+-  :servconf:`/vsmserver/subclusters` contains definitions of
+   subclusters within the ThinLinc cluster. This folder normally resides
+   in :file:`/opt/thinlinc/etc/conf.d/vsmserver.hconf`.
+
+-  :servconf:`/webaccess` contains parameters for the server part of
+   ThinLinc Web Access. This folder normally resides in
+   :file:`/opt/thinlinc/etc/conf.d/webaccess.hconf`.
+
+.. toctree::
+   :hidden:
+
+   config_profiles
+   config_tlwebadm
+   config_sessionstart
+   config_shadowing
+   config_utils
+   config_vsm
+   config_vsmagent
+   config_vsmserver
+   config_subclusters
+   config_webaccess

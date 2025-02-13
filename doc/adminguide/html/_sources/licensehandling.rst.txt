@@ -1,0 +1,85 @@
+.. meta::
+   :description: This section provides an overview of license management
+                 in ThinLinc, including license counting, file handling,
+                 and monitoring.
+
+.. _licensehandling:
+
+License handling
+================
+
+Overview
+--------
+
+To run a session against a ThinLinc cluster, the server must be equipped
+with license files. The license files specify the number of concurrent
+users the cluster is allowed to run.
+
+If no license files are installed on the cluster, a maximum of ten
+concurrent users are allowed.
+
+Each cluster can have one or several license files. Each file contains
+licenses for a specific number of concurrent users. When the VSM Server
+starts up, it reads all license files and creates a sum of the number of
+concurrent users allowed based on the licenses from all files.
+
+License files have one soft and one hard limit. When the soft limit is
+reached, new sessions can still be started, but a license violation will
+be logged and sent to the administrator (see
+:ref:`licensekeys_logemail`). If however the hard limit has been
+reached, new sessions cannot be started. The purpose of this system is
+to allow growing organizations some time to adapt the number of licenses
+to a growing number of concurrent sessions, avoiding loss of production.
+
+License counting
+----------------
+
+One license is required for each pair of (**username**,
+**client hardware**). This means that if a user runs several sessions
+from the same client, only one license is used. If the same user runs
+multiple concurrent sessions from different client hardware, multiple
+licenses are required by the user.
+
+Location and format of license files
+------------------------------------
+
+License files are delivered either in the form of text files (filename
+extension :file:`.license`) or ZIP files (filename extension
+:file:`.zip`). Transfer each file to your ThinLinc master server and
+place it in :file:`/opt/thinlinc/etc/licenses`. Make sure that the
+transfer of the files uses binary mode, or the license file might not be
+verifiable. We recommend transferring via SCP or SFTP.
+
+After adding new license files, either restart VSM Server by running
+:command:`/bin/systemctl restart vsmserver` or wait until the VSM Server
+automatically reads in the new licenses, something that happens once
+every 12 hours.
+
+.. note::
+
+   When running VSM Server in a high availability setup (see :ref:`HA`),
+   license files should be copied to :file:`/opt/thinlinc/etc/licenses`
+   on both nodes.
+
+.. _licensekeys_logemail:
+
+Log files and e-mail messages
+-----------------------------
+
+ThinLinc logs user license violations to the file
+:file:`/var/log/thinlinc-user-licenses`. Other license-related messages
+are logged to :file:`/var/log/vsmserver.log`.
+
+If license violations occur, ThinLinc sends email to the person defined
+as system administrator in the parameter
+:servconf:`/vsmserver/admin_email` in :file:`vsmserver.hconf`. E-mail
+messages warning about license violations are sent every 12 hours if any
+license violations have occurred.
+
+Checking the number of valid licenses
+-------------------------------------
+
+You can use the program :program:`/opt/thinlinc/sbin/tl-show-licenses`
+to verify the number of valid user licenses. There is also a graph
+available in the administrative interface. See :ref:`tlwebadm_status`
+for more information.

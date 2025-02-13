@@ -1,0 +1,102 @@
+.. meta::
+   :description: The tl-config command accesses and modifies ThinLinc
+                 system configuration parameters and supports scripting.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-config
+=========
+
+Synopsis
+--------
+
+**tl-config** [*options*] <*parameter*>[**=**\ *value*] ...
+
+Description
+-----------
+
+The :program:`tl-config` command is used to access configuration
+parameters used by the ThinLinc system. It is also used to set
+parameters from scripts, and can be used instead of an editor when some
+parameter needs to be changed. :program:`tl-config` uses
+:program:`hivetool`, part of the Hiveconf system. See :ref:`hiveconf`
+for more information about Hiveconf.
+
+Options
+-------
+
+.. option:: -a, --all-entries
+
+   Print all parameters and folders in the given folder.
+
+.. option:: -i, --import=file
+
+   Import all parameters in *file*.
+
+.. option:: -p, --purge=file
+
+   Remove parameters in *file* which exists elsewhere.
+
+.. option:: -R, --recursive
+
+   When using :option:`-a`, ascend folders recursively.
+
+.. option:: -e, --eval=VAR=parameter
+
+   Print parameter value in format suitable for assignment to shell
+   variable via evaluation.
+
+.. option:: -E folder
+
+   As :option:`-e` but print all variables in specified folder.
+
+.. option:: --version
+
+   Prints the ThinLinc version and exits.
+
+.. option:: -x, --export
+
+   When using :option:`-e`, :option:`--eval`, or :option:`-E`, also export
+   the variables.
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+Examples
+--------
+
+Print all values in root, recursively:
+
+.. code:: console
+
+   $ tl-config -Ra /
+
+Set :servconf:`/vsmagent/agent_hostname` to ``agent.example.com``:
+
+.. code:: console
+
+   $ tl-config /vsmagent/agent_hostname=agent.example.com
+
+Print value of :servconf:`/vsmagent/agent_hostname`:
+
+.. code:: console
+
+   $ tl-config /vsmagent/agent_hostname
+   agent.example.com
+
+Set environment variable :environ:`AGENTNAME` to value of
+:servconf:`/vsmagent/agent_hostname`:
+
+.. code:: console
+
+   $ eval $(tl-config -e AGENTNAME=/vsmagent/agent_hostname)
+
+Set all variables in :servconf:`/vsmagent/default_environment` as
+environment variables:
+
+.. code:: console
+
+   $ eval $(tl-config -E /vsmagent/default_environment/)

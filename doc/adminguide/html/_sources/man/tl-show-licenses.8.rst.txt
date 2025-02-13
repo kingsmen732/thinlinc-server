@@ -1,0 +1,21 @@
+.. meta::
+   :description: The tl-show-licenses command displays the total number
+                 of ThinLinc user licenses available on the system.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-show-licenses
+================
+
+Synopsis
+--------
+
+**tl-show-licenses**
+
+Description
+-----------
+
+The :program:`tl-show-licenses` command can be used to show the total
+number of ThinLinc user licenses currently found on disk.

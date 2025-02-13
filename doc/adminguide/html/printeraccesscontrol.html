@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Explanation of the printer access control feature in ThinLinc, which manages and restricts user access to printers based on terminal location within a ThinLinc cluster. This section covers configuration requirements, activation steps, and considerations for handling unknown terminals." name="description" />
+
+    <title>Printer access control &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3D acceleration" href="virtualgl.html" />
+    <link rel="prev" title="Nearest printer support" href="nearestprinter.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="nearestprinter.html" title="Previous document">Nearest printer support</a>
+        </li>
+        <li>
+          <a href="virtualgl.html" title="Next document">3D acceleration</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="printer-access-control">
+<span id="printeraccesscontrol"></span><h1>Printer access control<a class="headerlink" href="#printer-access-control" title="Permalink to this headline">¶</a></h1>
+<p>In a ThinLinc cluster, all printers that any user of the cluster needs
+to be able to print to must be defined centrally, or the user will not
+be able to print from applications that run in a ThinLinc session. For
+large installations, this leads to a very long list of available
+printers.</p>
+<p>A long list of printers leads to usability problems — having to a
+select printer from a long list can be troublesome. Also, it opens for
+problems with printer jobs being printed at remote locations by mistake
+(or on purpose, by users finding it amusing to send “messages” to other
+locations).</p>
+<p>The solution to this problem is the printer access control feature of
+ThinLinc. By integrating with CUPS (the Common Unix Printing System),
+the list of printers a user is presented with and allowed to print to is
+limited to the printers that should be available to a specific terminal,
+based on information in a database of printers, terminals and locations.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The printer access control feature will affect all users on the
+ThinLinc cluster. The only user excepted from limitations of the
+printer list is the superuser (root) — all other users will only
+see and be able to use printers based on the location of their
+terminals, when the printer access control feature is enabled.</p>
+</div>
+<section id="theory-of-operation">
+<h2>Theory of operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this headline">¶</a></h2>
+<p>Each time a user requests a new session or reconnects to an existing
+session, the hardware (MAC) address of the terminal is sent along with
+the request from the ThinLinc client. Using the same database as the
+<em>nearest printer</em> feature used to find which printer is closest to the
+user, the printer access control feature calculates which printers the
+user is allowed to use, and then configures the access control of the
+printing system (CUPS).</p>
+<p>This way, the user is presented with a list of printers that only
+contains the printers relevant for the location where the terminal the
+user is currently using is located. In a situation where a user has
+multiple sessions running from multiple clients, all printers associated
+with the different terminals will be made available.</p>
+</section>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>CUPS v1.2 or higher.</p></li>
+</ul>
+</section>
+<section id="activating-the-printer-access-control-feature">
+<h2>Activating the printer access control feature<a class="headerlink" href="#activating-the-printer-access-control-feature" title="Permalink to this headline">¶</a></h2>
+<p>First, make sure you have configured the printers in your ThinLinc
+cluster as documented in <a class="reference internal" href="printing_config_overview.html#printing-config-overview"><span class="std std-ref">Printer configuration overview</span></a>. For the
+printer access control feature, a central CUPS daemon on the VSM Server
+host is required, and all agent hosts must have a correctly configured
+<code class="file docutils literal notranslate"><span class="pre">/etc/cups/client.conf</span></code>.</p>
+<p>To activate the printer access feature, create two symlinks on the host
+running VSM Server, as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo ln -s /opt/thinlinc/sbin/tl-limit-printers <span class="se">\</span>
+   /opt/thinlinc/etc/sessionstartup.d
+<span class="gp">$ </span>sudo ln -s /opt/thinlinc/sbin/tl-limit-printers <span class="se">\</span>
+   /opt/thinlinc/etc/sessionreconnect.d
+</pre></div>
+</div>
+<p>The first symlink makes sure <strong class="program">tl-limit-printers</strong> is run when
+sessions are started. The second makes sure it is run at reconnects to
+existing sessions. More details about the session startup can be found
+in <a class="reference internal" href="config_session.html#configuration-customizing-user-session"><span class="std std-ref">Customizing the user’s session</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>With the above configuration (symlinking <strong class="program">tl-limit-printers</strong>
+into <code class="file docutils literal notranslate"><span class="pre">sessionstartup.d</span></code> and <code class="file docutils literal notranslate"><span class="pre">sessionreconnect.d</span></code>), the
+client will not get an answer back from the server until
+<strong class="program">tl-limit-printers</strong> has finished its execution. This is the
+desired behavior if it is strictly necessary that printer access
+rights are correct when the user connects to the session. In
+environments where it is acceptable that the final list of printers
+shown to the user may not be finished when the user connects to the
+session, place the execution of <strong class="program">tl-limit-printers</strong> in the
+background, as detailed in
+<a class="reference internal" href="config_session.html#configuration-scripts-startup-reconnect"><span class="std std-ref">Scripts run at session startup/reconnect</span></a>, as that will decrease
+the time the user has to wait for the session to appear on his client.</p>
+</div>
+<p>After creating the symlinks, try connecting to your ThinLinc cluster
+with a ThinLinc client and bring up an application that lists the
+available printers. The list of printers should now be limited according
+to configuration.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The printer list limitation doesn’t work for applications that use
+the deprecated “cupsGetPrinters” library call. This means that older
+applications might show the whole list of printers. The access
+control is still enforced, which means that even if a disallowed
+printer is shown in the list of printers, users can’t submit jobs to
+it.</p>
+<p>Most applications in a modern Linux distribution doesn’t have this
+problem.</p>
+</div>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>Configuration of the printer access control feature is mostly a matter
+of using tlwebadm (see <a class="reference internal" href="tlwebadm_locations.html#tlwebadm-locations"><span class="std std-ref">The locations module</span></a> for details) to add the
+hardware address of all terminals as well as information about where
+they are located and which printers are to be available for each
+location.</p>
+<section id="unknown-terminals-terminals-without-hardware-address">
+<h3>Unknown terminals / terminals without hardware address<a class="headerlink" href="#unknown-terminals-terminals-without-hardware-address" title="Permalink to this headline">¶</a></h3>
+<p>When a client reports a hardware address that is not present in the
+database of terminals, or when no hardware address is reported, the
+default behavior is to disallow access to all printers, rendering an
+empty printer list for the user.</p>
+<p>There is however a way to give even unknown terminals access to one or
+more printers — define a special location and enable the
+<span class="guilabel">Use for unknown terminals</span> switch. Then add the printers that
+should be available for the unknown terminals.</p>
+<p>One common configuration is to add such a location and then add the
+<strong>thinlocal</strong> printer to this location. This way, unknown terminals, for
+example people working from their home computers, will be able to user
+their locally connected printer, but no other printer will be available.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="nearestprinter.html" title="Previous document">Nearest printer support</a>
+        </li>
+        <li>
+          <a href="virtualgl.html" title="Next document">3D acceleration</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="printing.html">Printer features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="printing_config_overview.html">Printer configuration overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thinlocal.html">Local printer support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nearestprinter.html">Nearest printer support</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Printer access control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#theory-of-operation">Theory of operation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#activating-the-printer-access-control-feature">Activating the printer access control feature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="printing.html">Printer features</a><ul>
+      <li>Previous: <a href="nearestprinter.html" title="previous chapter">Nearest printer support</a></li>
+      <li>Next: <a href="virtualgl.html" title="next chapter">3D acceleration</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/printeraccesscontrol.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

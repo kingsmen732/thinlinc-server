@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Overview of ThinLinc session startup customization, including scripts, profiles, and environment settings." name="description" />
+
+    <title>Customizing the user’s session &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Limiting lifetime of ThinLinc sessions" href="config_lifetime.html" />
+    <link rel="prev" title="Configuring logging on ThinLinc servers" href="config_logging.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_logging.html" title="Previous document">Configuring logging on ThinLinc servers</a>
+        </li>
+        <li>
+          <a href="config_lifetime.html" title="Next document">Limiting lifetime of ThinLinc sessions</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="customizing-the-user-s-session">
+<span id="configuration-customizing-user-session"></span><h1>Customizing the user’s session<a class="headerlink" href="#customizing-the-user-s-session" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we will describe how the session startup in ThinLinc
+can be customized.</p>
+<section id="session-startup-the-big-picture">
+<span id="configuration-session-startup-bigpicture"></span><h2>Session startup — the big picture<a class="headerlink" href="#session-startup-the-big-picture" title="Permalink to this headline">¶</a></h2>
+<p>The session setup is constructed to be easy to use and configure yet
+still easy to customize for advanced use cases.</p>
+<figure class="align-default" id="id1">
+<span id="configuration-vsm-server-session-setup"></span><img alt="_images/vsm-server-session-startup.svg" src="_images/vsm-server-session-startup.svg" /><figcaption>
+<p><span class="caption-number">Fig. 23 </span><span class="caption-text">Session startup procedure — on VSM Server</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In <a class="reference internal" href="#configuration-vsm-server-session-setup"><span class="std std-numref">Fig. 23</span></a>, shows a
+(simplified) description of what happens on the VSM Server when a client
+connects to log in:</p>
+<ul class="simple">
+<li><p>The VSM Server checks if the user has an existing session.</p></li>
+<li><p>If a session exists, VSM Server contacts the VSM Agent running on the
+host where the session is running, and asks it to verify that the
+session is still alive.</p></li>
+<li><p>If the session was alive, VSM Server runs any scripts placed in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/sessionreconnect.d</span></code>. When all such scripts
+are completed, session information is returned to the client. The
+client proceeds by contacting the agent on which the session is
+running.</p></li>
+<li><p>If the existing session was not alive, or if there were no existing
+sessions at all, VSM Server finds out which VSM Agent has the least
+load, and contacts this agent to request a new session.</p></li>
+<li><p>When the agent responds that a new session has been created, VSM
+Server runs any scripts placed in
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/sessionstartup.d</span></code>. When all such scripts are
+completed, session information is sent back to the client. The client
+proceeds by contacting the agent on which the session was started.</p></li>
+</ul>
+<section id="scripts-run-at-session-startup-reconnect">
+<span id="configuration-scripts-startup-reconnect"></span><h3>Scripts run at session startup/reconnect<a class="headerlink" href="#scripts-run-at-session-startup-reconnect" title="Permalink to this headline">¶</a></h3>
+<p>Scripts in <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/sessionstartup.d</span></code> and
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/sessionreconnect.d</span></code> are run by the root user,
+on the VSM Server. Session information will not be sent back to the
+client until these scripts have completed. This makes it possible to
+ensure that commands have been run before the client connects to the VSM
+Agent.</p>
+<p>If background execution is desired, place the command to be run in the
+background and make sure all file descriptors are closed. Here’s an
+example on how to execute a script in the background.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/opt/thinlinc/sbin/tl-limit-printers &lt; /dev/null &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="session-startup-on-vsm-agent">
+<span id="configuration-session-startup-vsmagent"></span><h2>Session startup on VSM Agent<a class="headerlink" href="#session-startup-on-vsm-agent" title="Permalink to this headline">¶</a></h2>
+<figure class="align-default" id="id2">
+<span id="configuration-session-startup-vsmagent-figure"></span><img alt="_images/session-startup.svg" src="_images/session-startup.svg" /><figcaption>
+<p><span class="caption-number">Fig. 24 </span><span class="caption-text">Session startup procedure — on VSM Agent</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p><a class="reference internal" href="#configuration-session-startup-vsmagent-figure"><span class="std std-numref">Fig. 24</span></a> outlines what
+happens when an VSM Agent is contacted by VSM Server to request a new
+session. In detail, the following happens:</p>
+<ol class="arabic simple">
+<li><p>The VSM agent on the machine where the session will reside executes
+the script <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xsession</span></code>.</p></li>
+<li><p>The file <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xsession</span></code> is a shell script that
+can be customized by advanced users. In its standard version, as
+delivered with ThinLinc, it will check if there is a file named
+<code class="file docutils literal notranslate"><span class="pre">~/.thinlinc/xstartup</span></code> in the user’s home directory. If there
+is such a file, it will be executed. If no such file exists, the file
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xstartup.default</span></code> is executed instead. See
+<a class="reference internal" href="#configuration-profiles-xstartup"><span class="std std-ref">Profiles and the standard xstartup.default file</span></a> for a description of the
+standard behavior of this file.</p></li>
+</ol>
+<p>This system allows for experienced users to customize how their session
+startup should work by editing the file <code class="file docutils literal notranslate"><span class="pre">~/.thinlinc/xstartup</span></code>. On
+the other hand, at sites where users should not be able to customize
+their system startup, <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xsession</span></code> can be modified
+so that it doesn’t try to execute user-specific xstartup-files. The
+standard setup should however suit the needs of the majority of
+installations.</p>
+</section>
+<section id="profiles-and-the-standard-xstartup-default-file">
+<span id="configuration-profiles-xstartup"></span><h2>Profiles and the standard xstartup.default file<a class="headerlink" href="#profiles-and-the-standard-xstartup-default-file" title="Permalink to this headline">¶</a></h2>
+<p>ThinLinc allows for different “profiles” when starting up a user
+session. The users will be presented with a menu after logging in, where
+they can choose for example between a desktop suited for engineering
+users, a desktop suited for the marketing department or a Windows
+desktop. The example configuration files that are delivered with
+ThinLinc have several different alternatives, however only those
+sessions that are actually available on the system are displayed. This
+is just an example configuration, meant to be customized for each
+individual ThinLinc installation.</p>
+<figure class="align-default" id="id3">
+<span id="configuration-profile-setup-figure"></span><img alt="_images/profiles-xstartup.svg" src="_images/profiles-xstartup.svg" /><figcaption>
+<p><span class="caption-number">Fig. 25 </span><span class="caption-text">The ThinLinc profiles and xstartup.default</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>As described in <a class="reference internal" href="#configuration-session-startup-bigpicture"><span class="std std-ref">Session startup — the big picture</span></a>,
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xstartup.default</span></code> is executed if there is no
+<code class="file docutils literal notranslate"><span class="pre">~/.thinlinc/xstartup</span></code> for the user. This file, in its unmodified
+version as delivered with ThinLinc, executes three steps, as outlined in
+<a class="reference internal" href="#configuration-profile-setup-figure"><span class="std std-numref">Fig. 25</span></a>.</p>
+<ol class="arabic">
+<li><p>All files in <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xstartup.d/</span></code> are executed.
+Files that have filenames ending with <code class="file docutils literal notranslate"><span class="pre">.sh</span></code> will be <strong>sourced</strong>
+as shell scripts. Other files are executed normally. This way,
+environment variables that persist down to the session command can be
+set in <code class="file docutils literal notranslate"><span class="pre">*.sh</span></code> files.</p>
+<p>If a specific execution order is needed for the scripts in the
+<code class="file docutils literal notranslate"><span class="pre">xstartup.d/</span></code> directory, let the names of the scripts begin
+with numbers, where a script with a lower number will be executed
+before one with a higher number. For example <code class="file docutils literal notranslate"><span class="pre">10setuphomedir</span></code>
+will be executed before <code class="file docutils literal notranslate"><span class="pre">20copyfiles</span></code>.</p>
+<p>By default, the script
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xstartup.d/20-tl-select-profile.sh</span></code> will let
+the user choose among the possible profiles. See
+<a class="reference internal" href="#configuration-config-profiles"><span class="std std-ref">Configuring available profiles</span></a> for documentation on how to set
+up profiles. If only one profile is available, it will be selected
+without asking the user. The environment variable
+<span class="sig sig-inline environ">TLPROFILE</span> is set to the name of the selected profile.</p>
+<p>Worth noting is that the environment variable <span class="sig sig-inline environ">TLPROFILE</span> is
+available when running the scripts in <code class="file docutils literal notranslate"><span class="pre">xstartup.d</span></code>, for
+decisions based on what profile will be run.</p>
+</li>
+<li><p>The command <strong class="program">tl-run-profile</strong> is run. This runs the commands
+associated with the selected profile, for example <strong class="command">startkde</strong>
+to start a KDE session.</p></li>
+<li><p>When the commands run by <strong class="program">tl-run-profile</strong> exits,
+<code class="file docutils literal notranslate"><span class="pre">xstartup.default</span></code> runs scripts and commands located in the
+directory <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xlogout.d</span></code>. The same information
+that applies to files in <code class="file docutils literal notranslate"><span class="pre">xstartup.d</span></code> (as documented in
+step 1. above) applies to files in this directory.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Scripts in <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xstartup.d</span></code> and
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xlogout.d</span></code> are run <strong>on the agent</strong>, with
+the same rights as the user owning the session.</p>
+</div>
+</section>
+<section id="session-startup-with-a-client-supplied-start-program">
+<span id="configuration-start-program"></span><h2>Session startup with a client supplied start program<a class="headerlink" href="#session-startup-with-a-client-supplied-start-program" title="Permalink to this headline">¶</a></h2>
+<p>If the client has requested that the session should be started with a
+command supplied by the client, VSM agent will set the environment
+variable <span class="sig sig-inline environ">TLCOMMAND</span> to this command. In this case, the profile
+selection dialog will be disabled and <strong class="program">tl-run-profile</strong> will
+execute the command specified by the client, instead of a profile
+command. To disable client supplied start programs, create the file
+<code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xstartup.d/00-no-startprog.sh</span></code>, containing:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">unset</span> TLCOMMAND
+</pre></div>
+</div>
+</section>
+<section id="configuring-available-profiles">
+<span id="configuration-config-profiles"></span><h2>Configuring available profiles<a class="headerlink" href="#configuring-available-profiles" title="Permalink to this headline">¶</a></h2>
+<p>The available profiles are configured via Hiveconf, under the
+<a class="reference internal" href="config_profiles.html#std-server-config-folder-profiles"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/profiles</span></code></a> path. The default configuration includes a number
+of examples.</p>
+<p>If the <a class="reference internal" href="config_profiles.html#server-config-profiles-default"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">default</span></code></a> parameter is present, it specifies the default profile.
+The profile chooser will have this entry selected when it starts, and it
+may also be used automatically for some error conditions.</p>
+<p>The <a class="reference internal" href="config_profiles.html#server-config-profiles-order"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">order</span></code></a> parameter selects which profiles should be available for
+selection, and the order in which they are displayed. This is a
+space-separated list.</p>
+<p>If the <a class="reference internal" href="config_profiles.html#server-config-profiles-show_intro"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">show_intro</span></code></a> parameter is true, a configurable introduction text
+will be displayed and requires user input to proceed with the logon
+process. The <a class="reference internal" href="config_profiles.html#server-config-profiles-introduction"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">introduction</span></code></a> parameter is a text that will be displayed
+if introduction is shown. This text block also supports <a class="reference external" href="https://docs.gtk.org/Pango/pango_markup.html#pango-markup">Pango Markup</a>
+format styling for a fancier text layout.</p>
+<p>Each profile is defined under a section named
+<a class="reference internal" href="config_profiles.html#std-server-config-folder-profiles-profile-key"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/profiles/&lt;profile</span> <span class="pre">key&gt;</span></code></a>. For most desktop environments
+only the <a class="reference internal" href="config_profiles.html#server-config-profiles-profile-key-xdg_session"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">xdg_session</span></code></a> parameter needs to be configured. For custom
+profiles more values need to be specified, mainly <a class="reference internal" href="config_profiles.html#server-config-profiles-profile-key-cmdline"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">cmdline</span></code></a>. Please see
+<a class="reference internal" href="config_profiles.html#configuration-profiles"><span class="std std-ref">Parameters in /profiles/</span></a> for more details on the available options.</p>
+</section>
+<section id="configuring-different-linux-desktops-based-on-the-selected-profile">
+<h2>Configuring different Linux desktops based on the selected profile<a class="headerlink" href="#configuring-different-linux-desktops-based-on-the-selected-profile" title="Permalink to this headline">¶</a></h2>
+<p>Please read <a class="reference internal" href="tldc.html#tldc"><span class="std std-ref">Building custom Linux desktops with the ThinLinc desktop customizer</span></a> for documentation on how to configure different
+desktops with for example different menu and desktop icons depending on
+what profile is selected.</p>
+</section>
+<section id="speeding-up-session-startup">
+<h2>Speeding up session startup<a class="headerlink" href="#speeding-up-session-startup" title="Permalink to this headline">¶</a></h2>
+<p>If a user has a complicated session startup with many time-consuming
+operations, it can take quite a while before the user’s desktop
+environment (for example KDE or Gnome) begins to start. One example of
+when this happens is when mounting local drives.</p>
+<p>One way of speeding up this process is to execute some of the operations
+in the background. Most often, there is no need to mount the local
+drives before starting KDE because it takes longer time to start KDE
+than it takes to mount the local drives. The two operations can easily
+run in parallel. The same goes for the example of mounting shared
+directories.</p>
+<p>The easiest way to accomplish this is to add an &amp; sign after commands
+run by scripts in <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/xstartup.d</span></code>.</p>
+<p>Make sure that commands that must be run before starting the window
+environment are run sequentially. For example, configuring desktops via
+TLDC must be done before starting KDE.</p>
+</section>
+<section id="configuring-the-language-environment-on-the-server-based-on-the-client-language">
+<h2>Configuring the language environment on the server based on the client language<a class="headerlink" href="#configuring-the-language-environment-on-the-server-based-on-the-client-language" title="Permalink to this headline">¶</a></h2>
+<p>The ThinLinc client reports the language settings on the client side
+when requesting a session. This can be used to configure the language on
+the server side. The idea is that in an environment where several
+languages are in use, a user could automatically get their preferred
+language based on what their client computer is configured for.</p>
+<p>To activate this, a symlink needs to be created:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo ln -s /opt/thinlinc/libexec/tl-set-clientlang.sh <span class="se">\</span>
+   /opt/thinlinc/etc/xstartup.d/00-tl-set-clientlang.sh
+</pre></div>
+</div>
+<p>Also, make sure no other parts of the startup environment are trying to
+set the <span class="sig sig-inline environ">LANG</span> variable. For example, on Fedora, the files
+<code class="file docutils literal notranslate"><span class="pre">/etc/profile.d/lang.sh</span></code> and <code class="file docutils literal notranslate"><span class="pre">/etc/profile/lang.csh</span></code> will
+override the <span class="sig sig-inline environ">LANG</span> variable set by
+<code class="file docutils literal notranslate"><span class="pre">tl-set-clientlang.sh</span></code>.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_logging.html" title="Previous document">Configuring logging on ThinLinc servers</a>
+        </li>
+        <li>
+          <a href="config_lifetime.html" title="Next document">Limiting lifetime of ThinLinc sessions</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="configuration.html">Server configuration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config_cluster.html">Cluster configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_logging.html">Configuring logging on ThinLinc servers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Customizing the user’s session</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#session-startup-the-big-picture">Session startup — the big picture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#session-startup-on-vsm-agent">Session startup on VSM Agent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#profiles-and-the-standard-xstartup-default-file">Profiles and the standard xstartup.default file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#session-startup-with-a-client-supplied-start-program">Session startup with a client supplied start program</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-available-profiles">Configuring available profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-different-linux-desktops-based-on-the-selected-profile">Configuring different Linux desktops based on the selected profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#speeding-up-session-startup">Speeding up session startup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-the-language-environment-on-the-server-based-on-the-client-language">Configuring the language environment on the server based on the client language</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="config_lifetime.html">Limiting lifetime of ThinLinc sessions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_hsts.html">Configuring HSTS headers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="configuration.html">Server configuration</a><ul>
+      <li>Previous: <a href="config_logging.html" title="previous chapter">Configuring logging on ThinLinc servers</a></li>
+      <li>Next: <a href="config_lifetime.html" title="next chapter">Limiting lifetime of ThinLinc sessions</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/config_session.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

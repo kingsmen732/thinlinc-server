@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="454"
+   height="390"
+   id="svg7939"
+   version="1.0"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs7941">
+    <marker
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend"
+       style="overflow:visible">
+      <path
+         id="path3239"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="scale(-0.8)" />
+    </marker>
+  </defs>
+  <metadata
+     id="metadata7944">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     transform="translate(-30.000002,-58.362173)">
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.854922;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect10752"
+       width="160.90936"
+       height="33.782074"
+       x="278.09351"
+       y="364.68845" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.854922;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect10703"
+       width="160.90936"
+       height="33.782074"
+       x="74.621964"
+       y="363.83353" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:1.455;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect7947"
+       width="173.44785"
+       height="108.03058"
+       x="60.727695"
+       y="89.089867" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="78.109451"
+       y="103.10007"
+       id="text8822"><tspan
+         id="tspan8824"
+         x="78.109451"
+         y="103.10007"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">VSM Server, tl.example.com</tspan></text>
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:1.10415;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path8826"
+       cx="148.78522"
+       cy="145.32765"
+       rx="59.929424"
+       ry="27.826694" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="103.00151"
+       y="140.43816"
+       id="text8836"><tspan
+         x="103.00151"
+         y="140.43816"
+         id="tspan8840"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">cupsd with all</tspan><tspan
+         x="103.00151"
+         y="153.26202"
+         id="tspan8844"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">printers configured</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:1.77289;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect8873"
+       width="187.55946"
+       height="148.24683"
+       x="61.741367"
+       y="268.37396" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="70.176918"
+       y="286.4903"
+       id="text8875"><tspan
+         id="tspan8877"
+         x="70.176918"
+         y="286.4903"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">VSM Agent, agent1.example.com</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="90.623962"
+       y="323.82837"
+       id="text8881"><tspan
+         x="90.623962"
+         y="323.82837"
+         id="tspan8896"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">cupsd, only </tspan><tspan
+         x="90.623962"
+         y="336.65225"
+         id="tspan8900"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">thinlocal configured</tspan></text>
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:1.10415;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path8909"
+       cx="141.29721"
+       cy="328.27344"
+       rx="59.929424"
+       ry="27.826694" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="78.177971"
+       y="373.61252"
+       id="text10695"><tspan
+         id="tspan10697"
+         x="78.177971"
+         y="373.61252"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">/etc/cups/client.conf:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="81.733978"
+       y="388.72556"
+       id="text10699"><tspan
+         id="tspan10701"
+         x="81.733978"
+         y="388.72556"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">ServerName tl.example.com</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:1.77289;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect10730"
+       width="187.55946"
+       height="148.24683"
+       x="265.21292"
+       y="269.22888" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="273.64847"
+       y="287.34521"
+       id="text10732"><tspan
+         id="tspan10734"
+         x="273.64847"
+         y="287.34521"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">VSM Agent, agent2.example.com</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="294.09552"
+       y="324.68329"
+       id="text10736"><tspan
+         x="294.09552"
+         y="324.68329"
+         id="tspan10738"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">cupsd, only </tspan><tspan
+         x="294.09552"
+         y="337.50717"
+         id="tspan10740"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">thinlocal configured</tspan></text>
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:1.10415;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path10742"
+       cx="344.76871"
+       cy="329.12836"
+       rx="59.929424"
+       ry="27.826694" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="281.64951"
+       y="374.46744"
+       id="text10744"><tspan
+         id="tspan10746"
+         x="281.64951"
+         y="374.46744"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">/etc/cups/client.conf:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="285.20551"
+       y="389.58047"
+       id="text10748"><tspan
+         id="tspan10750"
+         x="285.20551"
+         y="389.58047"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">ServerName tl.example.com</tspan></text>
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.854922;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.70984, 0.854922;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
+       d="m 152.72298,265.33109 -3.81106,-88.91192"
+       id="path10807" />
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.854922;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.70984, 0.854922;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
+       d="M 358.36788,267.04093 184.81865,169.17115"
+       id="path10809" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="158.05701"
+       y="229.62328"
+       id="text11688"><tspan
+         id="tspan11690"
+         x="158.05701"
+         y="229.62328"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">IPP</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.2591px;line-height:0%;font-family:'Bitstream Vera Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.854922px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="282.51727"
+       y="218.06625"
+       id="text11692"><tspan
+         id="tspan11694"
+         x="282.51727"
+         y="218.06625"
+         style="font-size:10.2591px;line-height:1.25;stroke-width:0.854922px">IPP</tspan></text>
+  </g>
+</svg>

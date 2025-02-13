@@ -1,0 +1,125 @@
+.. meta::
+   :description: Instructions for installing and running the ThinLinc
+                 client on Linux systems, including system requirements
+                 and installation steps for RPM- and DEB-based, and
+                 other Linux distributions.
+
+.. _linuxclients:
+
+Linux PC
+--------
+
+.. _linuxclientsreq:
+
+Requirements
+~~~~~~~~~~~~
+
+-  A compatible CPU architecture:
+
+   -  An x86_64 (or compatible) CPU
+
+   -  An ARMv7 (or compatible) CPU with Thumb-2 and VFP3D16
+
+-  GLIBC 2.12, or newer
+
+-  A working Fontconfig configuration, or basic fonts available in
+   :file:`/usr/share/fonts` or :file:`/usr/X11R6/lib/X11/fonts`.
+
+-  32 MiB RAM
+
+.. _linuxclientsinstall:
+
+Installing the Linux client
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Linux client is distributed in three different kinds of packages.
+One that can be installed using the RPM package system, one in the DEB
+package format, and one in compressed tar archive form for any Linux
+distribution.
+
+If you need more information than mentioned here, read
+:ref:`clientconf`.
+
+In the instructions below, we will assume that you have unpacked your
+client bundle to :file:`~/tl-x.y.z-clients`.
+
+Installation on RPM-based distributions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The RPM-based client can be found in the directory
+:file:`client-linux-rpm` in the client bundle. It is suitable for
+systems such as Red Hat, Fedora, SUSE, and Mandrake. Perform the
+following steps to install it on a 64-bit system:
+
+.. code:: console
+
+   $ cd ~/tl-x.y.z-clients/client-linux-rpm
+   $ sudo rpm -Uvh thinlinc-client-x.y.z-rel.x86_64.rpm
+
+or the following steps on a 32-bit ARM hard-float system:
+
+.. code:: console
+
+   $ cd ~/tl-x.y.z-clients/client-linux-rpm
+   $ sudo rpm -Uvh thinlinc-client-x.y.z-rel.armv7hl.rpm
+
+Installation on DEB-based distributions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The DEB-based client can be found in the directory
+:file:`client-linux-deb` in the client bundle. It is suitable for
+systems such as Debian and Ubuntu. Perform the following step to install
+it on a 64-bit system:
+
+.. code:: console
+
+   $ cd ~/tl-x.y.z-clients/client-linux-deb
+   $ sudo dpkg -i thinlinc-client_x.y.z-rel_amd64.deb
+
+or the following steps on a 32-bit ARM hard-float system:
+
+.. code:: console
+
+   $ cd ~/tl-x.y.z-clients/client-linux-deb
+   $ sudo dpkg -i thinlinc-client_x.y.z-rel_armhf.deb
+
+Installation on other Linux distributions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A client without any specific package format can be found in the
+directory :file:`client-linux-dynamic` in the client bundle. It is
+possible to run this client from any directory, even from the unpacked
+client bundle. We generally recommend installing it in
+:file:`/opt/thinlinc`. Perform the following steps to install the client
+to :file:`/opt/thinlinc` on a 64-bit system:
+
+.. code:: console
+
+   $ cd ~/tl-x.y.z-clients/client-linux-dynamic
+   $ sudo mkdir -p /opt/thinlinc
+   $ sudo cp -a tl-x.y.z-rel-client-linux-dynamic-x86_64/* /opt/thinlinc/
+
+or the following steps on a 32-bit ARM hard-float system:
+
+.. code:: console
+
+   $ cd ~/tl-x.y.z-clients/client-linux-dynamic
+   $ sudo mkdir -p /opt/thinlinc
+   $ sudo cp -a tl-x.y.z-rel-client-linux-dynamic-armhf/* /opt/thinlinc/
+
+The client is also available as tar archives for easy transfer to other
+systems without having to copy the entire client bundle.
+
+.. _linuxclientsrun:
+
+Running the Linux client
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+On Linux systems the client will be installed as
+:file:`/opt/thinlinc/bin/tlclient`. The client package contains settings
+that add :file:`/opt/thinlinc/bin` to :environ:`PATH`.
+
+To run the client, click on the :guilabel:`ThinLinc client` icon in your
+desktop environment. Typically, the icon is found in the Internet
+category. You can also run the client by executing
+:file:`/opt/thinlinc/bin/tlclient`.

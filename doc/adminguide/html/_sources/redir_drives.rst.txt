@@ -1,0 +1,103 @@
+.. meta::
+   :description: This section explains how to access and manage client
+                 drives in ThinLinc sessions, covering commands for
+                 mounting and unmounting drives, as well as relevant
+                 limitations and configurations.
+
+.. _local-drives:
+
+Accessing the client's local drives
+-----------------------------------
+
+Introduction
+~~~~~~~~~~~~
+
+Using ThinLinc, it is possible to access the clients' drives and file
+systems from the ThinLinc session. With thin terminals, one might want
+to access a local USB drive. When running the client on a workstation,
+applications on the remote desktop server can access all filesystems
+mounted at the workstation, just like local applications can.
+
+Mounting and unmounting local drives
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The exported local drives can be mounted with the command
+:program:`tl-mount-localdrives`. The drives will be mounted below
+:file:`$TLSESSIONDATA/drives`. A symbolic link called :file:`thindrives`
+will be created in the user's home directory, pointing to this
+directory. The syntax for :program:`tl-mount-localdrives` is:
+
+tl-mount-localdrives [**-h**] [**-v**] [**\-\-version**]
+
+The option :option:`-v` causes the tool to be executed in verbose mode,
+:option:`-h` shows the syntax, and :option:`--version` shows the
+program's version number.
+
+The Hiveconf parameter
+:servconf:`/utils/tl-mount-localdrives/mount_args` specifies the mount
+arguments. This Hiveconf parameter is normally found in
+:file:`/opt/thinlinc/etc/conf.d/tl-mount-localdrives.hconf`. The options
+``mountport``, ``port``, ``mountvers``, ``nfsvers``, ``nolock``, and
+``tcp`` will always be used.
+
+Mounted local drives can be unmounted with the command
+:program:`tl-umount-localdrives`. If some applications are using a mount
+at this time, they can continue to access the mount, even though the
+mount has been removed from the file system hierarchy (so called "lazy"
+unmount). The syntax for :program:`tl-umount-localdrives` is:
+
+tl-umount-localdrives [**-a**] [**-s**] [**-l**] [**-h**] [**-v**] [**\-\-version**]
+
+If option :option:`-a` is specified, all mounted local drives for all
+users on this machine will be unmounted (root required). Option
+:option:`-s` leads to unmounting of all mounted local drives, for all
+sessions belonging to the current user. With option :option:`-l`
+requested, the :file:`thindrives` link will not be updated. Given option
+:option:`-v`, the tool will execute in verbose mode, :option:`-h` will
+show the syntax, and finally :option:`--version` shows the program's
+version number.
+
+.. note::
+
+   When using multiple sessions per user, the :file:`thindrives` link
+   will point to the newest session that executed
+   :program:`tl-mount-localdrives`. :program:`tl-umount-localdrives`
+   will restore the link to the newest session which is not newer than
+   the current session and which has mounted local drives.
+
+Mounting drives at login
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Often, it's convenient to automatically mount all local drives for a
+user when the session starts. This is done by default via a symbolic
+link in :file:`/opt/thinlinc/etc/xstartup.d`, pointing at
+:program:`/opt/thinlinc/bin/tl-mount-localdrives`. This link is created
+for you during installation, as well as its counterpart in
+:file:`/opt/thinlinc/etc/xlogout.d` which points to
+:program:`/opt/thinlinc/bin/tl-umount-localdrives`.
+
+Limitations and additional information
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  Linux kernel 2.6.23 or later is required.
+
+-  A mounted local drive, for example
+   :file:`/var/opt/thinlinc/sessions/johndoe/47/drives/cdrom`, is only
+   usable during the lifetime of the ThinLinc session. If the user ends
+   the session without unmounting and then starts a new session, the
+   mount will not be usable even if the session number happens to be
+   same. In this case, any attempts to access the mount will give the
+   error message "Stale NFS file handle". To be able to use the local
+   drive, the user needs to run :program:`tl-mount-localdrives`.
+
+-  The mounted local drive does not fully support POSIX semantics. The
+   usual limitations of NFSv3 applies. Additionally, if the file is
+   moved to another directory while a process has the file open, the
+   process will get a "Stale NFS file handle" error on any subsequent
+   file operation for that file.
+
+-  Local files are uniquely identified by their inode number. Some file
+   system implementations, such as the Linux kernel FAT implementation,
+   do not provide persistent inode numbers. Inode numbers will change on
+   each remount, which usually results in "Stale NFS file handle"
+   errors.

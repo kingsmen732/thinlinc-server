@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Guide to using the Status module in ThinLinc's web administration interface for monitoring licenses, server load, and managing sessions." name="description" />
+
+    <title>The status module &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The VSM module" href="tlwebadm_vsm.html" />
+    <link rel="prev" title="The system health module" href="tlwebadm_health.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tlwebadm_health.html" title="Previous document">The system health module</a>
+        </li>
+        <li>
+          <a href="tlwebadm_vsm.html" title="Next document">The VSM module</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="the-status-module">
+<span id="tlwebadm-status"></span><h1>The status module<a class="headerlink" href="#the-status-module" title="Permalink to this headline">¶</a></h1>
+<p>The status module allows you to view or manipulate the following aspects
+of ThinLinc, by selecting the relevant submenu:</p>
+<ul class="simple">
+<li><p><span class="guilabel">Licenses</span> allows you to view license usage.</p></li>
+<li><p><span class="guilabel">Load</span> allows you to check the current workload on the
+ThinLinc agents.</p></li>
+<li><p><span class="guilabel">Sessions</span> allows you to terminate, shadow or view details
+of sessions.</p></li>
+</ul>
+<section id="licenses">
+<span id="tlwebadm-licenses"></span><h2>Licenses<a class="headerlink" href="#licenses" title="Permalink to this headline">¶</a></h2>
+<p>The licenses menu provides graphs showing current and historical license
+usage, along with the current total number of licenses. It also includes
+functionality to generate a graph displaying license usage over a
+specified number of days in the past.</p>
+</section>
+<section id="load">
+<span id="tlwebadm-load"></span><h2>Load<a class="headerlink" href="#load" title="Permalink to this headline">¶</a></h2>
+<p>The load menu displays information about system utilization across the
+ThinLinc agents, enabling administrators to monitor performance metrics
+and evaluate the capacity for adding more users to the cluster.</p>
+<p>The overview shows the current workload for each agent in the ThinLinc
+cluster, including the total number of users (not only users running
+ThinLinc sessions), memory usage, CPU usage, and rating. To view load
+details for a specific agent, click on the agent’s name. A popup will
+appear with detailed information about the selected session. Refer to
+the list below for explanation of the rating and other load parameters.</p>
+<ul class="simple">
+<li><p><span class="guilabel">ThinLinc users</span>: The number of users on the agent running
+one or more ThinLinc sessions.</p></li>
+<li><p><span class="guilabel">Total number of users</span>: The total numbers of unique users
+on the agent (not only users running ThinLinc sessions). This
+includes both human users as well as system users for background
+processes.</p></li>
+<li><p><span class="guilabel">Memory (used RAM+swap)</span>: The combined total of RAM and
+swap memory currently in use.</p></li>
+<li><p><span class="guilabel">RAM (used/total)</span>: The amount of RAM currently used
+compared to the total available RAM.</p></li>
+<li><p><span class="guilabel">Swap (used/total)</span>: The amount of swap memory currently
+used compared to the total available swap memory.</p></li>
+<li><p><span class="guilabel">CPU</span>: The total CPU resources being utilized across all
+available CPUs.</p></li>
+<li><p><span class="guilabel">Load (1 min)</span>: The CPU load 1-minute average.</p></li>
+<li><p><span class="guilabel">Number of CPUs</span>: The total number of available CPUs.</p></li>
+<li><p><span class="guilabel">Bogomips</span>: A measurement of the system’s computational
+capacity, providing an estimate of processing performance.</p></li>
+<li><p><span class="guilabel">Rating</span>: A score indicating the agent’s capacity to
+handle additional sessions; for example, a rating of 10.0 suggests
+that the agent can accommodate approximately 10 more sessions.</p></li>
+<li><p><span class="guilabel">Penalty points</span>: Points assigned to the agent for
+performance issues, such as slow response times or additional users
+connecting. These points negatively impact the agent’s rating.</p></li>
+<li><p><span class="guilabel">Last updated</span>: The timestamp indicating when the load
+information was last refreshed.</p></li>
+</ul>
+</section>
+<section id="sessions">
+<span id="tlwebadm-sessions"></span><h2>Sessions<a class="headerlink" href="#sessions" title="Permalink to this headline">¶</a></h2>
+<p>When you select the sessions menu, a table with all currently active
+sessions is displayed. To perform additional tasks, click on the
+corresponding username. This will bring up the session details popup,
+which displays all the session parameters for the chosen session. The
+information table in the popup is described below.</p>
+<ul class="simple">
+<li><p><span class="guilabel">Created</span>: A timestamp for when the session was initially
+created.</p></li>
+<li><p><span class="guilabel">Session status</span>: The health status of the session as seen
+by the master machine.</p></li>
+<li><p><span class="guilabel">Connection status</span>: The current connection status between
+the client and the session.</p></li>
+<li><p><span class="guilabel">Last connection</span>: A timestamp for when the last connection
+was initiated and the IP address of the last connected client.</p></li>
+<li><p><span class="guilabel">Agent</span>: The DNS host name of the server that is hosting
+the session, as seen by the master machine.</p></li>
+<li><p><span class="guilabel">Agent server address</span>: The DNS host name of the server
+that is hosting this session, as seen by the client machine.</p></li>
+<li><p><span class="guilabel">Display number</span>: Each session on a certain server has a
+unique number, the X Window System display number. Display zero is
+reserved, and never used for ThinLinc sessions.</p></li>
+<li><p><span class="guilabel">Terminal ID</span>: An identification of the thin terminal. This
+is the terminal’s hardware address (MAC address).</p></li>
+<li><p><span class="guilabel">Framebuffer size</span>: The size (resolution) of the active
+session.</p></li>
+<li><p><span class="guilabel">Local screen size</span>: The size (resolution) of the
+terminal’s screen.</p></li>
+<li><p><span class="guilabel">Session process ID</span>: The PID (process identification
+number) of the <strong class="program">tl-session</strong> process, which is the parent for
+all processes belonging to a certain session.</p></li>
+<li><p><span class="guilabel">Command</span>: The command line that was specified when
+starting this session. This is usually empty for full desktop
+sessions.</p></li>
+</ul>
+<p>Below the session information table, there are two buttons:</p>
+<ul>
+<li><p><span class="guilabel">Terminate session</span>: By clicking this button, you can
+terminate a session immediately. Caution: This can lead to data loss,
+since applications running on the ThinLinc servers may not hold
+unsaved data.</p></li>
+<li><p><span class="guilabel">Shadow session</span>: This button will generate a ThinLinc
+“launch file” (see <a class="reference internal" href="client_web_integration.html#clientplatforms-web-integration"><span class="std std-ref">Launching the client from a web page</span></a>) that
+starts the native ThinLinc client, preconfigured to shadow the
+current user.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The user might not be informed that shadowing is in progress if
+shadowing notification has been disabled. See <a class="reference internal" href="shadowing.html#shadowing"><span class="std std-ref">Shadowing</span></a> for
+details.</p>
+</div>
+</li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tlwebadm_health.html" title="Previous document">The system health module</a>
+        </li>
+        <li>
+          <a href="tlwebadm_vsm.html" title="Next document">The VSM module</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tlwebadm.html#introduction">Introduction</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tlwebadm.html#modules">Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_health.html">The system health module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">The status module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_vsm.html">The VSM module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_profiles.html">The profiles module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_locations.html">The locations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tlwebadm_tldc.html">The desktop customizer module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a><ul>
+      <li>Previous: <a href="tlwebadm_health.html" title="previous chapter">The system health module</a></li>
+      <li>Next: <a href="tlwebadm_vsm.html" title="next chapter">The VSM module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/tlwebadm_status.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

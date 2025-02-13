@@ -1,0 +1,66 @@
+.. meta::
+   :description: The tl-session-param command retrieves session
+                 information managed by the master, including
+                 client-side settings like exported drives and language
+                 preferences, supporting shell variable assignments.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-session-param
+================
+
+Synopsis
+--------
+
+**tl-session-param** [*options*] <*parameter*>
+
+Description
+-----------
+
+The :program:`tl-session-param` command is used to access the session
+information managed by the master. This includes information sent by the
+client, such as if the client has exported any local drives, or what
+language is set on the client side.
+
+Options
+-------
+
+.. option:: -a, --all-entries=FOLDER
+
+   Print all parameters and values in a folder.
+
+.. option:: -e, --eval=VAR=parameter
+
+   Print parameter value in a format suitable for assignment to a shell
+   variable, via evaluation.
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+.. option:: --version
+
+   Prints the ThinLinc version and exits.
+
+Examples
+--------
+
+Print all the top-level session information:
+
+.. code:: console
+
+   $ tl-session-param -a /
+
+Set :environ:`LANG` to the client's language:
+
+.. code:: console
+
+   $ tl-session-param -e LANG=/client_params/capabilities/client_lang
+
+Print the client's IP address:
+
+.. code:: console
+
+   $ tl-session-param /client_ip

@@ -1,0 +1,206 @@
+.. meta::
+   :description: Troubleshooting guide for ThinLinc, covering common
+                 session issues, client errors, and session startup
+                 problems. Includes general troubleshooting methods and
+                 specific error resolution steps.
+
+.. _troubleshoot:
+
+Troubleshooting ThinLinc
+========================
+
+In this appendix, we will describe how to troubleshoot common problems
+in a ThinLinc installation.
+
+We will begin by giving a general view of the recommended
+troubleshooting method, and then continue with more detailed
+instructions for troubleshooting specific problems.
+
+General troubleshooting method
+------------------------------
+
+In most cases, troubleshooting a ThinLinc session problem should follow
+the method outlined in :numref:`troubleshoot-fig`.
+
+.. _troubleshoot-fig:
+
+.. figure:: images/troubleshoot.svg
+
+   The general troubleshooting method
+
+The method is to first check that the user was let in by SSH on the VSM
+server. This information is found on different places on different
+distributions. Common log filenames for SSH information are
+:file:`/var/log/secure`, :file:`/var/log/auth.log` or
+:file:`/var/log/daemon.log`. If the user was let in by SSH, the VSM
+server log (:file:`/var/log/vsmserver.log`) is inspected. In some cases,
+the reason for session failure can be found there, but most of the
+time, it's necessary to find out which VSM agent was selected for the
+session, and inspect the VSM agent log (:file:`/var/log/vsmagent.log`)
+on the server in question.
+
+If inspecting :file:`/var/log/vsmagent.log` on the server that was
+selected for the session does not reveal the reason for the failure,
+there is a per-session log in
+:file:`/var/opt/thinlinc/sessions/<username>/last/xinit.log` where the
+output of commands run during session startup is stored.
+
+In very rare cases, it might also be necessary to inspect the SSH log on
+the VSM agent.
+
+Troubleshooting specific problems
+---------------------------------
+
+The first step should be to check if your specific problem is mentioned
+in the platform-specific notes available at
+https://www.cendio.com/thinlinc/docs/platforms. If your problem isn't
+mentioned in the platform-specific notes you should read the sections
+below.
+
+Problems where the client reports an error
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the following sections, we will describe how to cope with problems
+where the ThinLinc client is reporting an error.
+
+Couldn't set up secure tunnel to ThinLinc server. (Couldn't establish SSH tunnel, SSH terminated.)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This error is caused by failure to connect to the SSH daemon on the
+ThinLinc server (the server running the VSM server). This could be
+caused by the fact that the SSH daemon is simply not running, or that it
+is not letting the user in for some reason.
+
+Another possible reason is that there is a firewall between the user and
+the ThinLinc server, that forbids communication.
+
+"Login failed! Wrong username or password."
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This error is very often caused simply by the user entering an incorrect
+password. Begin by verifying that the user is actually entering the
+correct username and password.
+
+If the username and password are correct and this is the first time the
+user tries to log in, check the SSH logs of the server. If SSH says that
+the user is invalid, that means that something is incorrect in the
+user's user information database entry. For example, this may happen if
+a user stored in eDirectory has two ``cn`` attributes, one of them
+different from the other.
+
+The :command:`getent` command can be a valuable tool to dissect problems
+of this type. If the output of :command:`getent passwd <username>`
+doesn't produce any output, that is a sign that the user is in fact
+invalid.
+
+The SSH connection succeeded, but the ThinLinc server connection failed. Perhaps this server doesn't run a ThinLinc server?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This error is most often caused by the fact that the VSM server is not
+running on the server. Start the VSM server and try again.
+
+A user entering the wrong hostname, for example the hostname of one of
+the VSM agents, would also get this error message. Check that the user
+has entered the correct hostname. In very rare cases, this could also be
+caused by incorrect DNS data.
+
+ThinLinc login failed. (No agent server was available)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This error is reported if there were no working VSM agents available
+according to the load balance information in the VSM server.
+
+In a system with few VSM agent servers, restoring a VSM agent that has
+been down for some reason doesn't take effect immediately --- the load
+balance information is only updated once every 40 seconds by default.
+Either wait for the load balance cycle to complete, or restart the VSM
+server.
+
+The load balance information can be inspected in the |tlwebadm|, or
+using the |cmdline|.
+
+.. |tlwebadm| replace::
+   :ref:`ThinLinc Web Administration <tlwebadm_status>`
+.. |cmdline| replace::
+   :ref:`command line <cli_load>`
+
+ThinLinc login failed. (Couldn't create your session)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When this error occurs, the user was valid on the VSM server, but for
+some reason, the session couldn't be created on the VSM agent.
+
+One very common reason for this problem is that the VSM agent has lost
+its connection to the user database backend (LDAP, Windows domain or
+other database), so the user exists on the VSM server, but not on the
+VSM agent. If this is the case, the VSM agent log on the selected server
+will clearly state that the user doesn't exist on the system.
+
+Another very common reason is home directory trouble on the VSM agent.
+Verify that the home directory exists on the selected server, and that
+it is owned by the correct uidNumber/gidNumber. Of course, the user must
+have write permissions in their home directory.
+
+To verify that the home directory works, the following command can be
+used:
+
+.. code:: console
+
+   $ ssh <username>@<agenthost> touch .
+
+If the home directory is correctly mounted and writable by the user, the
+above command will not produce any output except the password question.
+
+Couldn't set up secure tunnel to VNC! (Couldn't establish SSH tunnel, SSH terminated.)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This error is caused by failure to connect to the SSH daemon on the
+selected VSM agent. This could be caused by the fact that the SSH daemon
+is simply not running, or that it is not letting the user in for some
+reason.
+
+Another possible reason is that there is a firewall between the user and
+the selected VSM agent that disallows communication.
+
+Problems that occur after session start
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this section we will discuss some problems that can occur after the
+successful login, that is, after the ThinLinc login window has closed.
+In this phase, a number of session startup problems can occur
+
+Session starts, but closes down immediately
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If the ThinLinc login window closes, and the session starts up but then
+immediately shuts down, inspect :file:`xinit.log` found in
+:file:`/var/opt/thinlinc/sessions/<username>/last/` on the selected VSM
+agent. Some of the commands run during session startup will probably
+have written an error message that will be stored in that file.
+
+It may also be of value to inspect the VSM agent log on the selected
+server.
+
+At login, user is reconnected to previous, faulty, session
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If a previous session still exists and is faulty, for example because of
+desktop environment failures, the user is reconnected to the same
+session when logging in. Disconnect from the session, enable the
+:guilabel:`End existing session` checkbox and log in again. That will
+terminate the current session and start a new one.
+
+Login succeeds, but the ThinLinc desktop configuration fails
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using the ThinLinc desktop customizer, as documented in
+:ref:`tldc`, the KDE or Gnome menu and the entries on the desktop
+are customized at each login. If this fails, quota problems are very
+often the problem. Check the quota of the user in question.
+
+Login succeeds, but KDE fails to start
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If KDE fails to start, complaining about being unable to create symlinks
+and similar, quota problems are commonly the problem. Check the quota of
+the user in question.

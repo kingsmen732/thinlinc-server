@@ -1,0 +1,28 @@
+.. meta::
+   :description: Instructions for uninstalling ThinLinc server using
+                 native package manager commands.
+
+.. _uninstalling:
+
+Uninstalling the ThinLinc server
+================================
+
+Contrary to the installation process, there is no formal server
+uninstall script. As a substitute, the ThinLinc server may readily be
+uninstalled via command line by referring to the package
+'thinlinc-server', using the package manager native to the system. For
+instance, on an RPM-based system that would entail
+
+.. code:: console
+
+   $ sudo dnf remove thinlinc-server
+
+Depending on the Linux distribution, it is possible that some
+server-related files may linger in :file:`/opt/thinlinc/` after
+uninstall. To completely purge these, one may freely remove this
+directory.
+
+However, note that client-related files are distributed in parallel with
+server-related files in this directory tree. Hence, in the presence of a
+client installation, it is ill-advised to remove :file:`/opt/thinlinc/`
+indiscriminately.

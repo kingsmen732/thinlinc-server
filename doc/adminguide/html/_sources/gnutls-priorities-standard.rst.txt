@@ -1,0 +1,142 @@
+..
+   NOTE This section depends on the script insert-gnutls-lists.py to
+   populate the standard configuration and available algorithms.
+
+.. meta::
+   :description: Overview of the standard GnuTLS configuration in
+                 ThinLinc, including the default priority string, cipher
+                 suites, protocols, ciphers, MACs, key exchange
+                 algorithms, groups, and PK-signatures.
+
+Standard configuration
+----------------------
+
+ThinLinc comes configured with the priority string ``NORMAL``, which
+means the standard, secure GnuTLS algorithms. This is the order and
+availability of algorithms for that priority string.
+
+Cipher suites
+~~~~~~~~~~~~~
+
+::
+
+   TLS_AES_256_GCM_SHA384
+   TLS_CHACHA20_POLY1305_SHA256
+   TLS_AES_128_GCM_SHA256
+   TLS_AES_128_CCM_SHA256
+   TLS_ECDHE_ECDSA_AES_256_GCM_SHA384
+   TLS_ECDHE_ECDSA_CHACHA20_POLY1305
+   TLS_ECDHE_ECDSA_AES_256_CCM
+   TLS_ECDHE_ECDSA_AES_256_CBC_SHA1
+   TLS_ECDHE_ECDSA_AES_128_GCM_SHA256
+   TLS_ECDHE_ECDSA_AES_128_CCM
+   TLS_ECDHE_ECDSA_AES_128_CBC_SHA1
+   TLS_ECDHE_RSA_AES_256_GCM_SHA384
+   TLS_ECDHE_RSA_CHACHA20_POLY1305
+   TLS_ECDHE_RSA_AES_256_CBC_SHA1
+   TLS_ECDHE_RSA_AES_128_GCM_SHA256
+   TLS_ECDHE_RSA_AES_128_CBC_SHA1
+   TLS_RSA_AES_256_GCM_SHA384
+   TLS_RSA_AES_256_CCM
+   TLS_RSA_AES_256_CBC_SHA1
+   TLS_RSA_AES_128_GCM_SHA256
+   TLS_RSA_AES_128_CCM
+   TLS_RSA_AES_128_CBC_SHA1
+   TLS_DHE_RSA_AES_256_GCM_SHA384
+   TLS_DHE_RSA_CHACHA20_POLY1305
+   TLS_DHE_RSA_AES_256_CCM
+   TLS_DHE_RSA_AES_256_CBC_SHA1
+   TLS_DHE_RSA_AES_128_GCM_SHA256
+   TLS_DHE_RSA_AES_128_CCM
+   TLS_DHE_RSA_AES_128_CBC_SHA1
+
+Protocols
+~~~~~~~~~
+
+::
+
+    VERS-TLS1.3
+    VERS-TLS1.2
+    VERS-TLS1.1
+    VERS-TLS1.0
+    VERS-DTLS1.2
+    VERS-DTLS1.0
+
+
+Ciphers
+~~~~~~~
+
+::
+
+    AES-256-GCM
+    CHACHA20-POLY1305
+    AES-256-CCM
+    AES-256-CBC
+    AES-128-GCM
+    AES-128-CCM
+    AES-128-CBC
+
+
+MACs
+~~~~
+
+::
+
+    SHA1
+    AEAD
+
+
+Key Exchange Algorithms
+~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    ECDHE-ECDSA
+    ECDHE-RSA
+    RSA
+    DHE-RSA
+
+
+Groups
+~~~~~~
+
+::
+
+    GROUP-SECP256R1
+    GROUP-SECP384R1
+    GROUP-SECP521R1
+    GROUP-X25519
+    GROUP-X448
+    GROUP-FFDHE2048
+    GROUP-FFDHE3072
+    GROUP-FFDHE4096
+    GROUP-FFDHE6144
+    GROUP-FFDHE8192
+
+
+PK-signatures
+~~~~~~~~~~~~~
+
+::
+
+    SIGN-RSA-SHA256
+    SIGN-RSA-PSS-SHA256
+    SIGN-RSA-PSS-RSAE-SHA256
+    SIGN-ECDSA-SHA256
+    SIGN-ECDSA-SECP256R1-SHA256
+    SIGN-EdDSA-Ed25519
+    SIGN-RSA-SHA384
+    SIGN-RSA-PSS-SHA384
+    SIGN-RSA-PSS-RSAE-SHA384
+    SIGN-ECDSA-SHA384
+    SIGN-ECDSA-SECP384R1-SHA384
+    SIGN-EdDSA-Ed448
+    SIGN-RSA-SHA512
+    SIGN-RSA-PSS-SHA512
+    SIGN-RSA-PSS-RSAE-SHA512
+    SIGN-ECDSA-SHA512
+    SIGN-ECDSA-SECP521R1-SHA512
+    SIGN-RSA-SHA1
+    SIGN-ECDSA-SHA1
+
+

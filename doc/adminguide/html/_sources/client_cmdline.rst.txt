@@ -1,0 +1,196 @@
+.. meta::
+   :description: Comprehensive overview of ThinLinc client command-line
+                 usage, including syntax, available options, and
+                 techniques for customizing client behavior and
+                 settings.
+
+.. _client_cmdline:
+
+Client command line usage
+-------------------------
+
+To run the ThinLinc client from the command line you run the program
+tlclient, optionally followed by options and a server name. The correct
+program syntax is as follows.
+
+**tlclient** [*options*] [*server*][:*port*]
+
+The optional *server* field can be used to specify a ThinLinc server
+that should be predefined in the server field when the client is
+started. The optional *port* parameter causes the client to try to
+connect another TCP/IP port number than the normal SSH port when
+establishing its secure connection to the ThinLinc server. More
+information about custom SSH settings is available at
+:ref:`client_security_tab`.
+
+The ThinLinc client is highly controllable from the command line by the
+use of command-line arguments. Many parts of the client can be
+controlled this way, including the server address and username. It is
+possible to force settings and lock tabs and fields in the config
+interface to prevent them from being changed.
+
+All arguments written on the command line override the settings saved
+from previous sessions. The options window will show the current
+settings, including the settings from the command line. The client
+settings are only stored to file when the user presses the
+:guilabel:`OK` button in the options window. This means that options
+from the command line normally don't affect the saved settings. But if
+the user opens the options window and accepts the settings by pressing
+the :guilabel:`OK` button, then the settings, including the one from the
+command line, will be saved.
+
+For a complete list of arguments supported by your client you can run
+the client with the argument :option:`-?`.
+
+Description of available command-line arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Here follows a description for all available command-line arguments.
+
+.. option:: -?, --help
+
+   Display a help summary.
+
+.. option:: --version
+
+   Display client version information and exit.
+
+.. option:: -a, --advanced
+
+   Start client in advanced mode. Advanced mode means that the client
+   will show the :guilabel:`Server field`, :guilabel:`Options...` button
+   and the :guilabel:`End existing session` checkbox. The advanced mode
+   is the normal mode used when you start the ThinLinc client. A simpler
+   mode, where those interface components are hidden, is used
+   automatically when you enter a server name as a command-line
+   argument. By adding this argument you override that and always use
+   the advanced mode.
+
+.. option:: -C <FILE>, --configfile <FILE>
+
+   Specifies an additional configuration file. Parameter values in this
+   configuration file overrides the values specified by the system-wide
+   and user configuration file. Settings changed from the GUI will be
+   stored in this configuration file, instead of the user's
+   configuration file.
+
+.. option:: -d <LEVEL>, --debug <LEVEL>
+
+   The ThinLinc client logs information about the current session to the
+   file :file:`~/.thinlinc/tlclient.log` on Linux systems and
+   :file:`%TMP%\\tlclient.log` on Windows systems. The amount of
+   information to log can be configured with this option followed by a
+   number from 1 to 5. A low number gives less logging than a higher
+   number. The default is a log level of 3. For more information about
+   log file placement, see :ref:`client_logfile_placement` below.
+
+.. option:: -u <USER>, --user <USER>
+
+   This option sets the username that should be filled in into the
+   :guilabel:`Username` field. This can be used to override the name
+   that is automatically saved from the last session. If, for example,
+   you in a school classroom want it to always start with an empty
+   :guilabel:`Username` field, then you can use this parameter with the
+   empty string ``""``.
+
+.. option:: -p <PASSWORD>, --password <PASSWORD>
+
+   This option sets the password that should be filled in into the
+   :guilabel:`Password` field. When this option is used and a username
+   exists (either saved from a previous session or entered with the
+   :option:`-u` parameter) the client will automatically try to log in,
+   directly after start. If the login attempt fails, it will return
+   focus to the client interface, making it possible to adjust the
+   values. Note that the command line of tlclient, and therefore the
+   password, will be visible to other processes running on the client
+   operating system. If this is a problem in your environment, consider
+   using the :option:`-P` option documented below.
+
+.. option:: -P <PROGRAM>, --askpass <PROGRAM>
+
+   This option makes it possible to specify an askpass program that
+   should be used to achieve the password. This program should in some
+   way ask the user for a password and then return that password
+   together with an exit code. This triggers the auto login (see
+   argument :option:`-p` above).
+
+.. option:: -e <ENCODING>[,ENCODING...], --encodings <ENCODING>[,ENCODING...]
+
+   This option makes it possible to select which VNC encoding you want
+   to use (see :ref:`client_optimization_tab` for more information about
+   VNC encodings). Valid encodings for this option are: ``Tight``,
+   ``ZRLE``, ``Hextile`` and ``Raw``.
+
+.. option:: -l <ITEM>[,ITEM...], --lock <ITEM>[,ITEM...]
+
+   This option makes it possible to lock different parts of the client
+   interface. This can be used to prevent things from being changed.
+   Locked parts will still be shown, but will be "grayed out", which
+   means that they can't be made active for change. The items that
+   should be locked should follow this option as a comma separated list.
+   The following items are possible to lock.
+
+   -  ``server``: Server entry field
+
+   -  ``user``: Username entry field
+
+   -  ``display``: Display tab
+
+   -  ``localdevices``: Local Devices tab
+
+   -  ``optimization``: Optimization tab
+
+   -  ``security``: Security tab
+
+   -  ``advanced``: Advanced tab
+
+..
+   Note that we have an alias for "display" called "screen", and another alias
+   for "advanced" called "options" for backwards compatibility
+
+.. option:: -h <ITEM>[,ITEM...], --hide <ITEM>[,ITEM...]
+
+   This option makes it possible to hide different parts of the client
+   interface. This can be used to remove parts of the interface that can
+   confuse novice users, or to prevent them from reaching parts of the
+   interface. The following items are possible to hide.
+
+   -  ``options``: options button
+
+.. option:: -f <SETTING>[,SETTING...], --force <SETTING>[,SETTING...]
+
+   This option makes it possible to force a setting to a value. This can
+   be used to preset a client with values and to force them to reset to
+   those values each time, even if the users make changes. When an
+   option is forced it is turned on. The following items are possible to
+   force.
+
+   -  ``terminate``: terminate session
+
+   -  ``fullscreen``: full screen on all monitors
+
+   -  ``sound``: sound mode
+
+   -  ``sshcomp``: ssh compression
+
+.. option:: -M, --minimize
+
+   This option causes all other applications to be minimized when the
+   ThinLinc client starts.
+
+.. option:: -s <PROGRAM>, --startprogram <PROGRAM>
+
+   Specifies the program to start in the session. Overrides the
+   :clientconf:`START_PROGRAM_ENABLED` and
+   :clientconf:`START_PROGRAM_COMMAND` configuration parameters.
+
+.. option:: --loop
+
+   This option causes the client to run forever. The exit button is
+   removed, and when a session has ended, a new client process is
+   automatically started.
+
+   .. note::
+
+      The only way to stop the client from restarting is to terminate
+      the :program:`tlclient` process.

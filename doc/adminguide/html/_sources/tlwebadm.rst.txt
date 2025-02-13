@@ -1,0 +1,70 @@
+.. meta::
+   :description: Overview of ThinLinc web administration interface,
+                 tlwebadm, detailing modules for managing system health,
+                 status, profiles, locations, and more.
+
+.. _tlwebadm:
+
+Administration of ThinLinc using the web administration interface
+=================================================================
+
+Introduction
+------------
+
+This chapter describes the web-based ThinLinc administration interface
+called tlwebadm. This administration interface is installed
+automatically by the ThinLinc installation program, and may be accessed
+by pointing your web browser to ``https://<hostname>:1010``.
+
+The default username for logging in to tlwebadm is ``admin``, and the
+password is as specified during installation (or in the case of
+automated installs, as specified in the :ref:`answers file
+<install_automatic>`).
+
+For information on configuring tlwebadm, for example setting a password
+or changing the default port, see :ref:`configuration_tlwebadm`.
+
+.. note::
+
+   A password must be set and the tlwebadm service restarted before use.
+
+Modules
+-------
+
+The tlwebadm interface consists of several modules which address
+different aspects of ThinLinc configuration:
+
+-  :guilabel:`System health`, for viewing information about ThinLinc
+   master, agent and Web Access services, and testing user or group
+   lookup performance. See :ref:`tlwebadm_system_health` below.
+
+-  :guilabel:`Status`, for viewing information such as license usage,
+   server load and sessions. See :ref:`tlwebadm_status` below.
+
+-  :guilabel:`VSM`, for viewing information and managing ThinLinc
+   subclusters, the master service and the agent service. See
+   :ref:`tlwebadm_vsm` below.
+
+-  :guilabel:`Profiles`, for viewing and configuring profiles. See
+   :ref:`tlwebadm_profiles` below.
+
+-  :guilabel:`Locations`, for viewing and configuring printers and
+   terminal locations. See :ref:`tlwebadm_locations` below.
+
+-  :guilabel:`Desktop customizer`, for configuring desktops. See
+   :ref:`tlwebadm_tldc` below.
+
+-  :guilabel:`Help`, a module containing documentation and other useful
+   information.
+
+These modules are described in more detail in the following sections.
+
+.. toctree::
+   :hidden:
+
+   tlwebadm_health
+   tlwebadm_status
+   tlwebadm_vsm
+   tlwebadm_profiles
+   tlwebadm_locations
+   tlwebadm_tldc

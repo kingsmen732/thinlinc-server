@@ -1,0 +1,46 @@
+.. meta::
+   :description: The tl-setup command configures the ThinLinc server and
+                 local system, supporting graphical, text, and automated
+                 modes for initial setup.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-setup
+========
+
+Synopsis
+--------
+
+**tl-setup** [*options*]
+
+Description
+-----------
+
+ThinLinc setup is used to configure the ThinLinc server for the local
+system, and to modify the local system as is required for the ThinLinc
+server to function correctly.
+
+ThinLinc setup can be run graphically, in text mode, or in a fully
+automated mode.
+
+Options
+-------
+
+.. option:: -a, --answers-from=FILE
+
+   Run tl-setup in non-interactive mode and read the answers from
+   *FILE*.
+
+.. option:: -g, --generate-answers=FILE
+
+   Generate an answer file template and store it in *FILE*.
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+.. option:: --version
+
+   Prints the ThinLinc version and exits.

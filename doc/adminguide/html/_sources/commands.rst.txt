@@ -1,0 +1,104 @@
+.. meta::
+   :description: Overview of ThinLinc server commands for users and
+                 administrators, including tools for session management,
+                 configuration, synchronization, and more.
+
+.. _commands:
+
+Commands on the ThinLinc server
+===============================
+
+In this chapter, we will describe the commands shipped as part of the
+ThinLinc server that are meant for the end users or the system
+administrators.
+
+User commands:
+
+- :doc:`man/tl-config.1` --- command-line interface to ThinLinc
+  configuration
+
+- :doc:`man/tl-desktop-restore.1` --- reset GNOME and KDE configuration
+
+- :doc:`man/tl-disconnect.1` --- disconnect from a ThinLinc session
+
+- :doc:`man/tl-env.1` --- run command with a ThinLinc session
+  environment
+
+- :doc:`man/tl-memberof-group.1` --- determine group membership of
+  calling user
+
+- :doc:`man/tl-mount-localdrives.1` --- mount ThinLinc client local
+  drives
+
+- :doc:`man/tl-session-param.1` --- get ThinLinc session information
+
+- :doc:`man/tl-single-app.1` --- run a single application in full screen
+
+- :doc:`man/tl-sso-password.1` --- get single sign-on password
+
+- :doc:`man/tl-sso-token-passphrase.1` --- get single sign-on token
+  passphrase
+
+- :doc:`man/tl-sso-update-password.1` --- ask user for a single sign-on
+  password
+
+- :doc:`man/tl-umount-localdrives.1` --- unmounts ThinLinc client local
+  drives
+
+- :doc:`man/tl-while-x11.1` --- run program during ThinLinc session
+  lifetime
+
+Administrator commands:
+
+- :doc:`man/tlctl.8` --- control a ThinLinc cluster
+
+- :doc:`man/tlctl-load.8` --- cluster load information
+
+- :doc:`man/tlctl-session.8` --- session handling
+
+- :doc:`man/tl-gen-auth.8` --- generate a ThinLinc password hash
+
+- :doc:`man/tl-ldap-certalias.8` --- update local certificate
+  authentication from LDAP
+
+- :doc:`man/tl-notify.8` --- send a message to all ThinLinc sessions
+
+- :doc:`man/tl-rsync-all.8` --- synchronize files across all ThinLinc
+  agents
+
+- :doc:`man/tl-setup.8` --- configure the ThinLinc server
+
+- :doc:`man/tl-show-licenses.8` --- show ThinLinc user licenses
+
+- :doc:`man/tl-ssh-all.8` --- run a command on all ThinLinc agents
+
+- :doc:`man/tl-support.8` --- give ThinLinc support remote access
+
+.. toctree::
+   :hidden:
+
+   man/tl-config.1
+   man/tl-desktop-restore.1
+   man/tl-disconnect.1
+   man/tl-env.1
+   man/tl-memberof-group.1
+   man/tl-mount-localdrives.1
+   man/tl-session-param.1
+   man/tl-single-app.1
+   man/tl-sso-password.1
+   man/tl-sso-token-passphrase.1
+   man/tl-sso-update-password.1
+   man/tl-umount-localdrives.1
+   man/tl-while-x11.1
+
+   man/tlctl.8
+   man/tlctl-load.8
+   man/tlctl-session.8
+   man/tl-gen-auth.8
+   man/tl-ldap-certalias.8
+   man/tl-notify.8
+   man/tl-rsync-all.8
+   man/tl-setup.8
+   man/tl-show-licenses.8
+   man/tl-ssh-all.8
+   man/tl-support.8

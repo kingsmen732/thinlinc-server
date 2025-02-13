@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Overview of configuring ThinLinc for High Availability (HA) to eliminate single points of failure by using a dual master server setup, including background reasons, theory of operation, and ensuring continuous service with minimal interruption." name="description" />
+
+    <title>High availability overview &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration of ThinLinc for HA operations" href="HA-configuration.html" />
+    <link rel="prev" title="High availability" href="HA.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="HA.html" title="Previous document">High availability</a>
+        </li>
+        <li>
+          <a href="HA-configuration.html" title="Next document">Configuration of ThinLinc for HA operations</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="high-availability-overview">
+<h1>High availability overview<a class="headerlink" href="#high-availability-overview" title="Permalink to this headline">¶</a></h1>
+<section id="background-reasons-for-a-ha-setup">
+<h2>Background — reasons for a HA setup<a class="headerlink" href="#background-reasons-for-a-ha-setup" title="Permalink to this headline">¶</a></h2>
+<p>In a standard ThinLinc setup, there is a single point of failure — the
+machine running the VSM server. If the VSM server is down, no new
+ThinLinc connections can be made, and reconnections to existing sessions
+can’t be established. Existing connections to VSM agent machines still
+running will however continue to work. A ThinLinc cluster of medium size
+with one machine running as VSM server and three VSM agent machines is
+illustrated in <a class="reference internal" href="#vsm-server-agent-arch"><span class="std std-numref">Fig. 3</span></a>.</p>
+<figure class="align-default" id="id1">
+<span id="vsm-server-agent-arch"></span><img alt="_images/vsm-server-agent-arch.svg" src="_images/vsm-server-agent-arch.svg" /><figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">A non-HA ThinLinc cluster setup</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Here the incoming connections are handled by the VSM server which
+distributes the connections to the three VSM agent machines. If the VSM
+server goes down, no new connections can occur. The VSM server is a
+single point of failure in your ThinLinc setup.</p>
+</section>
+<section id="solution-elimination-of-single-point-of-failure">
+<h2>Solution — elimination of single point of failure<a class="headerlink" href="#solution-elimination-of-single-point-of-failure" title="Permalink to this headline">¶</a></h2>
+<p>In order to eliminate the single point of failure, we configure the VSM
+server in a HA configuration where two machines share the responsibility
+for keeping the service running. Note that ThinLinc’s HA functionality
+only handles the parts of your HA setup that keeps the ThinLinc session
+database synchronized between the two machines. Supplementary software
+is required, read more about this in <a class="reference internal" href="#ha-theory-of-operation"><span class="std std-ref">Theory of operation</span></a>.</p>
+<p>When ThinLinc as well as your systems are configured this way, the two
+machines are in constant contact with each other, each checking if the
+other one is up and running. If one of the machines goes down for some
+reason, for example hardware failure, the other machine detects the
+failure and automatically takes over the service with only a short
+interruption for the users. No action is needed from the system
+administrator.</p>
+</section>
+<section id="theory-of-operation">
+<span id="ha-theory-of-operation"></span><h2>Theory of operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this headline">¶</a></h2>
+<figure class="align-default" id="id2">
+<span id="vsm-server-agent-ha-arch"></span><img alt="_images/vsm-server-agent-HA-arch.svg" src="_images/vsm-server-agent-HA-arch.svg" /><figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">A ThinLinc HA cluster setup</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In a HA setup, as illustrated in <a class="reference internal" href="#vsm-server-agent-ha-arch"><span class="std std-numref">Fig. 4</span></a> two
+equal machines are used to keep the VSM server running. One of the
+machines is primary, the other one is secondary. The primary machine is
+normally handling VSM server requests, but if it fails, the secondary
+machine kicks in. When the primary machine comes online, it takes over
+again. That is, in normal operation, it’s always the primary machine
+that’s working, the secondary is in standby, receiving information from
+the primary about new and deleted sessions, maintaining its own copy of
+the session database.</p>
+<p>Both machines have a unique hostname and a unique IP address, but
+there is also a third IP address that is active only on the node
+currently responsible for the VSM server service. This is usually
+referred to as a resource IP address, which the clients are connecting
+to. ThinLinc does not move this resource IP address between servers,
+supplementary software is required for this purpose.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="HA.html" title="Previous document">High availability</a>
+        </li>
+        <li>
+          <a href="HA-configuration.html" title="Next document">Configuration of ThinLinc for HA operations</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="HA.html">High availability</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">High availability overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#background-reasons-for-a-ha-setup">Background — reasons for a HA setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#solution-elimination-of-single-point-of-failure">Solution — elimination of single point of failure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#theory-of-operation">Theory of operation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="HA-configuration.html">Configuration of ThinLinc for HA operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HA-recover.html">Recovering from hardware failures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="HA.html">High availability</a><ul>
+      <li>Previous: <a href="HA.html" title="previous chapter">High availability</a></li>
+      <li>Next: <a href="HA-configuration.html" title="next chapter">Configuration of ThinLinc for HA operations</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/HA-overview.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

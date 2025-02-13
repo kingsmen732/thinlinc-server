@@ -1,0 +1,52 @@
+.. meta::
+   :description: The tl-support command enables a support technician to
+                 access a ThinLinc server behind a firewall by setting
+                 up an SSH tunnel to a remote server, facilitating
+                 secure troubleshooting.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-support
+==========
+
+Synopsis
+--------
+
+**tl-support** [**-p** <*listen-port*>] [**-u** <*user*>] [*host*\ [**:**\ *port*]]
+
+Description
+-----------
+
+The :program:`tl-support` command can be used to enable a support
+technician to log in to your ThinLinc server, even though the server is
+behind a firewall that doesn't allow connections to the ssh port. This
+is accomplished by opening a ssh connection from the server to an
+external server on the internet, at the same time setting up a tunnel
+from the remote host to the local host's ssh port. The default server to
+connect to is "support.thinlinc.com" with the default username
+"support". This command should only be used after contacting your
+ThinLinc support technician.
+
+If *host* is not specified, "support.thinlinc.com" is assumed.
+
+Options
+-------
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+.. option:: -p listen-port, --port=listen-port
+
+   The remote port to listen on. If not specified, a random port will be
+   used.
+
+.. option:: -u user, --user=user
+
+   Username to connect as. The default is "support".
+
+.. option:: --version
+
+   Prints the ThinLinc version and exits.

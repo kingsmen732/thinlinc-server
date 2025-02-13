@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Comprehensive overview of ThinLinc client command-line usage, including syntax, available options, and techniques for customizing client behavior and settings." name="description" />
+
+    <title>Client command line usage &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Local device export" href="client_export_local_device.html" />
+    <link rel="prev" title="Client usage" href="client_usage.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_usage.html" title="Previous document">Client usage</a>
+        </li>
+        <li>
+          <a href="client_export_local_device.html" title="Next document">Local device export</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="client-command-line-usage">
+<span id="client-cmdline"></span><h1>Client command line usage<a class="headerlink" href="#client-command-line-usage" title="Permalink to this headline">¶</a></h1>
+<p>To run the ThinLinc client from the command line you run the program
+tlclient, optionally followed by options and a server name. The correct
+program syntax is as follows.</p>
+<p><strong>tlclient</strong> [<em>options</em>] [<em>server</em>][:<em>port</em>]</p>
+<p>The optional <em>server</em> field can be used to specify a ThinLinc server
+that should be predefined in the server field when the client is
+started. The optional <em>port</em> parameter causes the client to try to
+connect another TCP/IP port number than the normal SSH port when
+establishing its secure connection to the ThinLinc server. More
+information about custom SSH settings is available at
+<a class="reference internal" href="client_options_security.html#client-security-tab"><span class="std std-ref">Security tab</span></a>.</p>
+<p>The ThinLinc client is highly controllable from the command line by the
+use of command-line arguments. Many parts of the client can be
+controlled this way, including the server address and username. It is
+possible to force settings and lock tabs and fields in the config
+interface to prevent them from being changed.</p>
+<p>All arguments written on the command line override the settings saved
+from previous sessions. The options window will show the current
+settings, including the settings from the command line. The client
+settings are only stored to file when the user presses the
+<span class="guilabel">OK</span> button in the options window. This means that options
+from the command line normally don’t affect the saved settings. But if
+the user opens the options window and accepts the settings by pressing
+the <span class="guilabel">OK</span> button, then the settings, including the one from the
+command line, will be saved.</p>
+<p>For a complete list of arguments supported by your client you can run
+the client with the argument <code class="docutils literal notranslate"><span class="pre">-?</span></code>.</p>
+<section id="description-of-available-command-line-arguments">
+<h2>Description of available command-line arguments<a class="headerlink" href="#description-of-available-command-line-arguments" title="Permalink to this headline">¶</a></h2>
+<p>Here follows a description for all available command-line arguments.</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-0">
+<span id="cmdoption"></span><span id="cmdoption-help"></span><span class="sig-name descname"><span class="pre">-?</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a help summary.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-version">
+<span class="sig-name descname"><span class="pre">--version</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display client version information and exit.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-a">
+<span id="cmdoption-advanced"></span><span class="sig-name descname"><span class="pre">-a</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--advanced</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-a" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start client in advanced mode. Advanced mode means that the client
+will show the <span class="guilabel">Server field</span>, <span class="guilabel">Options…</span> button
+and the <span class="guilabel">End existing session</span> checkbox. The advanced mode
+is the normal mode used when you start the ThinLinc client. A simpler
+mode, where those interface components are hidden, is used
+automatically when you enter a server name as a command-line
+argument. By adding this argument you override that and always use
+the advanced mode.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-C">
+<span id="cmdoption-c"></span><span id="cmdoption-configfile"></span><span class="sig-name descname"><span class="pre">-C</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;FILE&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--configfile</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;FILE&gt;</span></span><a class="headerlink" href="#cmdoption-C" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an additional configuration file. Parameter values in this
+configuration file overrides the values specified by the system-wide
+and user configuration file. Settings changed from the GUI will be
+stored in this configuration file, instead of the user’s
+configuration file.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-d">
+<span id="cmdoption-debug"></span><span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;LEVEL&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--debug</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;LEVEL&gt;</span></span><a class="headerlink" href="#cmdoption-d" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ThinLinc client logs information about the current session to the
+file <code class="file docutils literal notranslate"><span class="pre">~/.thinlinc/tlclient.log</span></code> on Linux systems and
+<code class="file docutils literal notranslate"><span class="pre">%TMP%\tlclient.log</span></code> on Windows systems. The amount of
+information to log can be configured with this option followed by a
+number from 1 to 5. A low number gives less logging than a higher
+number. The default is a log level of 3. For more information about
+log file placement, see <a class="reference internal" href="client_logfile_placement.html#client-logfile-placement"><span class="std std-ref">Log file placement</span></a> below.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-u">
+<span id="cmdoption-user"></span><span class="sig-name descname"><span class="pre">-u</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;USER&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--user</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;USER&gt;</span></span><a class="headerlink" href="#cmdoption-u" title="Permalink to this definition">¶</a></dt>
+<dd><p>This option sets the username that should be filled in into the
+<span class="guilabel">Username</span> field. This can be used to override the name
+that is automatically saved from the last session. If, for example,
+you in a school classroom want it to always start with an empty
+<span class="guilabel">Username</span> field, then you can use this parameter with the
+empty string <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-p">
+<span id="cmdoption-password"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;PASSWORD&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--password</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;PASSWORD&gt;</span></span><a class="headerlink" href="#cmdoption-p" title="Permalink to this definition">¶</a></dt>
+<dd><p>This option sets the password that should be filled in into the
+<span class="guilabel">Password</span> field. When this option is used and a username
+exists (either saved from a previous session or entered with the
+<code class="docutils literal notranslate"><span class="pre">-u</span></code> parameter) the client will automatically try to log in,
+directly after start. If the login attempt fails, it will return
+focus to the client interface, making it possible to adjust the
+values. Note that the command line of tlclient, and therefore the
+password, will be visible to other processes running on the client
+operating system. If this is a problem in your environment, consider
+using the <code class="docutils literal notranslate"><span class="pre">-P</span></code> option documented below.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-P">
+<span id="cmdoption-askpass"></span><span class="sig-name descname"><span class="pre">-P</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;PROGRAM&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--askpass</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;PROGRAM&gt;</span></span><a class="headerlink" href="#cmdoption-P" title="Permalink to this definition">¶</a></dt>
+<dd><p>This option makes it possible to specify an askpass program that
+should be used to achieve the password. This program should in some
+way ask the user for a password and then return that password
+together with an exit code. This triggers the auto login (see
+argument <code class="docutils literal notranslate"><span class="pre">-p</span></code> above).</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-e">
+<span id="cmdoption-encodings"></span><span class="sig-name descname"><span class="pre">-e</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ENCODING&gt;[,ENCODING...]</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--encodings</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ENCODING&gt;[,ENCODING...]</span></span><a class="headerlink" href="#cmdoption-e" title="Permalink to this definition">¶</a></dt>
+<dd><p>This option makes it possible to select which VNC encoding you want
+to use (see <a class="reference internal" href="client_options_optimization.html#client-optimization-tab"><span class="std std-ref">Optimization tab</span></a> for more information about
+VNC encodings). Valid encodings for this option are: <code class="docutils literal notranslate"><span class="pre">Tight</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ZRLE</span></code>, <code class="docutils literal notranslate"><span class="pre">Hextile</span></code> and <code class="docutils literal notranslate"><span class="pre">Raw</span></code>.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-l">
+<span id="cmdoption-lock"></span><span class="sig-name descname"><span class="pre">-l</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ITEM&gt;[,ITEM...]</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--lock</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ITEM&gt;[,ITEM...]</span></span><a class="headerlink" href="#cmdoption-l" title="Permalink to this definition">¶</a></dt>
+<dd><p>This option makes it possible to lock different parts of the client
+interface. This can be used to prevent things from being changed.
+Locked parts will still be shown, but will be “grayed out”, which
+means that they can’t be made active for change. The items that
+should be locked should follow this option as a comma separated list.
+The following items are possible to lock.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">server</span></code>: Server entry field</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">user</span></code>: Username entry field</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">display</span></code>: Display tab</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">localdevices</span></code>: Local Devices tab</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">optimization</span></code>: Optimization tab</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">security</span></code>: Security tab</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">advanced</span></code>: Advanced tab</p></li>
+</ul>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-h">
+<span id="cmdoption-hide"></span><span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ITEM&gt;[,ITEM...]</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--hide</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ITEM&gt;[,ITEM...]</span></span><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>This option makes it possible to hide different parts of the client
+interface. This can be used to remove parts of the interface that can
+confuse novice users, or to prevent them from reaching parts of the
+interface. The following items are possible to hide.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">options</span></code>: options button</p></li>
+</ul>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-f">
+<span id="cmdoption-force"></span><span class="sig-name descname"><span class="pre">-f</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;SETTING&gt;[,SETTING...]</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--force</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;SETTING&gt;[,SETTING...]</span></span><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>This option makes it possible to force a setting to a value. This can
+be used to preset a client with values and to force them to reset to
+those values each time, even if the users make changes. When an
+option is forced it is turned on. The following items are possible to
+force.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">terminate</span></code>: terminate session</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fullscreen</span></code>: full screen on all monitors</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sound</span></code>: sound mode</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sshcomp</span></code>: ssh compression</p></li>
+</ul>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-M">
+<span id="cmdoption-m"></span><span id="cmdoption-minimize"></span><span class="sig-name descname"><span class="pre">-M</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--minimize</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-M" title="Permalink to this definition">¶</a></dt>
+<dd><p>This option causes all other applications to be minimized when the
+ThinLinc client starts.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-s">
+<span id="cmdoption-startprogram"></span><span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;PROGRAM&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--startprogram</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;PROGRAM&gt;</span></span><a class="headerlink" href="#cmdoption-s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the program to start in the session. Overrides the
+<a class="reference internal" href="client_config_params.html#client-config-START_PROGRAM_ENABLED"><code class="xref std std-clientconf docutils literal notranslate"><span class="pre">START_PROGRAM_ENABLED</span></code></a> and
+<a class="reference internal" href="client_config_params.html#client-config-START_PROGRAM_COMMAND"><code class="xref std std-clientconf docutils literal notranslate"><span class="pre">START_PROGRAM_COMMAND</span></code></a> configuration parameters.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loop">
+<span class="sig-name descname"><span class="pre">--loop</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>This option causes the client to run forever. The exit button is
+removed, and when a session has ended, a new client process is
+automatically started.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The only way to stop the client from restarting is to terminate
+the <strong class="program">tlclient</strong> process.</p>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_usage.html" title="Previous document">Client usage</a>
+        </li>
+        <li>
+          <a href="client_export_local_device.html" title="Next document">Local device export</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="client.html">The native client</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="clientplatforms.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_usage.html">Client usage</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Client command line usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description-of-available-command-line-arguments">Description of available command-line arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="client_export_local_device.html">Local device export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_options.html">Client configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_gestures.html">Client touch gestures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_logfile_placement.html">Log file placement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_customizer.html">Client customizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_web_integration.html">Launching the client from a web page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_advanced_topics.html">Advanced topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="client.html">The native client</a><ul>
+      <li>Previous: <a href="client_usage.html" title="previous chapter">Client usage</a></li>
+      <li>Next: <a href="client_export_local_device.html" title="next chapter">Local device export</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/client_cmdline.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

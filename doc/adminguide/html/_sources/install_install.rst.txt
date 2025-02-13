@@ -1,0 +1,154 @@
+.. meta::
+   :description: Learn how to install the ThinLinc server, configure it
+                 using ThinLinc setup, and set up additional features.
+
+.. _install_install:
+
+Installing the ThinLinc server
+------------------------------
+
+For information on where to find the ThinLinc server software, see
+:ref:`obtaining_thinlinc`. For instructions on how to upgrade a
+pre-existing ThinLinc installation, see :ref:`install_upgrade`.
+
+Start by downloading the ThinLinc server, extracting the ZIP file and
+running the :program:`install-server` script in the extracted archive's
+root directory:
+
+.. code:: console
+
+   $ unzip tl-x.y.z-server.zip
+   $ cd tl-x.y.z-server
+   $ sh ./install-server
+
+:program:`install-server` will install the ThinLinc server package
+suitable for your system from the :file:`packages` subdirectory. It
+will then ask if you want to run ThinLinc setup. Answer yes to this
+prompt or start ThinLinc setup manually by running
+:program:`/opt/thinlinc/sbin/tl-setup`.
+
+Moreover, remember to review the platform-specific notes that apply
+to your server platform: https://www.cendio.com/thinlinc/docs/platforms/
+
+.. note::
+
+   The ThinLinc server can also be installed and configured
+   non-interactively, see :ref:`install_automatic` for more information.
+
+.. _install_tl_setup:
+
+ThinLinc setup
+~~~~~~~~~~~~~~
+
+ThinLinc setup is responsible for configuring ThinLinc and installing
+any missing dependencies. When installing ThinLinc on a new machine,
+ThinLinc setup always needs to be run.
+
+ThinLinc setup will give you the choice to configure ThinLinc as a
+master or an agent. Selecting master will configure the system as a
+standalone ThinLinc server, while selecting agent will configure it as
+an agent node that is part of a load-balanced ThinLinc cluster. If this
+is the first ThinLinc system you are configuring, select master.
+
+.. note::
+
+   In case you want to redo any of the configuration steps done by
+   ThinLinc setup, you can always re-run it by running
+   :file:`/opt/thinlinc/sbin/tl-setup`.
+
+On SELinux enabled distributions, ThinLinc setup will optionally modify
+the local system policy. See :ref:`install_selinux` for more
+information.
+
+.. _install_sudo_configuration:
+
+Sudo configuration
+~~~~~~~~~~~~~~~~~~
+
+ThinLinc ships with an array of administration commands. Some of these
+needs root privileges to run. To use these commands with :command:`sudo`
+and not have to specify the entire path to the command, :command:`sudo`
+needs to be configured to trust ThinLinc paths. This is achieved by
+editing :command:`sudo`’s ``secure_path`` in :file:`/etc/sudoers` using
+:command:`visudo`:
+
+.. code:: console
+
+   $ sudo visudo
+
+Add :file:`/opt/thinlinc/bin` and :file:`/opt/thinlinc/sbin` to
+``secure_path`` and save the file.
+
+.. admonition:: Example
+
+   If this was in :file:`/etc/sudoers` before::
+
+     Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin
+
+   Then after you add the ThinLinc paths it should be::
+
+     Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/opt/thinlinc/bin:/opt/thinlinc/sbin
+
+.. _install_agent_hostname:
+
+External access behind NAT
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As described in :ref:`architecture`, the ThinLinc client first connects
+to the master machine. The master responds with the IP or domain name of
+the agent machine assigned to host the session. The client will then
+directly connect to this agent machine. This is true in all cases, even
+when you have a standalone ThinLinc server (where a single machine acts
+both as the master and agent).
+
+By default, the master will respond with the IP address assigned to the
+agent machine. As this IP will generally only be reachable from within
+the local area network, ThinLinc requires you to specify the public IP
+or domain name through which the agent machine in question is externally
+reachable.
+
+This is done by selecting one of the external connections options in
+tl-setup or by setting the parameter
+:servconf:`/vsmagent/agent_hostname` to the machine's publicly reachable
+IP or domain name and restarting the agent service:
+
+.. code:: console
+
+   $ sudo tl-config /vsmagent/agent_hostname=thinlinc.example.com
+   $ sudo systemctl restart vsmagent
+
+As described in :ref:`network`, each ThinLinc machine should have its
+own publicly reachable IP. :servconf:`/vsmagent/agent_hostname` will
+thus be unique for each individual machine.
+
+.. _install_next_steps:
+
+Next steps
+~~~~~~~~~~
+
+Assuming you have a desktop environment installed alongside the ThinLinc
+server, you should now be able to connect using either the :ref:`Native
+Client<client>` or the browser based :ref:`ThinLinc Web
+Access<tlwebaccess>` using the same credentials as when logging in to
+your server over SSH. See :ref:`clientcomparison` and
+:ref:`authentication` for further information.
+
+.. note::
+
+   Having issues connecting to your ThinLinc server? Take a look at the
+   :ref:`troubleshoot` chapter.
+
+You should now have a fully functioning ThinLinc setup. If you want to
+make additional tweaks to your setup, a few starting points are listed
+below:
+
+* :ref:`Installing license files to accommodate more than 10 concurrent
+  users<licensehandling>`
+
+* :ref:`Spreading the session load over multiple
+  machines<install_cluster>`
+
+* :ref:`Configuring high availability<HA>`
+
+* :ref:`Enabling hardware accelerated 3D graphics with
+  VirtualGL<virtualgl>`

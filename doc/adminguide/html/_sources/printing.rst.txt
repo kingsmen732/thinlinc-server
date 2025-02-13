@@ -1,0 +1,52 @@
+.. meta::
+   :description: Overview of ThinLinc's printer-related features
+                 including local printer support, nearest printer, and
+                 printer access control, all integrated with the CUPS
+                 system to enhance user flexibility and simplify
+                 administration.
+
+.. _printing:
+
+Printer features
+================
+
+ThinLinc has several printer-related features that aim to provide the
+user with maximum flexibility while making the administrator's work
+easier. A ThinLinc system normally uses CUPS (Common Unix Printing
+System) to provide normal printing services. By integrating with CUPS,
+ThinLinc also provides the following features:
+
+-  **Local printer support** allows users to print documents on a
+   printer that is connected to their terminal from applications running
+   on the ThinLinc server.
+
+   See :ref:`thinlocal` for documentation on this feature.
+
+-  **Nearest printer** is a feature that simplifies the printing process
+   for the user by automatically printing to a printer that is located
+   at the terminal the user is currently using. Users only need to know
+   that they should always print to the **nearest** printer --- the
+   system will figure out the rest based on a database of terminals,
+   printers and locations, eliminating the need to learn the names of
+   printers at different locations. This decreases the need for support.
+
+   See :ref:`nearestprinter` for documentation on this feature.
+
+-  **Printer access control** uses the same database of terminals,
+   locations and printers as the Nearest Printer feature to dynamically
+   limit which printers a user may print to based on the terminal the
+   user is currently using. This feature also limits the list of
+   printers seen by each user to the printers the user is allowed to
+   use, simplifying choice of printer for the user by only showing the
+   printers that are relevant at the current location.
+
+   See :ref:`printeraccesscontrol` for documentation on this
+   feature.
+
+.. toctree::
+   :hidden:
+
+   printing_config_overview
+   thinlocal
+   nearestprinter
+   printeraccesscontrol

@@ -1,0 +1,141 @@
+.. meta::
+   :description: Overview of network requirements for setting up
+                 ThinLinc, including configurations for simple and
+                 NAT/split-DNS environments.
+
+.. _network:
+
+Network requirements
+--------------------
+
+Naturally, the network at the site where ThinLinc is to be installed
+needs to be prepared for the installation. This section aims to help in
+understanding the requirements of the network for a successful ThinLinc
+installation.
+
+We will start by describing a simple setup, where all ThinLinc servers
+are directly accessible by the client. We will then explain how a site
+with NAT can use a NAT/split-DNS setup to access ThinLinc efficiently
+both from the inside network and from the Internet.
+
+.. note::
+
+   Regardless of network configuration, each server in a ThinLinc
+   cluster must be reachable by the client, either directly or
+   indirectly.
+
+.. _network_simple:
+
+A simple ThinLinc setup
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. _network_simple_fig:
+
+.. figure:: images/network-simple.svg
+
+   A simple ThinLinc setup
+
+In :numref:`network_simple_fig`, a simple ThinLinc setup is shown. In
+this setup, clients are configured to connect to
+**thinlinc.example.com**, DNS is configured with information about what
+IP addresses correspond to the hostnames **thinlinc.example.com**,
+**tlagent1.example.com** and **tlagent2.example.com** and no firewalls
+are in the path between the clients and the servers.
+
+The number of agents will range from 1 (possibly on the same host as the
+master) to a larger number, based on the number of users who are using the
+system. In this example, there is one host running both master (the process
+controlling the whole ThinLinc cluster) and agent services, and two dedicated
+agent hosts running only sessions.
+
+Native clients will communicate with the servers solely via SSH (port 22
+by default). Browser clients will connect via TLS at port 300.
+
+.. _network_nat:
+
+ThinLinc in a NAT/split-DNS environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. _network_nat_fig:
+
+.. figure:: images/network-NAT.svg
+
+   ThinLinc in a NAT/Split-DNS environment
+
+At many sites, the internal network is behind a firewall doing Network
+Address Translation (NAT). This means that the IP addresses on the
+internal network are private, and not accessible from the Internet.
+
+As long as ThinLinc servers are only meant to be accessed from the
+internal network, this is no problem, and the situation will be like the
+one described in :ref:`network_simple`. However, if the ThinLinc servers
+are meant to be accessed from the Internet as well, some network
+configuration is required.
+
+.. _network_nat_relays:
+
+Relays
+^^^^^^
+
+First, relays must be configured in the firewall. One IP address
+reachable from the outside network per ThinLinc server needs to be
+available, and each should be equipped with a relay forwarding traffic
+from TCP port 22 on the outside to TCP port 22 on one specific ThinLinc
+server. In our example, as shown in :numref:`network_nat_fig`, there is
+one relay listening to TCP port 22 on the externally reachable IP
+address **x.12.253.1** forwarding traffic to the ThinLinc server on the
+internal network with IP address **10.0.0.12**, one relay listening on
+TCP port 22 on the externally reachable IP address **x.12.253.2**
+forwarding traffic to the ThinLinc server on the internal network with
+IP address **10.0.0.13**, and so on.
+
+.. note::
+
+   For single-node ThinLinc clusters where master and agent services are
+   running on the same host, it is possible to use port forwarding
+   instead of NAT. In this instance, a single port may be forwarded from
+   the public interface to the host, and the ThinLinc client configured
+   to use this port.
+
+.. _network_nat_dns:
+
+DNS
+^^^
+
+After configuring the relays, DNS must be configured so DNS queries for
+the hostnames of the ThinLinc servers get different answers depending on
+the origin of the query. DNS queries originating from the internal
+network should be answered with the real IP addresses of the servers,
+and DNS queries originating from the outside network should be answered
+with the IP addresses on the firewall, where the relays are listening.
+
+In our example, if a host on the internal network is asking for the IP
+address of the hostname **thinlinc.example.com** it should get the IP
+address **10.0.0.12** as the answer. If an outside host is asking for
+the IP address of the same hostname it should instead get the IP address
+**x.12.253.1** as the answer.
+
+When configured this way, a client connecting from the internal network
+will communicate directly with the ThinLinc servers, without the need to
+pass the firewall, while clients connecting from the outside will pass
+through the firewall and the relays to communicate with the ThinLinc
+servers. This will ensure optimal performance for clients from the
+internal network, at the same time lowering the load on the firewall.
+
+.. _network_nat_vsmagent:
+
+Configuring the agents
+^^^^^^^^^^^^^^^^^^^^^^
+
+Finally, after configuring relays and DNS, the agents must be configured
+to respond with the correct hostname when asked by the master what
+hostname the clients should connect to. The default behavior is to
+respond with the IP address of the host, but that will not work in this
+case since clients connecting from the external network won't have any
+route to for example **10.0.0.13**. Instead, the agents should be
+configured to respond with the hostnames that can be found in both the
+internal and the external DNS.
+
+For information on performing this configuration, see
+:ref:`install_agent_hostname`.
+

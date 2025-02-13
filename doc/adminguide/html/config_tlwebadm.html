@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Configuration parameters for the ThinLinc Web Administration interface, including authentication credentials, TLS encryption, logging, and port settings." name="description" />
+
+    <title>Parameters in /tlwebadm/ &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parameters in /sessionstart/" href="config_sessionstart.html" />
+    <link rel="prev" title="Parameters in /profiles/" href="config_profiles.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_profiles.html" title="Previous document">Parameters in /profiles/</a>
+        </li>
+        <li>
+          <a href="config_sessionstart.html" title="Next document">Parameters in /sessionstart/</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="parameters-in-tlwebadm">
+<span id="std-server-config-folder-tlwebadm"></span><span id="std:server-config-folder-/tlwebadm"></span><span id="configuration-tlwebadm"></span><h1>Parameters in /tlwebadm/<a class="headerlink" href="#parameters-in-tlwebadm" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we will describe all the parameters currently used by
+the ThinLinc Web Administration. These configuration parameters reside
+in <code class="file docutils literal notranslate"><span class="pre">/opt/thinlinc/etc/conf.d/tlwebadm.hconf</span></code>.</p>
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-tlwebadm-username">
+<span id="server-config-/tlwebadm/username"></span><span class="sig-name descname"><span class="pre">/tlwebadm/username</span></span><a class="headerlink" href="#server-config-tlwebadm-username" title="Permalink to this definition">¶</a></dt>
+<dd><p>The username to authenticate with when accessing the web interface.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-tlwebadm-password">
+<span id="server-config-/tlwebadm/password"></span><span class="sig-name descname"><span class="pre">/tlwebadm/password</span></span><a class="headerlink" href="#server-config-tlwebadm-password" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password for the above user. The tool <strong class="program">tl-gen-auth</strong> may
+be used to create hashes of the format required for use with this
+parameter.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-tlwebadm-cert">
+<span id="server-config-/tlwebadm/cert"></span><span class="sig-name descname"><span class="pre">/tlwebadm/cert</span></span><a class="headerlink" href="#server-config-tlwebadm-cert" title="Permalink to this definition">¶</a></dt>
+<dd><p>The path to the certificate file to be used for TLS encryption.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-tlwebadm-certkey">
+<span id="server-config-/tlwebadm/certkey"></span><span class="sig-name descname"><span class="pre">/tlwebadm/certkey</span></span><a class="headerlink" href="#server-config-tlwebadm-certkey" title="Permalink to this definition">¶</a></dt>
+<dd><p>The path to the certificate private key file.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-tlwebadm-listen_port">
+<span id="server-config-/tlwebadm/listen_port"></span><span class="sig-name descname"><span class="pre">/tlwebadm/listen_port</span></span><a class="headerlink" href="#server-config-tlwebadm-listen_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>The local port for the web server to listen on.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-tlwebadm-gnutls_priority">
+<span id="server-config-/tlwebadm/gnutls_priority"></span><span class="sig-name descname"><span class="pre">/tlwebadm/gnutls_priority</span></span><a class="headerlink" href="#server-config-tlwebadm-gnutls_priority" title="Permalink to this definition">¶</a></dt>
+<dd><p>The GnuTLS priority string is used to select the order and
+availability of TLS versions, ciphers, key exchange, MAC,
+compression, signature and elliptic curve algorithms for TLS
+sessions. See <a class="reference internal" href="gnutls-priorities.html#gnutls-priorities"><span class="std std-ref">GnuTLS priority strings</span></a> for possible values.</p>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-tlwebadm-server_tokens">
+<span id="server-config-/tlwebadm/server_tokens"></span><span class="sig-name descname"><span class="pre">/tlwebadm/server_tokens</span></span><a class="headerlink" href="#server-config-tlwebadm-server_tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, Web Administration includes the ThinLinc version,
+as well as Python version information in the “Server” response header
+field. If set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, the “Server” response header will not
+include any version information. The default value is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Disabling server_tokens might make it easier to work with some
+security scanners that raise alerts when this type of version
+information is included. But note that hiding version information
+does nothing to make your server more secure.</p>
+</div>
+</dd></dl>
+
+<span class="target" id="std-server-config-folder-tlwebadm-hsts"><span id="std:server-config-folder-/tlwebadm/hsts"></span></span><dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-tlwebadm-hsts-policy">
+<span id="server-config-/tlwebadm/hsts/policy"></span><span class="sig-name descname"><span class="pre">/tlwebadm/hsts/policy</span></span><a class="headerlink" href="#server-config-tlwebadm-hsts-policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Note the warnings about enabling HSTS policy, see
+<a class="reference internal" href="config_hsts.html#configuring-hsts-header"><span class="std std-ref">Configuring HSTS headers</span></a>. The results should be considered
+permanent once enabled and are difficult to reverse. The only way to
+disable the HSTS policy is to wait for the specified duration, as
+described below, to pass until visiting the domain again.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Off</span></code>: The default value. The HSTS header will not be sent.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Testing</span></code>: Before setting the policy to permanent, it is
+recommended to test if the policy works for the intended domains to
+verify they support HTTPS. This value indicates to the browser that
+it should only remember this domain for 10 minutes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Permanent</span></code>: This value indicates that browsers will remember
+this domain for 2 years. This duration is refreshed every time a
+domain is revisited, which is why it should be viewed as permanent.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-tlwebadm-hsts-subdomains_included">
+<span id="server-config-/tlwebadm/hsts/subdomains_included"></span><span class="sig-name descname"><span class="pre">/tlwebadm/hsts/subdomains_included</span></span><a class="headerlink" href="#server-config-tlwebadm-hsts-subdomains_included" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HSTS policy will be applied to the included subdomains of the
+ThinLinc host if enabled.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is recommended to verify that all subdomains support HTTPS
+before enabling this. In order to verify, set <code class="docutils literal notranslate"><span class="pre">policy=testing</span></code>,
+restart the service and  then visit Web Administration in the
+browser to enable the HSTS policy.</p>
+</div>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-tlwebadm-hsts-allow_browser_preload">
+<span id="server-config-/tlwebadm/hsts/allow_browser_preload"></span><span class="sig-name descname"><span class="pre">/tlwebadm/hsts/allow_browser_preload</span></span><a class="headerlink" href="#server-config-tlwebadm-hsts-allow_browser_preload" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Requirements:</em> <code class="docutils literal notranslate"><span class="pre">policy=permanent</span></code> and <code class="docutils literal notranslate"><span class="pre">subdomains_included=true</span></code></p>
+<p>With <code class="docutils literal notranslate"><span class="pre">allow_browser_preload</span></code> enabled, it is indicated to the
+browser that the intention is to add the domain, and subdomains, to
+the browsers’ lists. This would result in the HSTS policy being
+enabled at the first visit to the domain or subdomain.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only use this option if you are sure to support HTTPS for domains
+and subdomains. It may be difficult to remove domains and
+subdomains from the preload list.</p>
+</div>
+</dd></dl>
+
+<dl class="std server-config">
+<dt class="sig sig-object std" id="server-config-tlwebadm-logging-logfile">
+<span id="server-config-/tlwebadm/logging/logfile"></span><span class="sig-name descname"><span class="pre">/tlwebadm/logging/logfile</span></span><a class="headerlink" href="#server-config-tlwebadm-logging-logfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>The file to use for logging tlwebadm messages. By default, this is
+<code class="file docutils literal notranslate"><span class="pre">/var/log/tlwebadm.log</span></code>.</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="config_profiles.html" title="Previous document">Parameters in /profiles/</a>
+        </li>
+        <li>
+          <a href="config_sessionstart.html" title="Next document">Parameters in /sessionstart/</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="config_params.html">Server configuration parameters</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config_profiles.html">Parameters in /profiles/</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parameters in /tlwebadm/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_sessionstart.html">Parameters in /sessionstart/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_shadowing.html">Parameters in /shadowing/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_utils.html">Parameters in /utils/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsm.html">Parameters in /vsm/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsmagent.html">Parameters in /vsmagent/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_vsmserver.html">Parameters in /vsmserver/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_subclusters.html">Parameters in /vsmserver/subclusters/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_webaccess.html">Parameters in /webaccess/</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="config_params.html">Server configuration parameters</a><ul>
+      <li>Previous: <a href="config_profiles.html" title="previous chapter">Parameters in /profiles/</a></li>
+      <li>Next: <a href="config_sessionstart.html" title="next chapter">Parameters in /sessionstart/</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/config_tlwebadm.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

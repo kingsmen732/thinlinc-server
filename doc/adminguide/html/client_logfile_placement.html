@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Overview of ThinLinc client log file management, including log file naming conventions and storage locations on Linux, Windows, and macOS systems." name="description" />
+
+    <title>Log file placement &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Client customizer" href="client_customizer.html" />
+    <link rel="prev" title="Client touch gestures" href="client_gestures.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_gestures.html" title="Previous document">Client touch gestures</a>
+        </li>
+        <li>
+          <a href="client_customizer.html" title="Next document">Client customizer</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="log-file-placement">
+<span id="client-logfile-placement"></span><h1>Log file placement<a class="headerlink" href="#log-file-placement" title="Permalink to this headline">¶</a></h1>
+<p>The ThinLinc client logs its activities in human-readable log files. For
+the common use case of running one client at a time, the log file is
+always called <code class="file docutils literal notranslate"><span class="pre">tlclient.log</span></code>. Once the first client has been
+closed and a second client is started, the log file of the first client
+is renamed <code class="file docutils literal notranslate"><span class="pre">tlclient.old.log</span></code> and the second client creates its
+log file, again called <code class="file docutils literal notranslate"><span class="pre">tlclient.log</span></code>. At most two log files are
+kept at a time for this use case — one for the current client and one
+for the most recently closed client. If the file
+<code class="file docutils literal notranslate"><span class="pre">tlclient.old.log</span></code> exists before starting a client, that file will
+be permanently deleted once the client is started.</p>
+<p>Another, more rare use case is running two or more clients
+simultaneously. The first log file is again called <code class="file docutils literal notranslate"><span class="pre">tlclient.log</span></code>
+and the log files of any additional clients are called
+<code class="file docutils literal notranslate"><span class="pre">tlclient2.log</span></code>, <code class="file docutils literal notranslate"><span class="pre">tlclient3.log</span></code>, and so on, up to a maximum
+of nine active log files. Once the maximum number of active log files is
+reached, any additional clients started will not have any log files
+associated with them.</p>
+<p>If a client with an associated log file is closed, that log file is
+considered inactive. If a new client is started when less than nine log
+files are active, the client will once again have a log file associated
+with it. Note, however, that a client can <em>reuse</em> an inactive log name.
+In this context, <em>reuse</em> means that if e.g. the client associated with
+log file <code class="file docutils literal notranslate"><span class="pre">tlclient3.log</span></code> is closed and a new client is opened, it
+is possible for the log file of the new client to again be named
+<code class="file docutils literal notranslate"><span class="pre">tlclient3.log</span></code>.</p>
+<p>Every time a new client is opened, all <code class="file docutils literal notranslate"><span class="pre">.old.log</span></code> files will be
+permanently deleted and all inactive log files will be renamed from
+<code class="file docutils literal notranslate"><span class="pre">.log</span></code> to <code class="file docutils literal notranslate"><span class="pre">.old.log</span></code>. That means that when running multiple
+clients simultaneously, there can be several <code class="file docutils literal notranslate"><span class="pre">.log</span></code> files as well
+as several <code class="file docutils literal notranslate"><span class="pre">.old.log</span></code> files.</p>
+<p>The locations of the log files differ between Linux and Windows systems
+and are explained below.</p>
+<section id="linux-log-file">
+<h2>Linux log file<a class="headerlink" href="#linux-log-file" title="Permalink to this headline">¶</a></h2>
+<p>On Linux systems, the log file is located in the user home directory:
+<code class="file docutils literal notranslate"><span class="pre">~/.thinlinc/tlclient.log</span></code>.</p>
+</section>
+<section id="windows-log-file">
+<h2>Windows log file<a class="headerlink" href="#windows-log-file" title="Permalink to this headline">¶</a></h2>
+<p>On Windows systems the log file is located in the directory referenced
+from the <span class="sig sig-inline environ">%TMP%</span> variable. The value of this variable can be
+achieved by running any of the following commands in a Windows command
+window.</p>
+<div class="highlight-doscon notranslate"><div class="highlight"><pre><span></span><span class="gp">C:\&gt;</span> <span class="k">echo</span> <span class="nv">%TMP%</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-doscon notranslate"><div class="highlight"><pre><span></span><span class="gp">C:\&gt;</span> <span class="k">set</span>
+</pre></div>
+</div>
+<p>Observe that some directories in the Windows <span class="sig sig-inline environ">%TMP%</span> path may
+be flagged as hidden by the Windows system. This means that you need to
+change directory options to display hidden files and directories to
+navigate to the log file.</p>
+</section>
+<section id="macos-log-file">
+<h2>macOS log file<a class="headerlink" href="#macos-log-file" title="Permalink to this headline">¶</a></h2>
+<p>On macOS systems the log file is located in the home directory for the
+user that runs the ThinLinc client. The path is
+<code class="file docutils literal notranslate"><span class="pre">~/.thinlinc/tlclient.log</span></code>.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_gestures.html" title="Previous document">Client touch gestures</a>
+        </li>
+        <li>
+          <a href="client_customizer.html" title="Next document">Client customizer</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="client.html">The native client</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="clientplatforms.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_usage.html">Client usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_cmdline.html">Client command line usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_export_local_device.html">Local device export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_options.html">Client configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_gestures.html">Client touch gestures</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Log file placement</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#linux-log-file">Linux log file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#windows-log-file">Windows log file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macos-log-file">macOS log file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="client_customizer.html">Client customizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_web_integration.html">Launching the client from a web page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_advanced_topics.html">Advanced topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="client.html">The native client</a><ul>
+      <li>Previous: <a href="client_gestures.html" title="previous chapter">Client touch gestures</a></li>
+      <li>Next: <a href="client_customizer.html" title="next chapter">Client customizer</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/client_logfile_placement.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,51 @@
+.. meta::
+   :description: Configuration parameters for defining subclusters in
+                 ThinLinc, including agent assignments, user
+                 associations, and group associations.
+
+.. _configuration_subcluster_params:
+
+.. server-config-folder:: /vsmserver/subclusters
+
+Parameters in /vsmserver/subclusters/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this section, we will describe all the parameters used for defining
+subclusters. For more information about subclusters see
+:ref:`configuration_subcluster`. These configuration parameters reside
+in :file:`/opt/thinlinc/etc/conf.d/vsmserver.hconf`.
+
+.. server-config:: /vsmserver/subclusters/<name>/agents
+
+   All ThinLinc agents part of this ThinLinc subcluster. New user
+   sessions for this subcluster are created on the agents in this list.
+   Agents later removed from the list will continue to function normally
+   for existing sessions until those sessions end. This should be a
+   space-separated list of DNS host names. These will be used for
+   communication between the master and the agent. The name reported to
+   the client is fetched from the agent itself; names in
+   :servconf:`/vsmserver/subclusters/<name>/agents` are not reported
+   directly to the clients.
+
+.. server-config:: /vsmserver/subclusters/<name>/users
+
+   All users who should be associated with this specific ThinLinc
+   subcluster. This should be a space-separated list of usernames. If
+   both :servconf:`/vsmserver/subclusters/<name>/users` and
+   :servconf:`/vsmserver/subclusters/<name>/groups` are empty it means
+   the subcluster is a default subcluster.
+
+.. server-config:: /vsmserver/subclusters/<name>/groups
+
+   All user groups that should be associated with this specific ThinLinc
+   subcluster. This should be a space-separated list of group names. If
+   both :servconf:`/vsmserver/subclusters/<name>/groups` and
+   :servconf:`/vsmserver/subclusters/<name>/users` are empty it means
+   the subcluster is a default subcluster.
+
+.. server-config:: /vsmserver/subclusters/<name>/max_users_per_agent
+
+   Maximum concurrent users allowed per agent within the subcluster. The
+   default value is 0, which implies an unlimited number of users. When the
+   limit is reached, the agent will no longer be considered by the load
+   balancer for new users.

@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Instructions for installing and configuring the ThinLinc client on various thin terminals, including HP ThinPro, IGEL Universal Desktop, and other Linux-based or Windows-based appliances." name="description" />
+
+    <title>Thin terminals &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Running ThinLinc on a ThinStation terminal" href="client_thinstation.html" />
+    <link rel="prev" title="Linux PC" href="client_linux.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_linux.html" title="Previous document">Linux PC</a>
+        </li>
+        <li>
+          <a href="client_thinstation.html" title="Next document">Running ThinLinc on a ThinStation terminal</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="thin-terminals">
+<span id="thinterminals"></span><h1>Thin terminals<a class="headerlink" href="#thin-terminals" title="Permalink to this headline">¶</a></h1>
+<p>ThinLinc has support for several thin terminals, i.e. hardware built
+with the task of providing a thin client as a primary design goal.</p>
+<section id="hp-thinpro-terminals">
+<span id="clientplatforms-hp-terminals"></span><h2>HP ThinPro terminals<a class="headerlink" href="#hp-thinpro-terminals" title="Permalink to this headline">¶</a></h2>
+<p>HP ThinPro terminals are based on Ubuntu, and therefore one can use the
+DEB package provided in our ThinLinc client bundle for this terminal.</p>
+<section id="manual-installation-upgrade-of-thinlinc-client">
+<h3>Manual installation/upgrade of ThinLinc client<a class="headerlink" href="#manual-installation-upgrade-of-thinlinc-client" title="Permalink to this headline">¶</a></h3>
+<p>Below we will describe the process of manually installing the ThinLinc
+client on Ubuntu-based HP ThinPro Linux terminals.</p>
+<ol class="arabic">
+<li><p>Use the tool <span class="guilabel">Administrator/User mode switch</span> to
+authenticate as administrator.</p></li>
+<li><p>Start an X terminal from the advanced tab in the control panel.</p></li>
+<li><p>Unlock the file system:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>fsunlock
+</pre></div>
+</div>
+</li>
+<li><p>Copy the ThinLinc client .deb package from ThinLinc client bundle
+onto a USB memory stick, and connect it to the terminal. Go into the
+directory which represents your connected USB device with command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="nb">cd</span> /tmp/tmpfs/media/my_usb_storage
+</pre></div>
+</div>
+<p>As an alternative, it is also possible to download the client package
+from a web server using the <strong class="command">wget</strong> command.</p>
+</li>
+<li><p>Install the ThinLinc client package using Debian package manager
+command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>dpkg -i thinlinc-client*.deb
+</pre></div>
+</div>
+</li>
+<li><p>Lock down the file system before closing the X terminal window:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>fslock
+</pre></div>
+</div>
+</li>
+<li><p>Reboot.</p></li>
+<li><p>Add a ThinLinc connection in the connection manager.</p></li>
+</ol>
+<p>The HP <span class="guilabel">Connection Wizard</span> does not include an entry for
+ThinLinc. Press <span class="guilabel">Skip</span>, then add a ThinLinc connection in the
+<span class="guilabel">Connection Manager</span>.</p>
+<p>The default user and administrator share the same home directory, and it
+is therefore important to NOT start the ThinLinc client as administrator
+the first time. This will make the ThinLinc client configuration only
+accessible by administrator and not the default user.</p>
+<p>On “zero” clients, the default server name is set when the ThinLinc
+connection type is selected. To change server name, temporarily switch
+to another connection type, then switch back to ThinLinc. Also, to
+configure the ThinLinc client, enter an invalid username/password
+combination in the HP login dialog. Acknowledge the error. It is then
+possible to access the full ThinLinc client interface.</p>
+</section>
+</section>
+<section id="igel-universal-desktop">
+<span id="igel"></span><h2>IGEL Universal Desktop<a class="headerlink" href="#igel-universal-desktop" title="Permalink to this headline">¶</a></h2>
+<p>A client package for IGEL Universal Desktop terminals is provided. It is
+included in the directory <code class="file docutils literal notranslate"><span class="pre">client-igel</span></code> in the client bundle. IGEL
+Universal Desktop is a modern embedded operating system which works
+well. Some editions include a bundled ThinLinc client. We do not
+recommend this client. Instead, install the client as described below.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Installation of our client package is only possible on IGEL terminals
+with the <span class="guilabel">Custom Partition</span> feature. Please ask your IGEL
+representative for more information.</p>
+</div>
+<section id="installing-upgrading-the-thinlinc-client-on-igel-terminals">
+<h3>Installing/Upgrading the ThinLinc client on IGEL terminals<a class="headerlink" href="#installing-upgrading-the-thinlinc-client-on-igel-terminals" title="Permalink to this headline">¶</a></h3>
+<p>Below we will describe how to install and configure the ThinLinc client
+on IGEL terminals, using the <span class="guilabel">Custom partition</span>. You can use
+either the Universal Management Suite software running on a separate
+workstation, or the setup software installed on the terminal. You will
+need access to a web server which allows you to publish the client
+files.</p>
+<ol class="arabic">
+<li><p>Edit the configuration of the terminal. Select
+<span class="menuselection">System ‣ Firmware ‣ Customization ‣ Custom
+Partition</span>.</p></li>
+<li><p>Under the <span class="guilabel">Partition</span> option, make sure that
+<span class="guilabel">Enable Partition</span> is checked. Enter a size, such as
+<code class="docutils literal notranslate"><span class="pre">100M</span></code>. The partition must be at least 25 MiB. The upper limit
+depends on the hardware used. Make sure that the mount point is
+<code class="docutils literal notranslate"><span class="pre">/custom</span></code>.</p></li>
+<li><p>Under the <span class="guilabel">Download</span> option, press the star to create a new
+data source. Enter the URL to the web server where the ThinLinc
+client package definition is located. Example:
+<code class="samp docutils literal notranslate"><span class="pre">http://</span><em><span class="pre">www.example.com</span></em><span class="pre">/client-igel/thinlinc-amd64.inf</span></code></p></li>
+<li><p>Under <span class="guilabel">Custom Application</span>, press the star to create a new
+application entry. Use a <span class="guilabel">Session name</span> such as
+<code class="docutils literal notranslate"><span class="pre">ThinLinc</span></code>.</p></li>
+<li><p>Click on <span class="guilabel">Settings</span>. Enter the <span class="guilabel">Icon name</span>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/custom/thinlinc/icon.png
+</pre></div>
+</div>
+<p>To set up the client to use the terminal’s normal language, enter this
+<span class="guilabel">Command</span>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/custom/thinlinc/bin/tlclient
+</pre></div>
+</div>
+<p>To setup the client to use Swedish, use this <span class="guilabel">Command</span>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>env LC_ALL=sv_SE.UTF-8 /custom/thinlinc/bin/tlclient
+</pre></div>
+</div>
+</li>
+<li><p>Press <span class="guilabel">OK</span> to save the configuration.</p></li>
+</ol>
+</section>
+</section>
+<section id="other-thin-terminals">
+<h2>Other thin terminals<a class="headerlink" href="#other-thin-terminals" title="Permalink to this headline">¶</a></h2>
+<p>The ThinLinc client can be made to run on almost any Linux-based thin
+terminal as well as on some Windows-based appliances. Contact Cendio if
+you need help on a consultancy basis.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_linux.html" title="Previous document">Linux PC</a>
+        </li>
+        <li>
+          <a href="client_thinstation.html" title="Next document">Running ThinLinc on a ThinStation terminal</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="client.html">The native client</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="clientplatforms.html">Installation</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="client_windows.html">Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_macos.html">macOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_linux.html">Linux PC</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Thin terminals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_thinstation.html">Running ThinLinc on a ThinStation terminal</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="client_usage.html">Client usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_cmdline.html">Client command line usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_export_local_device.html">Local device export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_options.html">Client configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_gestures.html">Client touch gestures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_logfile_placement.html">Log file placement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_customizer.html">Client customizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_web_integration.html">Launching the client from a web page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_advanced_topics.html">Advanced topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="client.html">The native client</a><ul>
+  <li><a href="clientplatforms.html">Installation</a><ul>
+      <li>Previous: <a href="client_linux.html" title="previous chapter">Linux PC</a></li>
+      <li>Next: <a href="client_thinstation.html" title="next chapter">Running ThinLinc on a ThinStation terminal</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/client_terminals.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,184 @@
+.. meta::
+   :description: Instructions for accessing ThinLinc Web Access, browser
+                 requirements, logging in, and using the toolbar,
+                 clipboard, and touch gestures. Essential for efficient
+                 use of ThinLinc Web Access.
+
+.. _tlwebaccess_usage:
+
+Usage
+-----
+
+ThinLinc Web Access is accessed with your web browser by browsing to the
+master machine, for example https://thinlinc-master.example.com:300.
+If you have configured the service to run on port 443, ":300" can be
+omitted.
+
+.. note::
+
+   On iOS and Android devices, you can add an icon to the home screen.
+   When the ThinLinc Web Access is launched from the home screen, it
+   will run in full-screen mode.
+
+.. _tlwebaccess_requirements:
+
+Requirements
+~~~~~~~~~~~~
+
+ThinLinc Web Access requires a web browser that supports modern web
+technologies such as WebSockets and Canvas. It is verified to work
+correctly on the latest versions of the major web browsers:
+
+-  Microsoft Edge
+
+-  Firefox
+
+-  Google Chrome
+
+-  Safari
+
+.. _tlwebaccess_login:
+
+Logging in to a ThinLinc server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The first thing presented to the user when browsing to ThinLinc Web
+Access is a login form where the user's username and password can be
+specified.
+
+.. figure:: images/tlwebaccess-login.svg
+
+   ThinLinc Web Access login
+
+To log in to a ThinLinc server Web Access needs to do a successful
+user authentication. For most systems the password will be
+sufficient. If more information is needed, e.g. when using one-time
+passwords or when a password change is needed, then Web Access will
+present a series of prompts for the user until the user has been fully
+authenticated.
+
+If the login attempt is successful a ThinLinc session will start or an
+old one will be reused, depending on if the user already has a session
+running or not.
+
+.. note::
+
+   ThinLinc Web Access does not fully support multiple sessions for the same
+   user. If the user has multiple sessions, a random session will be chosen.
+
+.. _tlwebaccess_toolbar:
+
+The toolbar
+~~~~~~~~~~~
+
+Once connected ThinLinc Web Access will display a toolbar on one side of
+the browser window for various functions. This toolbar can be hidden by
+clicking the small tab on the side of it. Clicking the tab again will
+make the toolbar reappear. The toolbar can also be moved to either side
+by grabbing the tab and dragging it to the desired side.
+
+.. figure:: images/tlwebaccess-toolbar.svg
+
+   ThinLinc Web Access toolbar
+
+The ThinLinc Web Access toolbar has the following functions:
+
+:guilabel:`Move/Drag viewport`
+   Toggle between sending mouse events to the ThinLinc session or
+   panning a session that is larger than the current browser window.
+   This button will only be shown on devices that do not have visible
+   scrollbars.
+
+:guilabel:`Show keyboard`
+   Toggle the on-screen keyboard for the device. This button will only
+   be shown if a touch device has been detected.
+
+:guilabel:`Show extra keys`
+   Displays a secondary toolbar with virtual keys for devices with
+   limited or no physical keyboard. See :ref:`tlwebaccess_extra_keys`
+   for details.
+
+:guilabel:`Clipboard`
+   Opens the clipboard dialog. See :ref:`tlwebaccess_clipboard` for
+   details.
+
+:guilabel:`Disconnect`
+   Disconnects ThinLinc Web Access from the current session.
+
+.. _tlwebaccess_extra_keys:
+
+Extra keys
+~~~~~~~~~~
+
+Some physical keyboards and most on screen keyboards lack a number of
+keys that are commonly used in applications and desktop environments. To
+simplify use of these an extra toolbar is available that can simulate
+these keys.
+
+.. figure:: images/tlwebaccess-extra-keys.svg
+
+   ThinLinc Web Access extra keys
+
+:guilabel:`Control`
+   Simulates pressing or releasing the left :kbd:`Control` key.
+
+:guilabel:`Alt`
+   Simulates pressing or releasing the left :kbd:`Alt` key.
+
+:guilabel:`Windows`
+   Simulates pressing or releasing the left :kbd:`Windows` key.
+
+:guilabel:`Tab`
+   Simulates pressing and releasing the :kbd:`Tab` key in sequence.
+
+:guilabel:`Escape`
+   Simulates pressing and releasing the :kbd:`Escape` key in sequence.
+
+:guilabel:`Ctrl+Alt+Delete`
+   Simulates pressing and releasing the :kbd:`Control`, :kbd:`Alt` and
+   :kbd:`Delete` keys in sequence.
+
+.. _tlwebaccess_clipboard:
+
+Clipboard
+~~~~~~~~~
+
+For security reasons the browsers prevent ThinLinc Web Access from
+directly integrating with the local clipboard. Copying text to or from
+the ThinLinc session must therefore be handled manually via the
+clipboard dialog.
+
+.. figure:: images/tlwebaccess-clipboard.svg
+
+   ThinLinc Web Access clipboard dialog
+
+The contents of the clipboard dialog will automatically be updated
+whenever the contents of the clipboard in the ThinLinc session changes.
+Correspondingly, if the contents of the clipboard dialog is changed by
+the user then the clipboard in the session will be updated to match.
+
+.. _tlwebaccess_gestures:
+
+Touch gestures
+~~~~~~~~~~~~~~
+
+ThinLinc Web Access has support for the same touch gestures as the
+ThinLinc client when used on a touch capable monitor. These gestures
+allow the user to simulate certain mouse operations that would otherwise
+not be possible. Please see :ref:`client_gestures` for details on what
+gestures are available.
+
+.. _tlwebaccess_macos:
+
+Command and Alt keys on macOS and iOS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The :kbd:`Alt` key (also known as the :kbd:`Option` key) behaves very
+differently on macOS and iOS compared to its behavior on other
+platforms. It closely resembles the PC :kbd:`AltGr` key, found on
+international keyboards. ThinLinc therefore treats these keys in a
+special manner on macOS and iOS in order to provide a good integration
+between the client and the remote ThinLinc system.
+
+For more information on how ThinLinc treats these keys see
+:ref:`macosalt`.

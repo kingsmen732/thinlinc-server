@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Overview of sound device redirection in ThinLinc, detailing how to enable and configure audio redirection for PulseAudio, ALSA, and OSS applications." name="description" />
+
+    <title>Using sound device redirection &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using smart card redirection" href="redir_scard.html" />
+    <link rel="prev" title="Using serial port redirection" href="redir_serial.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="redir_serial.html" title="Previous document">Using serial port redirection</a>
+        </li>
+        <li>
+          <a href="redir_scard.html" title="Next document">Using smart card redirection</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="using-sound-device-redirection">
+<span id="sound-redirection"></span><h1>Using sound device redirection<a class="headerlink" href="#using-sound-device-redirection" title="Permalink to this headline">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>With ThinLinc, it is possible to access the client’s sound device from
+the ThinLinc session. This means that you can run sound applications on
+the remote desktop servers and listen to the sound through the client’s
+sound device and speakers. Input devices such as microphones can also be
+used.</p>
+<p>ThinLinc can support sound redirection for almost all applications,
+provided that the correct libraries and utilities are installed on the
+ThinLinc server.</p>
+</section>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>PulseAudio client libraries to support applications with native
+PulseAudio support and the ALSA plugin. ThinLinc supports version
+0.9 of PulseAudio.</p></li>
+<li><p><strong class="command">padsp</strong> to support OSS applications via PulseAudio.</p></li>
+<li><p>alsa-plugins, version 1.0.12 or later, to support ALSA applications
+via PulseAudio.</p></li>
+</ul>
+</section>
+<section id="pulseaudio-applications">
+<h2>PulseAudio applications<a class="headerlink" href="#pulseaudio-applications" title="Permalink to this headline">¶</a></h2>
+<p>All applications that can communicate using the PulseAudio protocol will
+also work automatically in ThinLinc. Most current distributions are
+configured to use PulseAudio by default, but older ones might require
+some configuration to work properly.</p>
+</section>
+<section id="oss-applications">
+<span id="sound-redirection-oss"></span><h2>OSS applications<a class="headerlink" href="#oss-applications" title="Permalink to this headline">¶</a></h2>
+<p>Most applications that use the Open Sound System (OSS) can be made to
+work with ThinLinc through the <strong class="command">padsp</strong> application.</p>
+<p><strong class="command">padsp</strong> redirects OSS applications to the PulseAudio protocol.
+The following command line should be used:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>padsp &lt;application&gt;
+</pre></div>
+</div>
+<p>See the <strong class="command">padsp</strong> manual page for more information.</p>
+<p>The application which communicates with the sound device must be
+dynamically linked to glibc. It is not possible to intercept the
+accesses to OSS in a statically linked application. Most applications
+that you find on a Linux system will satisfy this requirement, but a
+test with <strong class="command">ldd</strong> can also be done:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ldd /usr/bin/someapp
+<span class="go">        not a dynamic executable</span>
+</pre></div>
+</div>
+<p>When using <strong class="command">padsp</strong> on 64-bit platforms, make sure that you have
+both 32- and 64-bit versions of the necessary libraries
+(<code class="file docutils literal notranslate"><span class="pre">libpulsedsp.so</span></code> and <code class="file docutils literal notranslate"><span class="pre">libpulse.so.0</span></code> ). Usually, these are
+found in <code class="file docutils literal notranslate"><span class="pre">/usr/lib</span></code> and <code class="file docutils literal notranslate"><span class="pre">/usr/lib64</span></code>. Also, the
+<strong class="command">padsp</strong> script must not contain absolute references to these
+libraries. Instead, the system should automatically select the correct
+library, depending on if you are executing a 32- or 64-bit application.
+In this case it’s necessary to have both library directories included in
+<code class="file docutils literal notranslate"><span class="pre">/etc/ld.so.conf</span></code>.</p>
+<p>Although it is rare, some applications manage to misuse the OSS API in a
+way that works with local sound cards but not <strong class="command">padsp</strong> . If you
+encounter problems, try updating the application to the latest version
+as it might contain fixes for such bugs.</p>
+</section>
+<section id="alsa-applications">
+<h2>ALSA applications<a class="headerlink" href="#alsa-applications" title="Permalink to this headline">¶</a></h2>
+<p>All applications that use the Advanced Linux Sound Architecture (ALSA)
+will also work well with ThinLinc provided the correct plugins are
+installed and configured. The plugins can be found in the alsa-plugins
+package (called libasound2-plugins on Debian-based distributions). The
+PulseAudio client libraries are also needed to build and use the
+plugins.</p>
+<p>To redirect ALSA applications to use the plugins, the ALSA
+configuration must be modified. This can be done on a global level in
+<code class="file docutils literal notranslate"><span class="pre">/etc/asound.conf</span></code> or per user in <code class="file docutils literal notranslate"><span class="pre">~/.asoundrc</span></code>. Add the
+following to the file (creating it if necessary):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pcm.!default {
+    type pulse
+}
+ctl.!default {
+    type pulse
+}
+</pre></div>
+</div>
+<p>Unfortunately, there are some applications that use the ALSA API in an
+incorrect way. When using local hardware this usually doesn’t matter,
+but when advanced ALSA features, like dmix or this plugin, are used,
+then problems start to appear. If an application misbehaves, the first
+step should be to upgrade it to the latest version.</p>
+</section>
+<section id="choosing-sound-system">
+<h2>Choosing sound system<a class="headerlink" href="#choosing-sound-system" title="Permalink to this headline">¶</a></h2>
+<p>Many applications support several sound systems and it can be difficult
+to know which one to use. Applications should be configured in the
+following manner, listed from the best solution to the worst:</p>
+<ol class="arabic simple">
+<li><p>Native PulseAudio application.</p></li>
+<li><p>ALSA appliction using the PulseAudio plugin.</p></li>
+<li><p>OSS appliction using <strong class="command">padsp</strong>.</p></li>
+</ol>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="redir_serial.html" title="Previous document">Using serial port redirection</a>
+        </li>
+        <li>
+          <a href="redir_scard.html" title="Next document">Using smart card redirection</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="redir_drives.html">Accessing the client’s local drives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="redir_serial.html">Using serial port redirection</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Using sound device redirection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pulseaudio-applications">PulseAudio applications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#oss-applications">OSS applications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alsa-applications">ALSA applications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choosing-sound-system">Choosing sound system</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="redir_scard.html">Using smart card redirection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="redirection.html">Accessing client resources from the ThinLinc session</a><ul>
+      <li>Previous: <a href="redir_serial.html" title="previous chapter">Using serial port redirection</a></li>
+      <li>Next: <a href="redir_scard.html" title="next chapter">Using smart card redirection</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/redir_sound.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

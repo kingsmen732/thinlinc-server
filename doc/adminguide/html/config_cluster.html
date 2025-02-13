@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Detailed guide on configuring and managing ThinLinc clusters, including subcluster setup, agent synchronization, and session management." name="description" />
+
+    <title>Cluster configuration &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuring logging on ThinLinc servers" href="config_logging.html" />
+    <link rel="prev" title="Server configuration" href="configuration.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="configuration.html" title="Previous document">Server configuration</a>
+        </li>
+        <li>
+          <a href="config_logging.html" title="Next document">Configuring logging on ThinLinc servers</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="cluster-configuration">
+<span id="configuration-cluster"></span><h1>Cluster configuration<a class="headerlink" href="#cluster-configuration" title="Permalink to this headline">¶</a></h1>
+<p>This chapter details the configuration possibilities of a pre-existing
+ThinLinc cluster with multiple agent servers. For information regarding
+the initial setup of a ThinLinc cluster, see <a class="reference internal" href="install_cluster.html#install-cluster"><span class="std std-ref">Cluster installation</span></a>.</p>
+<section id="subclusters">
+<span id="configuration-subcluster"></span><h2>Subclusters<a class="headerlink" href="#subclusters" title="Permalink to this headline">¶</a></h2>
+<p>A subcluster is a group of agents assigned to a number of individual
+users and/or user groups. Each subcluster can serve a specific purpose
+within the ThinLinc cluster. The dimension for grouping can be chosen at
+will and could for example be; location, project, application etc.</p>
+<p>ThinLinc ships with one default subcluster configuration which is used
+for creating new sessions by any user.</p>
+<p>To associate a user with a subcluster, either use the <a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-users"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">users</span></code></a> or
+<a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-groups"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">groups</span></code></a> configuration parameter for the specific subcluster. See
+<a class="reference internal" href="config_subclusters.html#configuration-subcluster-params"><span class="std std-ref">Parameters in /vsmserver/subclusters/</span></a> for details on these subcluster
+configuration parameters.</p>
+<p>If a subcluster does have neither user nor group associations
+configured, it is used as a default subcluster. Users that do not
+belong to any subcluster, will have their sessions created on the
+default subcluster. If a user is not associated with a subcluster and
+there is no default subcluster configured, the user will not be able to
+log on to the ThinLinc cluster.</p>
+<p>Load balancing of new sessions is performed using the list of agents defined
+in the <a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-agents"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">agents</span></code></a> parameter within each subcluster. See
+<a class="reference internal" href="#limit-number-of-users-per-agent"><span class="std std-ref">Limiting number of users per agent</span></a> for how to limit concurrent users per
+agent, which excludes the agent from the load balancer when the limit is
+reached. See <a class="reference internal" href="#stop-new-sessions-on-agent"><span class="std std-ref">Stopping new session creation on select agents in a cluster</span></a> for details on preventing new
+sessions on some agents.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The subcluster association rules limit the creation of new sessions
+and do not apply to already existing sessions. So given a case
+where subcluster association was changed after session startup, the
+user can reconnect to a session outside their configured
+subcluster. However, next time this user creates a session it will be
+created on the configured subcluster.</p>
+</div>
+<p>A subcluster is defined as a folder under the
+<a class="reference internal" href="config_subclusters.html#std-server-config-folder-vsmserver-subclusters"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/subclusters</span></code></a> configuration folder in
+<code class="file docutils literal notranslate"><span class="pre">vsmserver.hconf</span></code> on the master. The folder name defines a unique
+subcluster name.</p>
+<p>Here follows an example subcluster configuration for a geographic
+location-based grouping of agents:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[/vsmserver/subclusters/Default]</span>
+<span class="na">agents</span><span class="o">=</span><span class="s">tla01.eu.cendio.com tla02.eu.cendio.com</span>
+
+<span class="k">[/vsmserver/subclusters/usa]</span>
+<span class="na">agents</span><span class="o">=</span><span class="s">tla01.usa.cendio.com tla02.usa.cendio.com</span>
+<span class="na">groups</span><span class="o">=</span><span class="s">ThinLinc_USA</span>
+
+<span class="k">[/vsmserver/subclusters/india]</span>
+<span class="na">agents</span><span class="o">=</span><span class="s">tal01.india.cendio.com tla02.india.cendio.com</span>
+<span class="na">groups</span><span class="o">=</span><span class="s">ThinLinc_India</span>
+</pre></div>
+</div>
+<p>During the selection process for which subcluster a new session is
+created on, the following rules apply:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-users"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">users</span></code></a> has precedence over <a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-groups"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">groups</span></code></a>. This means that if a user
+belongs to a group that is associated with subcluster A and the user
+also is specified in <a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-users"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">users</span></code></a> for subcluster B, the user session will
+be created on subcluster B.</p></li>
+<li><p><a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-groups"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">groups</span></code></a> has precedence over the default subcluster. This means that
+if a user belongs to a group that is associated with subcluster B,
+the user session will be created subcluster B and not on the default
+subcluster A.</p></li>
+<li><p>If the user does not belong to an associated group nor is explicitly
+specified by <a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-users"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">users</span></code></a> for a subcluster, the new session will be
+created on the default subcluster.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Avoid the following configurations that will result in undefined
+behaviors for subclusters:</p>
+<ol class="arabic simple">
+<li><p>Avoid two subclusters without associated <a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-users"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">users</span></code></a> and <a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-groups"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">groups</span></code></a>,
+e.g. default subclusters. It is undefined which of them that will
+be the default subcluster used for users that are not associated
+to a specific subcluster.</p></li>
+<li><p>If a user is a member of two user groups which are used for two
+different subclusters, it is undefined which subcluster the new
+session will be created on.</p></li>
+<li><p>If a user is specified in <a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-users"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">users</span></code></a> of two different subclusters, it
+is undefined which subcluster the new session will be created on.</p></li>
+</ol>
+</div>
+</section>
+<section id="keeping-agent-configuration-synchronized-in-a-cluster">
+<span id="keeping-agents-synced"></span><h2>Keeping agent configuration synchronized in a cluster<a class="headerlink" href="#keeping-agent-configuration-synchronized-in-a-cluster" title="Permalink to this headline">¶</a></h2>
+<p>When multiple agents have been configured as part of a cluster, it is
+usually desirable to keep their configurations synchronized. Instead of
+making the same change separately on each agent, ThinLinc ships with the
+tool <strong class="program">tl-rsync-all</strong> to ensure that configuration changes can be
+synchronized easily across all agents in a cluster. See
+<a class="reference internal" href="commands.html#commands"><span class="std std-ref">Commands on the ThinLinc server</span></a> for more information on how to use this tool.</p>
+<p>The <strong class="program">tl-rsync-all</strong> command should be run on the master server,
+since it is the master which has the knowledge of which agents are part
+of the cluster.</p>
+<section id="using-the-master-node-as-a-staging-agent">
+<h3>Using the master node as a staging agent<a class="headerlink" href="#using-the-master-node-as-a-staging-agent" title="Permalink to this headline">¶</a></h3>
+<p>For the reasons above, it is often useful to configure the master server
+as an agent as well. This allows the master to be used as a staging
+agent, where configuration changes can be made and tested by an
+administrator before pushing them out to the rest of the agents in the
+cluster. In this way, configuration changes are never made on the agents
+themselves; rather, the changes are always made on the master server,
+and then distributed to the agents using <strong class="program">tl-rsync-all</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong class="program">tl-rsync-all</strong> and its sibling <strong class="program">tl-ssh-all</strong> are not
+subcluster aware. They will affect all agents within all subclusters.</p>
+</div>
+<p>An example of how one might implement such a system is to configure the
+master server as an agent which only accepts sessions for a single
+administrative user:</p>
+<ol class="arabic">
+<li><p>Configure the master as an agent too. On a ThinLinc master, the
+<strong>vsmagent</strong> service should already have been installed during the
+ThinLinc installation process; make sure that this service is
+running.</p></li>
+<li><p>Create an administrative user, for example, <strong>tladmin</strong>. Give this
+user administrative privileges if required, i.e. sudo access.</p></li>
+<li><p>Create a <a class="reference internal" href="#configuration-subcluster"><span class="std std-ref">subcluster</span></a> for the master
+server and associate administrator user <strong>tladmin</strong> to it. See the
+following example:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[/vsmserver/subclusters/Staging]</span>
+<span class="na">agents</span><span class="o">=</span><span class="s">127.0.0.1</span>
+<span class="na">users</span><span class="o">=</span><span class="s">tladmin</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#configuration-subcluster"><span class="std std-ref">Subclusters</span></a> for details on subcluster
+configuration.</p>
+</li>
+<li><p>Restart the <strong>vsmserver</strong> service.</p></li>
+</ol>
+<p>In this way, configuration changes are never made on the agents
+themselves; rather, the changes are always made on the master server,
+and then tested by logging in as the <strong>tladmin</strong> user. If successful,
+these changes are then distributed to the agents using
+<strong class="program">tl-rsync-all</strong>.</p>
+</section>
+</section>
+<section id="limiting-number-of-users-per-agent">
+<span id="limit-number-of-users-per-agent"></span><h2>Limiting number of users per agent<a class="headerlink" href="#limiting-number-of-users-per-agent" title="Permalink to this headline">¶</a></h2>
+<p>In certain use cases, it may be desirable to limit the number of users that
+can be active on one agent at a time. The max_users_per_agent parameter
+provides this functionality, ensuring that the agent will no longer be
+considered by the load balancer for new user sessions if the limit is
+reached. Please see
+<a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-max_users_per_agent"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/subclusters/&lt;name&gt;/max_users_per_agent</span></code></a> for more
+details. Once the limit has been reached on all agents new users are denied
+from starting new sessions, with a message that there are no available
+agents. Because of this, one might also want to consider
+<a class="reference internal" href="config_lifetime.html#configuration-limiting-lifetime"><span class="std std-ref">Limiting lifetime of ThinLinc sessions</span></a>.</p>
+<p>This configuration could, for example, be relevant in scenarios where GPU
+access needs to be restricted, since some applications expect full access to
+the GPU, and as a result, are not designed to handle memory allocation
+failures.</p>
+</section>
+<section id="stopping-new-session-creation-on-select-agents-in-a-cluster">
+<span id="stop-new-sessions-on-agent"></span><h2>Stopping new session creation on select agents in a cluster<a class="headerlink" href="#stopping-new-session-creation-on-select-agents-in-a-cluster" title="Permalink to this headline">¶</a></h2>
+<p>When, for example, a maintenance window is scheduled for some agents
+servers, it is sometimes desirable that no new sessions are started on
+that part of the cluster. It is possible to prevent new sessions from
+being started without affecting running sessions.</p>
+<p>To stop new session creation on specific agents, those agents need to be
+removed from the <a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-agents"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">agents</span></code></a> configuration variable in the associated
+subcluster. Once the <strong>vsmserver</strong> service is restarted on the master
+server, new user sessions will not be created on the removed agents.
+Users with existing sessions can continue working normally, and users
+with disconnected sessions will still be able to reconnect.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="configuration.html" title="Previous document">Server configuration</a>
+        </li>
+        <li>
+          <a href="config_logging.html" title="Next document">Configuring logging on ThinLinc servers</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="configuration.html">Server configuration</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Cluster configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subclusters">Subclusters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#keeping-agent-configuration-synchronized-in-a-cluster">Keeping agent configuration synchronized in a cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#limiting-number-of-users-per-agent">Limiting number of users per agent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stopping-new-session-creation-on-select-agents-in-a-cluster">Stopping new session creation on select agents in a cluster</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="config_logging.html">Configuring logging on ThinLinc servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_session.html">Customizing the user’s session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_lifetime.html">Limiting lifetime of ThinLinc sessions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_hsts.html">Configuring HSTS headers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="configuration.html">Server configuration</a><ul>
+      <li>Previous: <a href="configuration.html" title="previous chapter">Server configuration</a></li>
+      <li>Next: <a href="config_logging.html" title="next chapter">Configuring logging on ThinLinc servers</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/config_cluster.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Guide to the optimization settings in the ThinLinc client, including options for graphic encoding, compression, color levels, and SSH compression to enhance session performance." name="description" />
+
+    <title>Optimization tab &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Security tab" href="client_options_security.html" />
+    <link rel="prev" title="Local devices tab" href="client_options_local_devices.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_options_local_devices.html" title="Previous document">Local devices tab</a>
+        </li>
+        <li>
+          <a href="client_options_security.html" title="Next document">Security tab</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="optimization-tab">
+<span id="client-optimization-tab"></span><h1>Optimization tab<a class="headerlink" href="#optimization-tab" title="Permalink to this headline">¶</a></h1>
+<p>The <span class="guilabel">Optimization</span> tab contains various settings that affect
+the protocols used to transfer the graphic information. This includes
+the algorithm used for the graphic encoding. The best choices may differ
+from case to case. Factors that affect the algorithm choices can for
+example be network bandwidth, network latency, and client computer
+performance.</p>
+<p>The default setting is to use the <span class="guilabel">Auto select</span> mode, to
+automatically select the best suited algorithms.</p>
+<figure class="align-default" id="id1">
+<img alt="_images/client-options-optimization.png" src="_images/client-options-optimization.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 14 </span><span class="caption-text">Client settings optimization tab</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="description-of-optimization-tab-settings">
+<h2>Description of optimization tab settings<a class="headerlink" href="#description-of-optimization-tab-settings" title="Permalink to this headline">¶</a></h2>
+<p>Here follows a detailed description of the settings available in the
+optimization tab.</p>
+<dl>
+<dt><span class="guilabel">Auto select</span></dt><dd><p>This option makes the ThinLinc system try to automatically select the
+best suited encoding algorithm. The network performance is measured
+during the life of the connection and the encoding options are
+adjusted based on the results. This means that the encoding options
+can be changed automatically during the connection, if the network
+performance changes. Activating this option will “gray out” the
+<span class="guilabel">Preferred encoding</span> and <span class="guilabel">Color level</span> options,
+to show that they aren’t manually controlled.</p>
+</dd>
+<dt><span class="guilabel">Preferred encoding</span></dt><dd><p>This block of settings affects the VNC protocol encoding. There are
+several different ways to compress and encode the graphic data that
+is sent from the server to your client. In this box you select one of
+four possible encodings. The methods differ much: Some try to use
+smart algorithms to select and compress the areas to send, which
+means slightly higher CPU usage, but most likely less bandwidth usage
+and faster sessions where the bandwidth is limited. Other methods use
+less CPU capacity but more network bandwidth. The best choice can
+vary much depending on place and situation. A safe choice is to let
+the system automatically select the best encoding by checking the
+<span class="guilabel">Auto select</span> checkbox above.</p>
+</dd>
+<dt><span class="guilabel">Encoding: Tight</span></dt><dd><p>This choice selects the Tight encoding method. With this encoding the
+zlib compression library is used to compress the pixel data. It
+pre-processes the data to maximize compression ratios, and to
+minimize CPU usage on compression. Also, JPEG compression may be used
+to encode color-rich screen areas. The zlib compression level and the
+JPEG compression ratio can be manually changed. See <span class="guilabel">Custom
+compression level</span> and <span class="guilabel">Allow JPEG compression</span> below.
+Tight encoding is usually the best choice for low-bandwidth network
+environments (e.g. slow modem connections).</p>
+</dd>
+<dt><span class="guilabel">Encoding: ZRLE</span></dt><dd><p>This choice selects the ZRLE encoding method.</p>
+</dd>
+<dt><span class="guilabel">Encoding: Hextile</span></dt><dd><p>This choice selects the Hextile encoding method. With Hextile the
+screen is divided into rectangles, split up into tiles of 16×16
+pixels and sent in a predetermined order. Hextile encoding is often
+the best choice for using in high-speed network environments (e.g.
+Ethernet local-area networks).</p>
+</dd>
+<dt><span class="guilabel">Encoding: Raw</span></dt><dd><p>This choice selects the Raw encoding method. This is the simplest of
+the encoding methods. It simply sends all the graphic data of the
+screen, raw and uncompressed. Since this method use the least
+processing power among the possible methods this is normally the best
+choice if the server and client runs on the same machine.</p>
+</dd>
+<dt><span class="guilabel">Custom compression level</span></dt><dd><p>By selecting this option you choose to override the standard
+compression level used when compressing data with the Tight encoding.
+You can manually select the wanted compression level by entering a
+number between 0 and 9. Level 0 means no compression. Level 1 uses a
+minimum of CPU performance and achieves weak compression ratios,
+while level 9 offers best compression but is slow in terms of CPU
+consumption on the server side. Use high levels with very slow
+network connections, and low levels when working over high-speed
+network connections. <strong>This applies to the Tight encoding only!</strong></p>
+</dd>
+<dt><span class="guilabel">Allow JPEG compression</span></dt><dd><p>By selecting this option you choose to override the standard JPEG
+compression quality of color-rich parts of the screen. JPEG is a
+“lossy” compression method for images that helps the Tight encoding
+to significantly reduce the size of the image data. The drawback is
+that the resulting image, depending on the selected compression
+ratio, can be blurred and grainy. You can manually select the image
+quality by entering a number between 0 and 9. Quality level 0 gives
+bad image quality but very impressive compression ratios, while level
+9 offers very good image quality at lower compression ratios. Note
+that the Tight encoder uses JPEG to encode only those screen areas
+that look suitable for lossy compression, so quality level 0 does not
+always mean unacceptable image quality.</p>
+</dd>
+<dt><span class="guilabel">Color level</span></dt><dd><p>This block of choices selects the number of colors to be used for the
+graphic data sent from the server to the client. The setting has four
+levels, <span class="guilabel">Full</span>, <span class="guilabel">Medium</span>, <span class="guilabel">Low</span> and
+<span class="guilabel">Very low</span>. The default and normal is to use the
+<span class="guilabel">Full</span> setting. Selecting a lower number of colors will
+highly affect the resulting image to the worse, but may also speed up
+the transfer significantly when using slow network connections.</p>
+<p>In this context, <span class="guilabel">Full</span> means the number of colors
+supported by the client’s graphics hardware.</p>
+</dd>
+<dt><span class="guilabel">SSH compression</span></dt><dd><p>This choice selects whether or not to use SSH compression for all the
+data sent between ThinLinc server and client. This is normally not
+used since an extra compression step, above a compressing graphic
+encoding normally doesn’t help making it smaller, only use more CPU
+performance. There can still be occasions where this is worth trying
+though. It is possible that this can help speed up printing or other
+exports over slow connections.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="client_options_local_devices.html" title="Previous document">Local devices tab</a>
+        </li>
+        <li>
+          <a href="client_options_security.html" title="Next document">Security tab</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HA.html">High availability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="client.html">The native client</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="clientplatforms.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_usage.html">Client usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_cmdline.html">Client command line usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_export_local_device.html">Local device export</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="client_options.html">Client configuration</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="client_options_display.html">Display tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_local_devices.html">Local devices tab</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Optimization tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_security.html">Security tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_options_advanced.html">Advanced tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client_config.html">Configuration storage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="client_gestures.html">Client touch gestures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_logfile_placement.html">Log file placement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_customizer.html">Client customizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_web_integration.html">Launching the client from a web page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_advanced_topics.html">Advanced topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="client.html">The native client</a><ul>
+  <li><a href="client_options.html">Client configuration</a><ul>
+      <li>Previous: <a href="client_options_local_devices.html" title="previous chapter">Local devices tab</a></li>
+      <li>Next: <a href="client_options_security.html" title="next chapter">Security tab</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/client_options_optimization.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

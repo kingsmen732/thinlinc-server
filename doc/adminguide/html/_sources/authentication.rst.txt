@@ -1,0 +1,21 @@
+.. meta::
+   :description: Overview of the different user authentication methods
+                 supported in ThinLinc, including PAM, public key, smart
+                 card, and OTP.
+
+.. _authentication:
+
+Authentication in ThinLinc
+==========================
+
+In this chapter we will describe how authentication of users is
+performed in ThinLinc
+
+.. toctree::
+   :hidden:
+
+   authentication_pam
+   authentication_limitations
+   authentication_publickey
+   authentication_scpublickey
+   authentication_otp

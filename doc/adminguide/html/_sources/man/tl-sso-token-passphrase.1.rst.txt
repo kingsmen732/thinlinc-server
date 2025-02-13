@@ -1,0 +1,48 @@
+.. meta::
+   :description: The tl-sso-token-passphrase command is similar to
+                 tl-sso-password but retrieves and manages the smart
+                 card token passphrase (PIN) for ThinLinc's single
+                 sign-on system.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-sso-token-passphrase
+=======================
+
+Synopsis
+--------
+
+**tl-sso-token-passphrase** [*options*]
+
+Description
+-----------
+
+This command is identical to :program:`tl-sso-password`\ (1), except
+that it uses the smart card token passphrase (PIN) instead of the user's
+password. For usage, see the :program:`tl-sso-password`\ (1) page.
+
+Options
+-------
+
+.. option:: -c, --check
+
+   Returns 0 if token passphrase is available, instead of fetch.
+
+.. option:: -h, --help
+
+   Prints a short help text and exits.
+
+.. option:: -r, --remove
+
+   Removes the token passphrase after fetch or check.
+
+.. option:: --version
+
+   Prints the ThinLinc version and exits.
+
+See also
+--------
+
+:program:`tl-sso-password`\ (1)

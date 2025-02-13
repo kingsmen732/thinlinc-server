@@ -1,0 +1,135 @@
+.. meta::
+   :description: Guide to managing subclusters, master, and agent
+                 services in the VSM module of ThinLinc's web
+                 administration interface, including configuration and
+                 service management.
+
+.. _tlwebadm_vsm:
+
+The VSM module
+~~~~~~~~~~~~~~
+
+VSM contains information about subclusters and master and agent
+services. This module also allows managing of subclusters and
+configuration of master and agent.
+
+-  :guilabel:`Subclusters` allows viewing, adding, modifying or deleting
+   subclusters.
+
+-  :guilabel:`Master` allows starting or stopping the **vsmserver**
+   service, and modifying a subset of the configuration options.
+
+-  :guilabel:`Agent` allows starting or stopping the **vsmagent**
+   service, and modifying a subset of the configuration options.
+
+.. _tlwebadm_vsm_subclusters:
+
+Subclusters
+^^^^^^^^^^^
+
+On this page, the configured subclusters of the ThinLinc master can be
+found. Subclusters are groups of agents that can be associated with
+users or groups. Adding, modifying or deleting existing subclusters is
+possible. A restart of the **vsmserver** service is required after
+changes to subcluster configuration in order for the changes to take
+effect. The **vsmserver** service can be restarted from the
+:guilabel:`Master` page described in :ref:`tlwebadm_vsm_master`.
+
+The page will present a list of currently configured subclusters. This
+should be something like the example in
+:numref:`tlwebadm_subcluster_list`. To edit a subcluster, click on its
+name in the list.
+
+.. _tlwebadm_subcluster_list:
+
+.. figure:: images/tlwebadm-subcluster-list.svg
+
+   Subclusters
+
+:numref:`tlwebadm_subcluster_list` shows a system with a total of two
+subclusters. The subcluster called :guilabel:`default` is configured
+with two agent servers and :guilabel:`US_cluster` is configured with one
+agent.
+
+To add a new subcluster to the list, press the :guilabel:`Add new
+subcluster` button. This will bring up an empty subcluster edit pop-up.
+See figure :numref:`tlwebadm_subcluster_new` for an example.
+
+.. _tlwebadm_subcluster_new:
+
+.. figure:: images/tlwebadm-subcluster-new.svg
+
+   New subcluster pop-up
+
+There are five editable fields in this view: :guilabel:`Subcluster`,
+:guilabel:`Agents`, :guilabel:`Users`, :guilabel:`Groups` and
+:guilabel:`Limit sessions`. The first field controls the name of the
+subcluster. The rest are described in
+:ref:`configuration_subcluster_params`. To save changes, press the
+:guilabel:`Save` button. Remember to restart the **vsmserver** service
+afterward.
+
+.. _tlwebadm_vsm_master:
+
+Master
+^^^^^^
+
+On this page you can start or stop the master service. There are also a
+subset of configuration options available for configuration of the
+service.
+
+-  :guilabel:`Service status` gives you the ability to start or stop the
+   master service.
+
+-  :guilabel:`Sessions per user` allows you to configure how many
+   sessions are allowed per user.
+
+   A value of zero means no limit and will give unlimited sessions per
+   user.
+
+-  :guilabel:`Allowed groups` allows you to configure which groups
+   should be given access to connect to ThinLinc.
+
+   If no groups are specified, all users will have access to connect to
+   ThinLinc
+
+-  :guilabel:`Allowed shadowers` allows you to configure which users
+   should be able to shadow other ThinLinc sessions.
+
+Click the :guilabel:`Save` button when you want to save your changes to
+the configuration files.
+
+.. note::
+
+   You need to restart the service to apply your changes.
+
+.. _tlwebadm_vsm_agent:
+
+Agent
+^^^^^
+
+On this page you can start or stop the agent service. There are also a
+subset of configuration options available for configuration of the
+service.
+
+-  :guilabel:`Service status` gives you the ability to start or stop the
+   agent service.
+
+-  :guilabel:`Externally reachable address to use` allows you to
+   configure the hostname that clients are redirected to.
+
+   .. note::
+
+      This configuration is needed if running ThinLinc in a NAT
+      environment. See :ref:`network_nat` for more information.
+
+-  :guilabel:`Extra arguments to X server` allows you to configure
+   additional arguments to the X server (:program:`Xvnc`) for new
+   sessions that are started.
+
+Click the :guilabel:`Save` button when you want to save your changes to
+the configuration files.
+
+.. note::
+
+   You need to restart the service to apply your changes.

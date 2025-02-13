@@ -1,0 +1,153 @@
+.. meta::
+   :description: Configuration parameters for managing session profiles
+                 in ThinLinc, including profile order, default settings,
+                 and customization options.
+
+.. _configuration_profiles:
+
+.. server-config-folder:: /profiles
+
+Parameters in /profiles/
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this section, we will describe all the parameters currently used by
+the profiles feature. These configuration parameters reside in
+:file:`/opt/thinlinc/etc/conf.d/profiles.hconf`.
+
+.. server-config:: /profiles/default
+
+   The profile that should be preselected when the profile chooser
+   starts, and the profile to be chosen when there is a problem
+   displaying the profile chooser to the user.
+
+.. server-config:: /profiles/order
+
+   A space separated list of profiles that should be available for the
+   user to choose from. The profiles will be displayed in the same order
+   as specified here.
+
+   Note that other criteria must also be satisfied for a profile to be
+   available to a user. See |xdg_session| and |testcmd| for more
+   details.
+
+.. server-config:: /profiles/show_intro
+
+   If this parameter is true then the introduction text specified in
+   |introduction| will be displayed by the profile chooser. Enabled by
+   default.
+
+.. server-config:: /profiles/greeting
+
+   This parameter specifies the title for the introduction text
+   specified in |introduction|. It is also shown above the profile
+   list. `Pango Markup`_ can be used here to provide styling to the text
+   (e.g. italicized words).
+
+   .. |introduction| replace::
+      :servconf:`introduction </profiles/introduction>`
+
+.. server-config:: /profiles/introduction
+
+   This parameter specifies the introduction text shown by the profile
+   chooser. `Pango Markup`_ can be used here to provide styling to the
+   text (e.g. bold or italicized words). If |show_intro| is set to
+   false, this text is not shown.
+
+   .. |show_intro| replace::
+      :servconf:`show_intro </profiles/show_intro>`
+
+.. server-config-folder:: /profiles/<profile key>
+
+Each profile is defined under a section named
+:servconf:`/profiles/\<profile key\>`. It has the following fields:
+
+.. server-config:: /profiles/<profile key>/xdg_session
+
+   Connects this ThinLinc profile with a system desktop session
+   configuration. The directories :file:`/etc/X11/sessions` and
+   :file:`/usr/share/xsessions` will be searched for a file matching
+   :file:`{<xdg_session>}.desktop`. It is recommended that this field is
+   used for all modern desktop environments as it sets up important
+   environment variables.
+
+   The fields |name|, |description|, |icon|, |cmdline| and |testcmd|
+   will all be implicitly filled in by the system configuration. You can
+   override those values individually by specifying a different value in
+   the ThinLinc configuration.
+
+   .. |name| replace::
+      :servconf:`name </profiles/<profile key>/name>`
+   .. |description| replace::
+      :servconf:`description </profiles/<profile key>/description>`
+   .. |icon| replace::
+      :servconf:`icon </profiles/<profile key>/icon>`
+   .. |cmdline| replace::
+      :servconf:`cmdline </profiles/<profile key>/cmdline>`
+   .. |testcmd| replace::
+      :servconf:`testcmd </profiles/<profile key>/testcmd>`
+
+   Multiple values can be specified in this field, separated by spaces.
+   The first matching configuration will be used. If no matching
+   configuration can be found then the profile will not be shown.
+
+   .. note::
+
+      If the configuration is listed in :file:`/etc/upstart-xsessions`
+      then the specified command is ignored and an Upstart user session
+      will be started instead. A manually specified |cmdline| can still
+      be used to override the command.
+
+.. server-config:: /profiles/<profile key>/name
+
+   A short description of the profile, shown in the profile list. `Pango
+   Markup`_ can be used here to provide styling to the text (e.g.
+   italicized words).
+
+.. server-config:: /profiles/<profile key>/description
+
+   A longer description, shown below the name in the profile list.
+   `Pango Markup`_ can be used here to provide styling to the text
+   (e.g. bold or italicized words).
+
+.. server-config:: /profiles/<profile key>/icon
+
+   An image shown next to the name in the profile list. We recommend
+   using SVG files, but if not, the icon should be at least 22×22.
+   Paths can be absolute or relative
+   :file:`/opt/thinlinc/share/tl-select-profile`. It is also possible to
+   specify an icon name in accordance with the `icon naming
+   specification`_.
+
+.. server-config:: /profiles/<profile key>/screenshot
+
+   An image with aspect ratio 4:3, shown in the profile list.
+   Resolutions of 640×480 or 800×600 works well. Paths can be absolute
+   or relative :file:`/opt/thinlinc/share/tl-select-profile`.
+
+.. server-config:: /profiles/<profile key>/cmdline
+
+   The command to execute if this profile has been chosen.
+
+   If |xdg_session| is set then the environment variable
+   :environ:`XDG_EXEC` will be set to the original command line from the
+   system desktop session configuration.
+
+   .. |xdg_session| replace::
+      :servconf:`xdg_session </profiles/<profile key>/xdg_session>`
+
+.. server-config:: /profiles/<profile key>/testcmd
+
+   A shell expression or command that is executed to determine if this
+   profile should be visible or not. A non-zero return code causes the
+   entry to be hidden. If this field is empty or missing then the entry
+   will always be shown.
+
+   If |xdg_session| is set then the environment variable
+   :environ:`XDG_TRY_EXEC` will be set to the expected binary from the
+   system desktop session configuration. Note that this value differs in
+   behavior from |testcmd|. :environ:`XDG_TRY_EXEC` should only name a
+   executable binary in :environ:`PATH` , whilst |testcmd| will be
+   executed and its return code inspected.
+
+.. _Pango Markup: https://docs.gtk.org/Pango/pango_markup.html#pango-markup
+.. _icon naming specification: https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html

@@ -1,0 +1,36 @@
+.. meta::
+   :description: This section explains how to use smart card redirection
+                 in ThinLinc, covering its requirements, enabling
+                 process, and limitations.
+
+.. _scard-redirection:
+
+Using smart card redirection
+----------------------------
+
+Introduction
+~~~~~~~~~~~~
+
+Using ThinLinc, it is possible to access the locally connected smart
+cards and smart card readers from the ThinLinc session. This means that
+you can use smart cards for encrypting your email, signing documents and
+authenticating against remote systems.
+
+Requirements
+~~~~~~~~~~~~
+
+-  The application which communicates with the smart card must be using
+   the PC/SC API and be dynamically linked to pcsc-lite.
+
+Enabling smart card redirection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Smart card redirection is always activated on the server so there is no
+administration required to enable it.
+
+Limitations and additional information
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  When a client disconnects, all smart cards and smart card readers
+   will disappear for the applications. Some applications do not handle
+   hot-plug and must therefore be restarted when this happens.

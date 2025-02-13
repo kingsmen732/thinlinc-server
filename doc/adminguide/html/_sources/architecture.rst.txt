@@ -1,0 +1,78 @@
+.. meta::
+   :description: Overview of ThinLinc's architectural components and
+                 their roles within a ThinLinc cluster, highlighting the
+                 key aspects of system integration and session
+                 management.
+
+.. _architecture:
+
+ThinLinc architecture
+=====================
+
+This chapter describes the high-level components that constitute a
+ThinLinc cluster. For information about how to install, set up, and
+maintain ThinLinc, please refer to the :ref:`toc_install` and
+:ref:`toc_administration` parts.
+
+Major components
+----------------
+
+The three major components of a ThinLinc cluster are the master servers,
+agent servers, and clients. The former two are responsible for making
+the server-side Linux environment available for the clients.
+
+- **Master servers** --- Accepts incoming client connections and load
+  balances them between available agent servers.
+
+- **Agent servers** --- Hosts user sessions. One agent server typically
+  hosts multiple user sessions. Sessions are kept separate through user
+  isolation.
+
+- **Clients** --- The application used to connect to the ThinLinc
+  cluster. This can either be :ref:`client` or :ref:`tlwebaccess`.
+
+A single machine can act both as a master and an agent server
+simultaneously.
+
+A common ThinLinc cluster consists of one master server, and as many
+agent servers as warranted by the client load. An additional redundant
+master server may be added to increase the robustness of the system.
+
+System integration
+------------------
+
+ThinLinc tightly integrates with the host Linux system. For instance,
+ThinLinc relies on the system user database and utilizes the system's
+native authentication mechanisms. This is analogous to how SSH works.
+
+Once tools and applications are installed on the agent servers, they
+become seamlessly accessible to the users. Similarly, the graphical user
+interface provided to a connected user depends on the installed desktop
+environment. If multiple desktop environments are installed in parallel,
+users are prompted to pick one at the start of a session.
+
+Session overview
+----------------
+
+Connecting clients are handed a session on an agent server. This
+assignment is managed by a master server, which delegates sessions based
+on agent server load. The following steps are executed during the
+connection process:
+
+#. Client establishes an encrypted connection to a master server.
+
+#. Client authenticates to the master server.
+
+#. Master server checks for an existing user session, or prepares a new
+   session on an agent server.
+
+#. Client disconnects from the master server.
+
+#. Client establishes an encrypted connection to the designated agent
+   server.
+
+At this point, a user session is active, allowing the user to freely
+navigate the system. A user can leave a session either by disconnecting
+or logging out. If the user disconnects, the session remains active and
+available for reconnecting to; if the user logs out, the session
+terminates.

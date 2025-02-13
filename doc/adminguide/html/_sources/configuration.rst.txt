@@ -1,0 +1,22 @@
+.. meta::
+   :description: Detailed instructions for configuring the ThinLinc
+                 server, including cluster setup, logging, session
+                 management, and session lifetime configuration.
+
+.. _configuration:
+
+Server configuration
+====================
+
+This chapter describes how to configure the various features of the
+ThinLinc server once it has been installed as described in
+:ref:`install_install`.
+
+.. toctree::
+   :hidden:
+
+   config_cluster
+   config_logging
+   config_session
+   config_lifetime
+   config_hsts

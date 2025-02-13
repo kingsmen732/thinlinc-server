@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<meta content="Guide for configuring ThinLinc for High Availability (HA) operations, including installation of a new HA cluster, ensuring synchronization between nodes, and reconfiguring existing installations into HA mode." name="description" />
+
+    <title>Configuration of ThinLinc for HA operations &#8212; ThinLinc Administrator&#39;s Guide</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/constants.css" />
+    <link rel="stylesheet" type="text/css" href="_static/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="_static/cendio.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/thinlinc.ico"/>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Recovering from hardware failures" href="HA-recover.html" />
+    <link rel="prev" title="High availability overview" href="HA-overview.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="HA-overview.html" title="Previous document">High availability overview</a>
+        </li>
+        <li>
+          <a href="HA-recover.html" title="Next document">Recovering from hardware failures</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="configuration-of-thinlinc-for-ha-operations">
+<span id="ha-install"></span><h1>Configuration of ThinLinc for HA operations<a class="headerlink" href="#configuration-of-thinlinc-for-ha-operations" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we describe how ThinLinc is configured for high
+availability.</p>
+<section id="installation-of-a-new-ha-cluster">
+<h2>Installation of a new HA cluster<a class="headerlink" href="#installation-of-a-new-ha-cluster" title="Permalink to this headline">¶</a></h2>
+<p>In this section, we will describe how to set up a new HA cluster. In the
+examples we will use a primary node with the hostname <strong>tlha-primary</strong>
+and IP address <strong>10.0.0.2</strong>, a secondary node with the hostname
+<strong>tlha-secondary</strong> and IP address <strong>10.0.0.3</strong>, and a resource IP
+address of <strong>10.0.0.4</strong> with the DNS name <strong>tlha</strong>.</p>
+<ol class="arabic">
+<li><p>Begin by installing ThinLinc as described in <a class="reference internal" href="install_install.html#install-install"><span class="std std-ref">Installing the ThinLinc server</span></a>
+on both nodes.</p></li>
+<li><p>Both nodes in the HA cluster must have the same SSH host key. Copy
+<code class="file docutils literal notranslate"><span class="pre">/etc/ssh/ssh_host_*</span></code> from the primary host to the secondary
+host, and restart ssh on the secondary host.</p></li>
+<li><p>Install and configure the system-level high-availability software,
+for example the software provided by the ClusterLabs project, which
+can be found at <a class="reference external" href="https://clusterlabs.org">https://clusterlabs.org</a>. This and other
+high-availability software may also be provided as part of your
+distribution, so check for the solution which best fits your
+requirements before proceeding.</p></li>
+<li><p>Configure the system’s high-availability software to watch the status
+of the other machine via the network, and to enable the resource IP
+address <strong>10.0.0.4</strong> on the active node. The machine with the
+hostname <strong>tlha-primary</strong> should normally be active.</p></li>
+<li><p>Configure each VSM agent to allow privileged operations both from
+<strong>tlha-primary</strong> and <strong>tlha-secondary</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo tl-config <span class="s1">&#39;/vsmagent/allowed_clients=tlha-primary tlha-secondary&#39;</span>
+</pre></div>
+</div>
+<p>Also, set the <a class="reference internal" href="config_vsmagent.html#server-config-vsmagent-master_hostname"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmagent/master_hostname</span></code></a> to the DNS name
+of the HA interface:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo tl-config /vsmagent/master_hostname<span class="o">=</span>tlha
+</pre></div>
+</div>
+<p>Restart all VSM agents after changing the configuration values.</p>
+</li>
+<li><p>Verify operations of VSM Server on both nodes. Make sure you can
+start the VSM server properly on both hosts, and connect to the
+respective hosts when VSM server is running (i.e., it should be
+possible to connect, using <strong class="program">tlclient</strong>, to both
+<strong>tlha-primary</strong> and to <strong>tlha-secondary</strong>).</p>
+<p>Both nodes should be configured with the same subcluster
+configuration.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is <strong>very important</strong> that 127.0.0.1 is not in the list of
+agent servers of any subcluster. If the machines running VSM
+server are also VSM agents, their unique hostnames or IP addresses
+must be added to <a class="reference internal" href="config_subclusters.html#server-config-vsmserver-subclusters-name-agents"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/subclusters/&lt;name&gt;/agents</span></code></a>
+instead of 127.0.0.1. The reason for this is that 127.0.0.1 will
+be a different server based on which VSM server is currently
+active.</p>
+</div>
+</li>
+<li><p>After verifying that normal ThinLinc connections work as intended
+when using both the primary and the secondary VSM server’s hostname,
+it is time to enable HA in the VSM servers. This is done by setting
+<a class="reference internal" href="config_vsmserver.html#server-config-vsmserver-HA-enabled"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/HA/enabled</span></code></a> to <code class="docutils literal notranslate"><span class="pre">1</span></code>, and by specifying the
+nodes in the cluster in <a class="reference internal" href="config_vsmserver.html#server-config-vsmserver-HA-nodes"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/HA/nodes</span></code></a>. For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo tl-config /vsmserver/HA/enabled<span class="o">=</span><span class="m">1</span>
+<span class="gp">$ </span>sudo tl-config <span class="s1">&#39;/vsmserver/HA/nodes=tlha-primary.example.com tlha-secondary.example.com&#39;</span>
+</pre></div>
+</div>
+<p>Configuration should be identical on both nodes. Restart the VSM
+server on both nodes after configuration.</p>
+</li>
+<li><p>If vsmserver can’t safely determine which of the two nodes in
+<a class="reference internal" href="config_vsmserver.html#server-config-vsmserver-HA-nodes"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/HA/nodes</span></code></a> is the remote node, and which is the
+local node, it will start without HA enabled, and log a message. If
+this happens, validate your hostname and DNS setup. One of the
+entries of <a class="reference internal" href="config_vsmserver.html#server-config-vsmserver-HA-nodes"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/HA/nodes</span></code></a> must match the local
+machine. Either the resolved IP of one of the entries in
+<a class="reference internal" href="config_vsmserver.html#server-config-vsmserver-HA-nodes"><code class="xref std std-servconf docutils literal notranslate"><span class="pre">/vsmserver/HA/nodes</span></code></a> must match the local IP, or one entry
+must exactly match the local hostname as returned by
+<strong class="command">uname -n</strong>.</p></li>
+<li><p>Once HA has been configured, tests should be performed in order to
+confirm that the failover works as expected. This can normally be
+done by simply removing the network cable from the primary node, and
+ensuring that the secondary node then takes over. Check also that any
+active ThinLinc sessions have been synchronized from the primary to
+the secondary node, and that logging in to such a session on the
+secondary node succeeds once the primary node has been disabled.</p></li>
+</ol>
+<p>Your ThinLinc HA cluster is now configured! When sessions are created,
+changed or deleted on the currently active node, the information about
+them will be transferred to the other node using an inter-VSM server
+protocol. If the other node has to take over service, its copy of the
+session data will be up-to-date, and it can start serving new requests
+instantly. When the primary node comes up again, the secondary node will
+resynchronize with the master.</p>
+</section>
+<section id="reconfiguring-an-existing-thinlinc-installation-into-ha-mode">
+<h2>Reconfiguring an existing ThinLinc installation into HA mode<a class="headerlink" href="#reconfiguring-an-existing-thinlinc-installation-into-ha-mode" title="Permalink to this headline">¶</a></h2>
+<p>If you have an existing ThinLinc installation and want to eliminate the
+single point of failure (the VSM server), the procedure is very much
+like the procedure for installing a new HA cluster.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="HA-overview.html" title="Previous document">High availability overview</a>
+        </li>
+        <li>
+          <a href="HA-recover.html" title="Next document">Recovering from hardware failures</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/thinlinc.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">The ThinLinc Administrator's Guide</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">ThinLinc architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obtaining.html">Obtaining ThinLinc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Server installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_server.html">Server requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_install.html">Installing the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional setup</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication in ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensehandling.html">License handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_cluster.html">Cluster installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="HA.html">High availability</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="HA-overview.html">High availability overview</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Configuration of ThinLinc for HA operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation-of-a-new-ha-cluster">Installation of a new HA cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reconfiguring-an-existing-thinlinc-installation-into-ha-mode">Reconfiguring an existing ThinLinc installation into HA mode</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="HA-recover.html">Recovering from hardware failures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="printing.html">Printer features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualgl.html">3D acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_automatic.html">Automated installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstalling.html">Uninstalling the ThinLinc server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Clients</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="clientcomparison.html">Choosing a client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">The native client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebaccess.html">ThinLinc Web Access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="redirection.html">Accessing client resources from the ThinLinc session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Server configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">Upgrading ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shadowing.html">Shadowing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hiveconf.html">Hiveconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tlwebadm.html">Administration of ThinLinc using the web administration interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tldc.html">Building custom Linux desktops with the ThinLinc desktop customizer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendixes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands on the ThinLinc server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_params.html">Server configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_config_params.html">Client configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tcp-ports.html">TCP ports used by ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting ThinLinc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lockdown.html">Restricting access to ThinLinc servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnutls-priorities.html">GnuTLS priority strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_selinux.html">SELinux enabled distributions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="HA.html">High availability</a><ul>
+      <li>Previous: <a href="HA-overview.html" title="previous chapter">High availability overview</a></li>
+      <li>Next: <a href="HA-recover.html" title="next chapter">Recovering from hardware failures</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Cendio AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/HA-configuration.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

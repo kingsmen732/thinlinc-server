@@ -1,0 +1,110 @@
+.. meta::
+   :description: Overview of the ThinLinc nearest printer feature, which
+                 automatically directs print jobs to the nearest
+                 available printer based on the user's terminal
+                 location. Includes details on configuration,
+                 administration, and the printer selection algorithm.
+
+.. _nearestprinter:
+
+Nearest printer support
+-----------------------
+
+With the ThinLinc *nearest printer* feature, printer jobs are sent to
+a printer selected based on the physical address of the users terminal.
+This is typically used to implement printer queues based on physical
+proximity.
+
+The nearest printer is implemented as an extra printer queue, on top of
+the real printers. Printer jobs sent to the **nearest** queue will be
+sent to the *nearest printer backend*. The backend is a program which is
+called by CUPS together with all needed information. The backend will
+look at the username requesting the printout and ask the ThinLinc VSM
+server for more information about this user. The information includes
+which terminal the user is currently using. The backend then queries the
+information stored in Hiveconf for a list of printers that are
+considered near the terminal used by the printing user. When a printer
+is known the backend will place the job in that printer queue.
+
+The **nearest** queue is added to the VSM master server by ThinLinc
+setup. The recommended setup is to configure one **nearest** printer
+queue in the CUPS daemon on the VSM Server host, and then let all agents
+use this CUPS daemon. See :ref:`printing_config_overview` for an
+overview of printer setup in a ThinLinc cluster.
+
+Administration of the nearest printer feature in ThinLinc
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The nearest printer system needs information about groups of terminals,
+known as *locations*, which typically represents some physical layout.
+The information connects terminals to locations and also links printers
+to the locations. Available printers are automatically fetched from the
+underlying printing system and are available for assignment to locations
+and/or terminals.
+
+Information about terminals, locations and their associated printers can
+be administrated using the ThinLinc Web Administration, see
+:ref:`tlwebadm_locations`.
+
+Each location should be entered with a name, and may have an optional
+description. A location can for example represent a classroom, a
+department, a house, and so on. Each location can be associated with one
+or more printers, including the special **nearest** and **thinlocal**
+printers. Typically it will include all printers available near that
+physical location the location represents. If the location is so big
+that different printers are close to different parts of the location,
+then you should probably divide the location into smaller parts, each
+represented by a separate location.
+
+A location can be set to handle clients which are not defined using a
+terminal definition ("unknown terminals").
+
+Each terminal in the ThinLinc Web Administration represents one physical
+terminal in the installation and is defined by its terminal network
+interface hardware (MAC) address. The hardware address can be entered in
+many formats, but will be converted to all uppercase hexadecimal form
+separated by a colon, i.e. ``01:23:45:67:89:AB``.
+
+A terminal must be associated with a location.
+
+Nearest printer selection algorithm
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If a terminal has a printer directly assigned to it in the terminals
+module in tlwebadm, that printer will be the nearest printer for that
+terminal. For terminals without a printer directly assigned (the normal
+situation), the first printer in the list of printers for the terminal's
+location is selected when the user submits a printer job to the
+**nearest** queue.
+
+If the client is not a known terminal, i.e. its hardware address was not
+found, it will use the printer for the location marked as handling
+unknown terminals. If not, there will be no printer available.
+
+If a user is using multiple sessions, print jobs submitted via
+**nearest** printer will be redirected to the printer that is found
+starting from the client that made the last connection.
+
+Printer drivers
+~~~~~~~~~~~~~~~
+
+When printing via the **nearest** printer, the CUPS client can't get
+hold of all information about the real printer where the job will
+actually be printed because it doesn't know that the printer job will be
+rerouted by the **nearest** driver. Therefore, the printing application
+has no way to know about the number of trays, the paper sizes available
+etc. This is a problem for some applications, and it also adds to the
+number of applications that will be misconfigured, for example selecting
+the wrong paper size.
+
+As a compromise, the **nearest** printer is configured with a PPD
+(*Postscript Printer Definition*) that covers a broad range of printer
+capabilities --- it's a *Generic Postscript Printer* driver. This makes
+it possible to configure default values for some of the settings, for
+example paper size, using the CUPS configuration interface.
+
+If all the printers in your organization are of the same type, it may be
+a good idea to replace the Generic Postscript PPD installed for the
+**nearest** queue with a PPD for the specific printer in use. That will
+let CUPS-aware applications select between the specific set of features
+available for the specific printer model.

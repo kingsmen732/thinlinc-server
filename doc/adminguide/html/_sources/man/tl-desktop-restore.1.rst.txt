@@ -1,0 +1,26 @@
+.. meta::
+   :description: The tl-desktop-restore command, part of the ThinLinc
+                 desktop customizer, resets Gnome and KDE desktops to
+                 default by backing up user settings, restoring original
+                 configurations.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-desktop-restore
+==================
+
+Synopsis
+--------
+
+**tl-desktop-restore**
+
+Description
+-----------
+
+When a user's Gnome or KDE desktop needs to be reset to default, the
+command :program:`tl-desktop-restore` can be run. This will move the
+settings directories for KDE and Gnome to a backup directory named
+:file:`~/.old-thinlinc-desktop` in the user's home directory, which will
+make both Gnome and KDE revert to the default settings.

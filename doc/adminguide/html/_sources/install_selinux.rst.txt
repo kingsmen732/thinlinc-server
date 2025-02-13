@@ -1,0 +1,28 @@
+.. meta::
+   :description: Explanation of ThinLinc's compatibility with SELinux
+                 enabled distributions, including optional local policy
+                 modifications and instructions for reapplying
+                 ThinLinc's SELinux policy changes.
+
+.. _install_selinux:
+
+SELinux enabled distributions
+-----------------------------
+
+ThinLinc is designed to run with reference SELinux policy and users in
+the unconfined context. It is possible to use ThinLinc with other
+policies and more restricted contexts, but will most likely require
+modifications to your policy to accommodate ThinLinc.
+
+The local system policy will optionally be modified by ThinLinc setup
+during installation. The SELinux module and other policy changes
+performed can be examined in :file:`/opt/thinlinc/share/selinux`.
+Execute the command :program:`/opt/thinlinc/share/selinux/install` to
+reapply ThinLinc's policy changes.
+
+.. note::
+
+   The ThinLinc policy module is distributed in source form and
+   therefore requires the reference policy build environment. On Red
+   Hat-based systems this is always installed, but other systems might
+   require extra packages.

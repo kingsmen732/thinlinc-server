@@ -1,0 +1,76 @@
+.. meta::
+   :description: Instructions for setting up public key authentication
+                 in ThinLinc, providing a secure alternative to
+                 password-based logins.
+
+.. _publickey_authentication:
+
+Using public key authentication
+-------------------------------
+
+Introduction
+~~~~~~~~~~~~
+
+Public key authentication is a more secure alternative to passwords. It
+uses a challenge/response mechanism that prevents even the server from
+gaining access to the authentication information. This section will
+describe how to configure ThinLinc to use it.
+
+Key generation
+~~~~~~~~~~~~~~
+
+In order to use public key authentication, a pair of encryption keys
+must be generated. Tools to accomplish this should be included with the
+SSH server. On Linux, that server is normally OpenSSH and the tool to
+generate keys is called :command:`ssh-keygen`.
+
+Example:
+
+.. code:: console
+
+   $ ssh-keygen
+   Generating public/private rsa key pair.
+   Enter file in which to save the key (/home/johndoe/.ssh/id_rsa):
+   Enter passphrase (empty for no passphrase):
+   Enter same passphrase again:
+   Your identification has been saved in /home/johndoe/.ssh/id_rsa.
+   Your public key has been saved in /home/johndoe/.ssh/id_rsa.pub.
+   The key fingerprint is:
+   e1:87:0d:82:71:df:e9:4a:b0:a8:e3:cd:e8:79:58:32 johndoe@example.com
+
+Remember that the private key (:file:`id_rsa` in the example) is a
+password equivalent and should be handled with care. The public key
+(:file:`id_rsa.pub` in the example) does not need to be kept secret.
+
+.. note::
+
+   The SSH key format is not standardized, so it may be required to
+   convert the keys depending on which servers you will be using.
+
+Server configuration
+~~~~~~~~~~~~~~~~~~~~
+
+All SSH servers must support public key authentication, so any SSH
+server will work. It is important, however, to verify that public key
+authentication is not disabled. Refer to the documentation for your SSH
+server for instructions on how to do this.
+
+Next, the public keys need to be associated with the correct users. For
+OpenSSH, you must store a copy of the public key in the users' home
+directory, specifically in the file :file:`~/.ssh/authorized_keys`. This
+file can contain multiple keys, each on a separate line.
+
+Client configuration
+~~~~~~~~~~~~~~~~~~~~
+
+The client must have a copy of the private key associated with the
+public key stored on the server. The key can be stored anywhere,
+although on Linux it is commonly stored as :file:`~/.ssh/id_rsa`. The
+user will be able to specify where the key is located in the ThinLinc
+client interface.
+
+.. note::
+
+   The client currently only supports the OpenSSH key format. If your
+   keys are in another format, e.g. for PuTTY, then they must first be
+   converted before they can be used with ThinLinc.

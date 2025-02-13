@@ -1,0 +1,24 @@
+.. meta::
+   :description: The tl-disconnect command disconnects a ThinLinc client
+                 from an active session while keeping the session on the
+                 server, allowing users to reconnect later.
+
+.. raw:: pdf
+
+   PageBreak
+
+tl-disconnect
+=============
+
+Synopsis
+--------
+
+**tl-disconnect**
+
+Description
+-----------
+
+:program:`tl-disconnect` allows a user to disconnect their ThinLinc
+client from their ThinLinc session by running a console command. The
+ThinLinc session will be kept on the server, waiting for the user to
+reconnect. This command needs to be run from inside a ThinLinc session.

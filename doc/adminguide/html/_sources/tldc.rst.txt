@@ -1,0 +1,37 @@
+.. meta::
+   :description: Learn how to create custom desktops for ThinLinc users
+                 using the ThinLinc desktop customizer (TLDC), which
+                 tailors application menus and desktop icons based on
+                 group membership, username, and ThinLinc profile.
+
+.. _tldc:
+
+Building custom Linux desktops with the ThinLinc desktop customizer
+===================================================================
+
+In this chapter, we will document how to create custom desktops for
+ThinLinc users using the ThinLinc desktop customizer (TLDC). TLDC relies
+on `freedesktop.org`_'s standard and desktop environments like `MATE`_
+and `Xfce`_ are examples of desktops that can be used in combination
+with TLDC.
+
+Note that TLDC does not work with some desktop environments such as
+`GNOME Shell (GNOME 3)`_ since it does not have a traditional
+application menu.
+
+The TLDC's core functionality is to build the application menus based on
+factors such as group membership, username and ThinLinc Profile. It can
+also add icons to the desktop of each user, based on the same premises.
+
+.. _freedesktop.org: https://www.freedesktop.org/
+.. _MATE: https://mate-desktop.org/
+.. _Xfce: https://www.xfce.org/
+.. _GNOME Shell (GNOME 3): https://www.gnome.org
+
+.. toctree::
+   :hidden:
+
+   tldc_introduction
+   tldc_tldesktopcustomizer
+   tldc_enabling
+   tldc_tips
